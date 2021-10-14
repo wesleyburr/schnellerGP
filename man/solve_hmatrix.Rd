@@ -4,7 +4,7 @@
 \alias{solve_hmatrix}
 \title{solve_hmatrix}
 \usage{
-solve_hmatrix(gp, x)
+solve_hmatrix(gp, b)
 }
 \arguments{
 \item{gp}{An H-matrix, likely created by create_h2_kernel() or equivalent.}
@@ -29,7 +29,7 @@ Solve a matrix equation Ax=b for x, where A is approximated in H-matrix form.
                            kt = 1)
  gp_h  = convert_h2_to_h_matrix(gp_h2)
  cholesky_hmatrix(gp_h)
- b <- matrix(rnorm(500), nrow = 500, ncol = 1)
- x <- solve_hmatrix(gp_h, b)
+ b <- matrix(data = rnorm(500), nrow = 500, ncol = 1)
+ x <- solve_hmatrix(gp = gp_h, b = b)
 
 }

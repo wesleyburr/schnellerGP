@@ -207,11 +207,11 @@ cholesky_hmatrix <- function(gp) {
 #'                            kt = 1)
 #'  gp_h  = convert_h2_to_h_matrix(gp_h2)
 #'  cholesky_hmatrix(gp_h)
-#'  b <- matrix(rnorm(500), nrow = 500, ncol = 1)
-#'  x <- solve_hmatrix(gp_h, b)
+#'  b <- matrix(data = rnorm(500), nrow = 500, ncol = 1)
+#'  x <- solve_hmatrix(gp = gp_h, b = b)
 #'
-solve_hmatrix <- function(gp, x) {
-    .Call(`_schnellerGP_solve_hmatrix`, gp, x)
+solve_hmatrix <- function(gp, b) {
+    .Call(`_schnellerGP_solve_hmatrix`, gp, b)
 }
 
 #' log_sqrt_determinant_hmatrix

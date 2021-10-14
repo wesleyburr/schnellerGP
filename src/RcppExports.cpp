@@ -124,14 +124,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // solve_hmatrix
-NumericMatrix solve_hmatrix(Rcpp::XPtr<matrix_h> gp, arma::vec x);
-RcppExport SEXP _schnellerGP_solve_hmatrix(SEXP gpSEXP, SEXP xSEXP) {
+NumericMatrix solve_hmatrix(Rcpp::XPtr<matrix_h> gp, arma::vec b);
+RcppExport SEXP _schnellerGP_solve_hmatrix(SEXP gpSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<matrix_h> >::type gp(gpSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(solve_hmatrix(gp, x));
+    Rcpp::traits::input_parameter< arma::vec >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(solve_hmatrix(gp, b));
     return rcpp_result_gen;
 END_RCPP
 }

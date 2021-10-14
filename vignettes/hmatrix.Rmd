@@ -1,6 +1,6 @@
 ---
 title: "schnellerGP: H-matrix Functionality"
-author: Matthew Wheeler^1^ and Wesley S. Burr^2^
+author: Matthew Wheeler^1^, Kelly R. Moran^2^ and Wesley S. Burr^3^
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{schnellerGP: H-matrix Functionality}
@@ -17,8 +17,9 @@ knitr::opts_chunk$set(
 
 ^1^ Biostatistics & Computational Biology Branch, National Institute of Environmental Health Sciences, NIH, Durham, NC, USA
 
-^2^ Department of Mathematics, Trent University, Peterborough, ON, Canada
+^2^ TBD
 
+^3^ Department of Mathematics, Trent University, Peterborough, ON, Canada
 # Introduction
 
 The schnellerGP package contains two separate interfaces in three threads: 
@@ -60,6 +61,7 @@ This data is intended to represent 2D grid locations, and is formed into
 a $100 \times 2$ matrix. 
 
 ```{r}
+library("schnellerGP")
 A <- matrix(data = rnorm(200),
              nrow = 100,
              ncol = 2)
