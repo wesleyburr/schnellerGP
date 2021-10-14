@@ -1,31 +1,51 @@
 ########################################################
-# setup_compressedMatrixGP
-# @X - matrix of locations
-# @kernel_type  - string specifying which kernel to use
-# @kernel_params - list of parameters for the chosen kernel
-# @tol - specified tolerance for accuracy of calculations
-# @M  - Max submatrix size
+#' Given a specified kernel (currently supporting matern and squared Exponential),
+#' and a matrix of locations X, set up a compressed matrix Gaussian process
+#' pointer via h2lib.
+#'
+#' @param X Matrix of locations to use.
+#' @param kernel_type String specifying which kernel to use. Defaults to matern; currently supported are 'matern' and 'squared_exponential'.
+#' @param kernel_params Named list of parameters for the chosen kernel. For supported kernels at present, must contain both 'sigma' and 'rho'.
+#' @param tol Specified tolerance for accuracy of calculations.
+#' @param M Maximum submatrix size in the H^2 decomposition.
+#'
+#' @return ptr Pointer to the compressed approximation matrix Gaussian Process.
+#'
 ########################################################
-setup_compressedMatrixGP = function(X, kernel_type, kernel_params, tol, M)
+
+setup_compressedMatrixGP = function(X,
+                                    kernel_type = "matern",
+                                    kernel_params,
+                                    tol,
+                                    M)
 {
-  names_kernParams = names(kernel_params)
-  if( kernel_type == "squaredExponential" ){ # If user chooses squared exponential kernel.
-    if( ("sigma" %in% names_kernParams) & ("rho" %in% names_kernParams) ){
-      ptr = .setup_compressedMatrixGP_sqrExp(X, kernel_params$sigma, kernel_params$rho, tol, M);
-    } else{
-      print('For squared exponential kernel, kernel_params must be a list defining "sigma" and "rho".')
-      return(NULL)
+  stopifnot(kernel_type %in% c("matern", "squared_exponential"))
+  stopifnot(is.list(kernel_params))
+  if(kernel_type %in% c("matern", "squared_exponential")) {
+    if( !all( c("sigma", "rho") %in% names(kernel_params) ) ) {
+      stop("The kernel_params must be a named list containing definitions for 'sigma' and 'rho'.")
     }
-  } else if( kernel_type == "matern" ){ # If user chooses Matern kernel.
-    if( ("sigma" %in% names_kernParams) & ("rho" %in% names_kernParams) ){
-      ptr = .setup_compressedMatrixGP_Matern(X, kernel_params$sigma, kernel_params$rho, tol, M);
-    } else{
-      print('For squared exponential kernel, kernel_params must be a list defining "sigma" and "rho".')
-      return(NULL)
-    }
-  } else{
-    print("Choose one of kernel_type entries currently supported: 'squaredExponential' or 'matern'.")
-    return(NULL)
   }
+
+  if( kernel_type == "matern" ) {
+
+    ptr = .setup_compressedMatrixGP_Matern(X,
+                                           kernel_params$sigma,
+                                           kernel_params$rho,
+                                           tol,
+                                           M);
+
+  } else if( kernel_type == "squared_exponential" ) {
+
+    ptr = .setup_compressedMatrixGP_sqrExp(X,
+                                           kernel_params$sigma,
+                                           kernel_params$rho,
+                                           tol,
+                                           M);
+
+  } else {  # this case cannot be reached because of the stopifnot() above.
+    stop("The specified kernel_type is not supported.")
+  }
+
   return(ptr)
 }

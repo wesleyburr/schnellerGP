@@ -5,35 +5,34 @@
 #include "HODLR_Tree.hpp"
 
 // Taking Matern Kernel for p = 2:
-// K(r) = σ^2 * (1 + sqrt(5) * r / ρ + 5/3 * (r / ρ)^2) * exp(-sqrt(5) * r / ρ)
-class Matern_Kernel : public HODLR_Matrix 
+// K(r) = σ^2 * [1 + sqrt(5) * r / ρ + 5/3 * (r / ρ)^2] * exp[-sqrt(5) * r / ρ]
+class Matern_Kernel : public HODLR_Matrix
 {
-
-private:
+  private:
     Mat x;
     double sigma_squared, rho;
     int D;
 
-public:
+  public:
 
     // Constructor:
-    Matern_Kernel(Mat tX, int N, double sigma, double rho) : HODLR_Matrix(N), x(tX) 
+    Matern_Kernel(Mat tX, int N, double sigma, double rho) : HODLR_Matrix(N), x(tX)
     {
-        this->sigma_squared = sigma * sigma;
-        this->rho           = rho;
-        this->D             = tX.cols();
+        this -> sigma_squared = sigma * sigma;
+        this -> rho           = rho;
+        this -> D             = tX.cols();
     };
-    
-    dtype getMatrixEntry(int i, int j) 
+
+    dtype getMatrixEntry(int i, int j)
     {
         double temp = 0;
-        for(int d=0; d<D; d++){ 
-          double temp2 = x(i, d) - x(j, d);
-          temp = temp + temp2*temp2;
+        for(int d = 0; d < D; d++){
+            double temp2 = x(i, d) - x(j, d);
+            temp = temp + temp2 * temp2;
         }
-        double R_by_rho = sqrt(temp) / rho;  
-        double nugget = (i ==j)?1e-8:0.0;       
-        return sigma_squared * (1 + sqrt(5) * R_by_rho + (5/3) * (R_by_rho * R_by_rho)) * exp(-sqrt(5) * R_by_rho)+nugget;
+        double R_by_rho = sqrt(temp) / rho;
+        double nugget = (i == j)?1e-8:0.0;  // if i==j, return 1e-8, else, return 0.0
+        return sigma_squared * (1 + sqrt(5) * R_by_rho + (5/3) * (R_by_rho * R_by_rho)) * exp(-sqrt(5) * R_by_rho) + nugget;
     }
 
     // Destructor:

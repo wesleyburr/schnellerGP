@@ -2,7 +2,7 @@ Package: schnellerGP
 Type: Package
 Title: Fast Bayesian GP sampling using H and H^2 matrices
 Version: 0.1.0
-Author: Matt Wheeler, Kelly Moran, Steffen Boern
+Author: Matt Wheeler, Kelly Moran, Steffen Börm
 Maintainer: Matt Wheelerr <matt.wheeler@nih.gov>
 Description: This package provides various functionality
     to utilize H/H^2 matrices for near exact GP sampling in O(n log^2 n) time
@@ -14,3 +14,8 @@ Include: Rcpp, RcppEigen, RcppArmadillo
 LinkingTo: Rcpp, RcppEigen, RcppArmadillo
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 7.1.2
+Suggests: 
+    rmarkdown,
+    knitr
+VignetteBuilder: knitr

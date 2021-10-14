@@ -50,17 +50,17 @@ public:
 
      matrix_h2(ph2matrix ph2);
      matrix_h2(string file);
-     matrix_h2(const arma::mat imat,                           
+     matrix_h2(const arma::mat imat,
                 const double compression = 1e-10,
-                const uint leafsize = 50, 
+                const uint leafsize = 50,
                 double eta = 1.0);//, const double compression=1e-10,
                                      // uint leafsize = 50, double eta = 1);
-                                      
+
      matrix_h2(arma::mat tX, field  (*kernel_fun)(const double *xx, const double *yy, void *data),
-                  arma::mat hp, uint tleafsize = 50, double eta = 2, double tolerance = 1e-10); 
+                  arma::mat hp, uint tleafsize = 50, double eta = 2, double tolerance = 1e-10);
 
      ~matrix_h2();
-    ////////////////////////////////////////////////////////////    
+    ////////////////////////////////////////////////////////////
      uint getdim(){
          return getrows_h2matrix(gp_h2);
      }
@@ -80,33 +80,36 @@ public:
           return rV;
      }
      arma::umat getIndex(){
-          
+
 
          arma::umat rVI(rows,1);
          for (unsigned int i = 0; i < rows; i++){
-             rVI(i,0) = idx[i]; 
+             rVI(i,0) = idx[i];
          }
-//         cout <<"Always here" << endl; 
+//         cout <<"Always here" << endl;
          return rVI;
      }
 
      arma::vec multiply_vector(arma::vec v);
-     void add_diag_avector( pavector a); 
+     void add_diag_avector( pavector a);
      arma::mat orderByIndex(arma::mat Y);
 
      ////////////////////////////////////////////////////////
-     arma::mat solve_precond_vect(arma::vec tb,
-                                 diagonal_precond *p, double eps=1e-14,
+     arma::vec solve_precond_vect(arma::vec tb,
+                                 diagonal_precond *p,
+                                 double eps=1e-14,
                                  uint iter=2000);
-     
-     
-     arma::mat solve_precond_vect_wstart(arma::vec tb,
-                                                    diagonal_precond *p, double eps,
-                                                    uint iter,
-                                                    arma::mat start);
-     phmatrix convert_to_hmatrix(); 
-     
-     void save_h2_netcdf(string file); 
+
+
+     arma::vec solve_precond_vect_wstart(arma::vec tb,
+                                         diagonal_precond *p,
+                                         arma::vec start,
+                                         double eps=1e-14,
+                                         uint iter=2000);
+
+     phmatrix convert_to_hmatrix();
+
+     void save_h2_netcdf(string file);
 private:
      pclusterbasis rb, cb;
      arma::mat X;          // matrix points as well as cluster geometry object
