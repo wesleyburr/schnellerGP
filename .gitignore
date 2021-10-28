@@ -3,3 +3,8 @@
 .RData
 .Ruserdata
 inst/doc
+src/*.o
+src/classes/*.o
+src/h2lib/*.o
+src/hodlrlib/*.o
+src/include/*.o
