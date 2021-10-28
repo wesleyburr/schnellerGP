@@ -11,9 +11,7 @@ H2LIB_FLAGS += -DUSE_BLAS
 H2LIB_FLAGS += -DUSE_SIMD -DUSE_CAIRO
 H2LIB_FLAGS += -DUSE_OPENMP -fopenmp
 
-H2LIB_LIBS   =
-H2LIB_LIBS  += -llapack -lblas -lgfortran
-H2LIB_LIBS  += -lm
+H2LIB_LIBS   = -llapack -lblas -lgfortran -lm
 
 HODLR_FLAGS =  -DUSE_DOUBLE
 
@@ -21,18 +19,16 @@ HODLR_FLAGS =  -DUSE_DOUBLE
 #Final Package Setup
 ##################################################
 
-ifeq "$(WIN)" "64"
-BITS=64
-else
-BITS=32
-endif
+PKG_CPPFLAGS = -I.
+# DON'T USE pkg-config
+#PKG_CPPFLAGS += -DUSE_NETCDF $(shell pkg-config --cflags netcdf) $(HODLR_FLAGS)
+PKG_CPPFLAGS += -DUSE_NETCDF $(HODLR_FLAGS)
+PKG_CPPFLAGS += $(H2LIB_FLAGS) -I../inst/include -I./include -w
+PKG_CPPFLAGS += -DUSE_CAIRO
 
-PKG_CPPFLAGS = -I. -Iwin$(BITS) $(XTRA_PKG_CPPFLAGS)
-PKG_CPPFLAGS += -DUSE_NETCDF $(shell pkg-config --cflags netcdf) $(HODLR_FLAGS)
-
-PKG_LIBS  = win$(BITS)/libcairo.a win$(BITS)/libpng.a win$(BITS)/libz.a -lgdi32 -lmsimg32
-PKG_LIBS += $(H2LIB_LIBS)
-PKG_LIBS += $(shell pkg-config --libs netcdf) -lnetcdf
+PKG_LIBS  = $(H2LIB_LIBS)
+PKG_LIBS += -DUSE_NETCDF -lnetcdf
+#PKG_LIBS += $(shell pkg-config --libs netcdf) -lnetcdf
 
 HODLR        = $(wildcard hodlrlib/*.cpp)
 WRAPPERS     = $(wildcard classes/*.cpp)
