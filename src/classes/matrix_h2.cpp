@@ -36,9 +36,9 @@ diag_pre(void *pdata, pavector r)
 
 
 matrix_h2::matrix_h2(string file){
-  gp_h2  = read_cdfcomplete_h2matrix(file.c_str());
+/*  gp_h2  = read_cdfcomplete_h2matrix(file.c_str());
   rb = clone_clusterbasis(gp_h2->rb);
-  cb = clone_clusterbasis(gp_h2->cb);
+  cb = clone_clusterbasis(gp_h2->cb);*/
   cg = NULL;
   idx = NULL;
   root  = NULL;
@@ -322,7 +322,7 @@ void matrix_h2::save_h2_netcdf(string file){
   char save_file[file.size() + 1];
   file.copy(save_file,file.size()+1);
   if ( gp_h2){
-     write_cdfcomplete_h2matrix(gp_h2,file.c_str());
+  //   write_cdfcomplete_h2matrix(gp_h2,file.c_str());
   }
   return;
 }

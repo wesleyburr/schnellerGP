@@ -9,6 +9,7 @@
 #include <omp.h>
 #include <RcppArmadillo.h>
 #include <Rcpp.h>
+#include <cairo.h>
 
 #include "settings.h"
 #include "h2matrix.h"
@@ -65,13 +66,13 @@ public:
          return getrows_h2matrix(gp_h2);
      }
      void  draw_matrix(){
-       cairo_t  *cr;
+  /*     cairo_t  *cr;
        printf("Draw hmatrix to \"hm_p1.pdf\"\n");
        cr = new_cairopng( 2048.0, 2048.0);
       // cr = new_cairopdf("./hm_p1.pdf", 1024.0, 1024.0);
        draw_cairo_h2matrix(cr, gp_h2, false, 0);
        write_cairopng(cr,"../hm_p1.png");
-       cairo_destroy(cr);
+       cairo_destroy(cr);*/
      }
      arma::mat getMatrix(){
           pamatrix test_temp  = convert_h2matrix_amatrix (false,gp_h2);

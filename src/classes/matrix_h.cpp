@@ -8,7 +8,7 @@ using namespace std;
 
 // Create new H-matrix from file reference, NetCDF
 matrix_h::matrix_h(string file){
-  hmatrix  = read_cdfcomplete_hmatrix(file.c_str());
+//  hmatrix  = read_cdfcomplete_hmatrix(file.c_str());
 }
 
 // Create new H-matrix from phmatrix source; uses clone_hmatrix()
@@ -146,7 +146,7 @@ double matrix_h::log_determinant(){
 void matrix_h::save_h_netcdf(string file){
 
   if (hmatrix){
-      write_cdfcomplete_hmatrix(hmatrix,file.c_str());
+ //     write_cdfcomplete_hmatrix(hmatrix,file.c_str());
   }
   return;
 }

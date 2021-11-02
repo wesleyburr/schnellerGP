@@ -8,27 +8,33 @@
 H2LIB_FLAGS  =
 H2LIB_FLAGS += -O3 -march=native -funroll-loops
 H2LIB_FLAGS += -DUSE_BLAS
-H2LIB_FLAGS += -DUSE_SIMD -DUSE_CAIRO
+H2LIB_FLAGS += -DUSE_SIMD 
 H2LIB_FLAGS += -DUSE_OPENMP -fopenmp
 
-H2LIB_LIBS   = -llapack -lblas -lgfortran -lm
+H2LIB_LIBS   =
+H2LIB_LIBS  += -lgfortran
+H2LIB_LIBS  += -lm -lR -lRlapack -lRblas 
 
-HODLR_FLAGS =  -DUSE_DOUBLE
+HODLR_FLAGS =  -DUSE_DOUBLE -O3 -march=native -funroll-loops
 
 ##################################################
 #Final Package Setup
 ##################################################
 
-PKG_CPPFLAGS = -I.
-# DON'T USE pkg-config
-#PKG_CPPFLAGS += -DUSE_NETCDF $(shell pkg-config --cflags netcdf) $(HODLR_FLAGS)
-PKG_CPPFLAGS += -DUSE_NETCDF $(HODLR_FLAGS)
-PKG_CPPFLAGS += $(H2LIB_FLAGS) -I../inst/include -I./include -w
-PKG_CPPFLAGS += -DUSE_CAIRO
+ifeq "$(WIN)" "64"
+BITS=64
+else
+BITS=32
+endif
 
-PKG_LIBS  = $(H2LIB_LIBS)
-PKG_LIBS += -DUSE_NETCDF -lnetcdf
-#PKG_LIBS += $(shell pkg-config --libs netcdf) -lnetcdf
+PKG_CPPFLAGS = -I. -Iwin$(BITS) $(XTRA_PKG_CPPFLAGS) -I../inst/include -I./include $(shell pkg-config --cflags cairo) -w -DCURL_STATICLIB
+#PKG_CPPFLAGS += -DUSE_NETCDF $(shell pkg-config --cflags netcdf) 
+PKG_CPPFLAGS += $(HODLR_FLAGS) $(H2LIB_FLAGS)
+
+#PKG_LIBS  = win$(BITS)/libcairo.a win$(BITS)/libpng.a win$(BITS)/libz.a -lgdi32 -lmsimg32
+
+PKG_LIBS  =  $(H2LIB_LIBS) -fopenmp -lwinmm 
+#-lcrypto -lcrypt32 -lssl -lssh2 -lcurl -lwinmm   -lwldap32  $(shell pkg-config --libs netcdf)    -lhdf5_hl -lhdf5 -lws2_32  -lz 
 
 HODLR        = $(wildcard hodlrlib/*.cpp)
 WRAPPERS     = $(wildcard classes/*.cpp)

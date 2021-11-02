@@ -1837,7 +1837,7 @@ choldecomp_amatrix(pamatrix a)
 uint
 choldecomp_amatrix(pamatrix a)
 {
-  print_matlab_a_matrix(a); 
+//  print_matlab_a_matrix(a); 
   pfield    aa = a->a;
   longindex lda = a->ld;
   uint      n = a->rows;
