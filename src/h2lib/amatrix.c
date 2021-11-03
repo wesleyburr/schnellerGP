@@ -583,15 +583,15 @@ print_amatrix(pcamatrix a)
   longindex lda = a->ld;
   uint      i, j;
 
-  (void) printf("amatrix(%u,%u,%u)\n", rows, cols, a->ld);
+  (void) Rprintf("amatrix(%u,%u,%u)\n", rows, cols, a->ld);
   if (rows == 0 || cols == 0)
     return;
 
   for (i = 0; i < rows; i++) {
-    (void) printf("  (" FIELD_CS(+.5, e), FIELD_ARG(a->a[i]));
+    (void) Rprintf("  (" FIELD_CS(+.5, e), FIELD_ARG(a->a[i]));
     for (j = 1; j < cols; j++)
-      (void) printf(" | " FIELD_CS(+.5, e), FIELD_ARG(a->a[i + j * lda]));
-    (void) printf(")\n");
+      (void) Rprintf(" | " FIELD_CS(+.5, e), FIELD_ARG(a->a[i + j * lda]));
+    (void) Rprintf(")\n");
   }
 }
 
@@ -604,39 +604,39 @@ print_matlab_amatrix(pcamatrix a)
   uint      i, j;
 
   if (rows == 0)
-    (void) printf("  [ ]\n");
+    (void) Rprintf("  [ ]\n");
   else if (rows == 1) {
     if (cols == 0)
-      (void) printf("  [ ]\n");
+      (void) Rprintf("  [ ]\n");
     else {
-      (void) printf("  [" FIELD_CS(.5, e), FIELD_ARG(a->a[0]));
+      (void) Rprintf("  [" FIELD_CS(.5, e), FIELD_ARG(a->a[0]));
       for (j = 1; j < cols; j++)
-	(void) printf(" " FIELD_CS(.5, e), FIELD_ARG(a->a[j * lda]));
-      (void) printf("]\n");
+	(void) Rprintf(" " FIELD_CS(.5, e), FIELD_ARG(a->a[j * lda]));
+      (void) Rprintf("]\n");
     }
   }
   else {
     if (cols == 0) {
-      (void) printf("  [");
+      (void) Rprintf("  [");
       for (i = 1; i < rows; i++)
-	(void) printf(" ;");
-      (void) printf(" ]\n");
+	(void) Rprintf(" ;");
+      (void) Rprintf(" ]\n");
     }
     else {
-      (void) printf("  [" FIELD_CS(.5, e), FIELD_ARG(a->a[0]));
+      (void) Rprintf("  [" FIELD_CS(.5, e), FIELD_ARG(a->a[0]));
       for (j = 1; j < cols; j++)
-	(void) printf(" " FIELD_CS(.5, e), FIELD_ARG(a->a[j * lda]));
-      (void) printf(" ;\n");
+	(void) Rprintf(" " FIELD_CS(.5, e), FIELD_ARG(a->a[j * lda]));
+      (void) Rprintf(" ;\n");
       for (i = 1; i < rows - 1; i++) {
-	(void) printf("  " FIELD_CS(.5, e), FIELD_ARG(a->a[i]));
+	(void) Rprintf("  " FIELD_CS(.5, e), FIELD_ARG(a->a[i]));
 	for (j = 1; j < cols; j++)
-	  (void) printf(" " FIELD_CS(.5, e), FIELD_ARG(a->a[i + j * lda]));
-	(void) printf(" ;\n");
+	  (void) Rprintf(" " FIELD_CS(.5, e), FIELD_ARG(a->a[i + j * lda]));
+	(void) Rprintf(" ;\n");
       }
-      (void) printf("  " FIELD_CS(.5, e), FIELD_ARG(a->a[i]));
+      (void) Rprintf("  " FIELD_CS(.5, e), FIELD_ARG(a->a[i]));
       for (j = 1; j < cols; j++)
-	(void) printf(" " FIELD_CS(.5, e), FIELD_ARG(a->a[i + j * lda]));
-      (void) printf("]\n");
+	(void) Rprintf(" " FIELD_CS(.5, e), FIELD_ARG(a->a[i + j * lda]));
+      (void) Rprintf("]\n");
     }
   }
 }

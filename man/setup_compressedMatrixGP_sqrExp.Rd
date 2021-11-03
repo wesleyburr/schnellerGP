@@ -22,7 +22,7 @@ After setting up compressed memory storage, returns a pointer
  to a HODLR_Tree object. Specifically, in this case, kernel is the
  Squared Exponential Kernel:
 
-   K(r) = σ^2 * exp[ -rho * ||r||^2 ]
+   K(r) = sigma^2 * exp[ -rho * ||r||^2 ]
 
  with the nugget diagonals set to 1e-8, as with the Matern default.
 }

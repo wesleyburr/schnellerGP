@@ -47,7 +47,7 @@ int get_n_levels(int N, int M) {
 //'  to a HODLR_Tree object. Specifically, in this case, the Matern kernel
 //'  (default) is the case of $p=2$, or $nu = 5/2$.
 //'
-//'    K(r) = σ^2 * [1 + sqrt(5) * r / ρ + 5/3 * (r / ρ)^2] * exp[-sqrt(5) * r / ρ]
+//'    K(r) = sigma^2 * [1 + sqrt(5) * r / rho + 5/3 * (r / rho)^2] * exp[-sqrt(5) * r / rho]
 //'
 //'  For this implementation, the diagonal elements for the nugget are set to 1e-8.
 // [[Rcpp::export]]
@@ -84,7 +84,7 @@ Rcpp::XPtr<HODLR_Tree> setup_compressedMatrixGP_Matern(Mat X, double sigma, doub
 //'  to a HODLR_Tree object. Specifically, in this case, the Matern_p1_Kernel
 //'  refers to a kernel with $p=1$ and $nu=3/2$:
 //'
-//'    K(r) = σ^2 * [1 + sqrt(3) * r / ρ] * exp[-sqrt(3) * r / ρ]
+//'    K(r) = sigma^2 * [1 + sqrt(3) * r / rho] * exp[-sqrt(3) * r / rho]
 //'
 //'  For this implementation, the diagonal elements for the nugget are set to 1.
 // [[Rcpp::export]]
@@ -116,6 +116,7 @@ Rcpp::XPtr<HODLR_Tree> setup_compressedMatrixGP_MaternP1(Mat X,
 //' user-provided reciprocal diagonal components for the nugget.
 //'
 //' @param X  Matrix of locations.
+//' @param tP  Specified kernel.
 //' @param sigma  Function standard deviation.
 //' @param rho  Length-Scale.
 //' @param tol  Tolerance for accuracy of calculations.
@@ -125,7 +126,7 @@ Rcpp::XPtr<HODLR_Tree> setup_compressedMatrixGP_MaternP1(Mat X,
 //'  to a HODLR_Tree object. Specifically, in this case, the Matern_pX_Kernel
 //'  refers to a kernel such that $p=2$, i.e.,
 //'
-//'    K(r) = σ^2 * (1 + sqrt(5) * r / ρ + 5/3 * (r / ρ)^2) * exp(-sqrt(5) * r / ρ)
+//'    K(r) = sigma^2 * (1 + sqrt(5) * r / rho + 5/3 * (r / rho)^2) * exp(-sqrt(5) * r / rho)
 //'
 //'  but with the nugget diagonals being set to 1/P, for P a N*1 matrix.
 // [[Rcpp::export]]
@@ -168,7 +169,7 @@ Rcpp::XPtr<HODLR_Tree> setup_compressedMatrixGP_Matern_tP(Mat X,
 //'  to a HODLR_Tree object. Specifically, in this case, kernel is the
 //'  Squared Exponential Kernel:
 //'
-//'    K(r) = σ^2 * exp[ -rho * ||r||^2 ]
+//'    K(r) = sigma^2 * exp[ -rho * ||r||^2 ]
 //'
 //'  with the nugget diagonals set to 1e-8, as with the Matern default.
 // [[Rcpp::export]]
@@ -208,7 +209,7 @@ Rcpp::XPtr<HODLR_Tree> setup_compressedMatrixGP_sqrExp(Mat X,
 //'  to a HODLR_Tree object. Specifically, in this case, kernel is the
 //'  Squared Exponential Kernel:
 //'
-//'    K(r) = σ^2 * exp[ -rho * ||r||^2 ]
+//'    K(r) = sigma^2 * exp[ -rho * ||r||^2 ]
 //'
 //'  with the nugget diagonals set to 1.0, as with the Matern p1 case.
 // [[Rcpp::export]]

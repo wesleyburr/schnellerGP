@@ -1047,8 +1047,7 @@ new_slp_helmholtz_bem3d(field k, pcsurface3d gr, uint q_regular,
     kernels->dnz_kernel_row = fill_dnz_kernel_l_helmholtzbem3d;
     break;
   default:
-    fprintf(stderr, "Unknown basis type detected!\n");
-    abort();
+    error("Unknown basis type detected!\n");
     break;
   }
 
@@ -1072,8 +1071,7 @@ new_slp_helmholtz_bem3d(field k, pcsurface3d gr, uint q_regular,
     kernels->dnz_kernel_col = fill_dnz_kernel_l_helmholtzbem3d;
     break;
   default:
-    fprintf(stderr, "Unknown basis type detected!\n");
-    abort();
+    error("Unknown basis type detected!\n");
     break;
   }
 
@@ -1105,8 +1103,7 @@ new_slp_helmholtz_bem3d(field k, pcsurface3d gr, uint q_regular,
       bem->mass[2] = 1.0 / 6.0;
       break;
     default:
-      fprintf(stderr, "Unknown basis type detected!\n");
-      abort();
+      error("Unknown basis type detected!\n");
       break;
     }
     break;
@@ -1159,14 +1156,12 @@ new_slp_helmholtz_bem3d(field k, pcsurface3d gr, uint q_regular,
       bem->mass[8] = 1.0 / 12.0;
       break;
     default:
-      fprintf(stderr, "Unknown basis type detected!\n");
-      abort();
+      error("Unknown basis type detected!\n");
       break;
     }
     break;
   default:
-    fprintf(stderr, "Unknown basis type detected!\n");
-    abort();
+    error("Unknown basis type detected!\n");
     break;
   }
 
@@ -1216,8 +1211,7 @@ new_dlp_helmholtz_bem3d(field k, pcsurface3d gr, uint q_regular,
     kernels->dnz_kernel_row = fill_dnz_kernel_l_helmholtzbem3d;
     break;
   default:
-    fprintf(stderr, "Unknown basis type detected!\n");
-    abort();
+    error("Unknown basis type detected!\n");
     break;
   }
 
@@ -1241,8 +1235,7 @@ new_dlp_helmholtz_bem3d(field k, pcsurface3d gr, uint q_regular,
     kernels->dnz_kernel_col = fill_dnzdcol_kernel_l_helmholtzbem3d;
     break;
   default:
-    fprintf(stderr, "Unknown basis type detected!\n");
-    abort();
+    error("Unknown basis type detected!\n");
     break;
   }
 
@@ -1274,8 +1267,7 @@ new_dlp_helmholtz_bem3d(field k, pcsurface3d gr, uint q_regular,
       bem->mass[2] = 1.0 / 6.0;
       break;
     default:
-      fprintf(stderr, "Unknown basis type detected!\n");
-      abort();
+      error("Unknown basis type detected!\n");
       break;
     }
     break;
@@ -1328,14 +1320,12 @@ new_dlp_helmholtz_bem3d(field k, pcsurface3d gr, uint q_regular,
       bem->mass[8] = 1.0 / 12.0;
       break;
     default:
-      fprintf(stderr, "Unknown basis type detected!\n");
-      abort();
+      error("Unknown basis type detected!\n");
       break;
     }
     break;
   default:
-    fprintf(stderr, "Unknown basis type detected!\n");
-    abort();
+    error( "Unknown basis type detected!\n");
     break;
   }
 
@@ -1385,8 +1375,7 @@ new_adlp_helmholtz_bem3d(field k, pcsurface3d gr, uint q_regular,
     kernels->dnz_kernel_row = fill_dnzdrow_kernel_l_helmholtzbem3d;
     break;
   default:
-    fprintf(stderr, "Unknown basis type detected!\n");
-    abort();
+    error("Unknown basis type detected!\n");
     break;
   }
 
@@ -1410,8 +1399,7 @@ new_adlp_helmholtz_bem3d(field k, pcsurface3d gr, uint q_regular,
     kernels->dnz_kernel_col = fill_dnz_kernel_l_helmholtzbem3d;
     break;
   default:
-    fprintf(stderr, "Unknown basis type detected!\n");
-    abort();
+    error("Unknown basis type detected!\n");
     break;
   }
 
@@ -1443,8 +1431,7 @@ new_adlp_helmholtz_bem3d(field k, pcsurface3d gr, uint q_regular,
       bem->mass[2] = 1.0 / 6.0;
       break;
     default:
-      fprintf(stderr, "Unknown basis type detected!\n");
-      abort();
+      error("Unknown basis type detected!\n");
       break;
     }
     break;
@@ -1497,14 +1484,12 @@ new_adlp_helmholtz_bem3d(field k, pcsurface3d gr, uint q_regular,
       bem->mass[8] = 1.0 / 12.0;
       break;
     default:
-      fprintf(stderr, "Unknown basis type detected!\n");
-      abort();
+      error( "Unknown basis type detected!\n");
       break;
     }
     break;
   default:
-    fprintf(stderr, "Unknown basis type detected!\n");
-    abort();
+    error("Unknown basis type detected!\n");
     break;
   }
 

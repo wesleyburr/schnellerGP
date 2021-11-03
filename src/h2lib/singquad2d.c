@@ -591,8 +591,7 @@ uint select_quadrature_singquad2d(pcsingquad2d sq, const uint * tv,
     return p;
     break;
   default:
-    printf("ERROR: Unknown quadrature situation!\n");
-    abort();
+    error("ERROR: Unknown quadrature situation!\n");
     break;
   }
 

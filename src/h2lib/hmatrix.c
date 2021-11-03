@@ -1523,8 +1523,7 @@ read_cdf_part(int nc_file,
     break;
 
   default:
-    (void) fprintf(stderr, "Unexpected matrix type %d\n", val);
-    abort();
+    error("Unexpected matrix type");
   }
 
   update_hmatrix(G);
@@ -1886,7 +1885,7 @@ read_hlib_part(FILE * in, uint roff, uint coff, pcluster *rc,
   (*lineno)++;
 
   if (line == 0) {
-    fprintf(stderr, "Unexpected end of file\n");
+    error("Unexpected end of file\n");
 
     return 0;
   }
@@ -1898,7 +1897,7 @@ read_hlib_part(FILE * in, uint roff, uint coff, pcluster *rc,
     if (*c == '\n')
       *c = '\0';
 
-    fprintf(stderr, "Expected \"Type ...\", got \"%s\"\n", line);
+    error("Expected \"Type ...\", got \"%s\"\n", line);
 
     return 0;
   }
@@ -2119,7 +2118,7 @@ read_hlibsymm_part(FILE * in, uint roff, pcluster *rc,
   (*lineno)++;
 
   if (line == 0) {
-    fprintf(stderr, "Unexpected end of file\n");
+    error("Unexpected end of file\n");
 
     return 0;
   }
@@ -2130,9 +2129,7 @@ read_hlibsymm_part(FILE * in, uint roff, pcluster *rc,
     for (c = line; *c != '\0' && *c != '\n'; c++);
     if (*c == '\n')
       *c = '\0';
-
-    fprintf(stderr, "Expected \"Type ...\", got \"%s\"\n", line);
-
+    error("Expected one type, got another, in scan.\n");
     return 0;
   }
 

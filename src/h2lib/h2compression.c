@@ -1000,10 +1000,10 @@ truncate_post(pccluster t, uint tname, void *data)
   k = findrank_truncmode(tm, eps[tname], sigma);
 
   /* DEBUGGING
-     printf("%u:", k);
+     Rprintf("%u:", k);
      for(i=0; i<kmax; i++)
-     printf(" %.4e", sigma->v[i]);
-     printf("\n");
+     Rprintf(" %.4e", sigma->v[i]);
+     Rprintf("\n");
    */
 
   /* Clean up intermediate matrices */
@@ -1588,10 +1588,10 @@ computebasis_post(pccluster t, uint tname, uint pardepth,
   k = findrank_truncmode(tm, eps[tname], sigma);
 
   /* DEBUGGING
-     printf("%u:", k);
+     Rprintf("%u:", k);
      for(i=0; i<kmax; i++)
-     printf(" %.4e", sigma->v[i]);
-     printf("\n");
+     Rprintf(" %.4e", sigma->v[i]);
+     Rprintf("\n");
    */
 
   /* Set rank of new cluster basis */

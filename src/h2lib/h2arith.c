@@ -1758,9 +1758,8 @@ lowersolve_amatrix_3_h2matrix(bool unit, pcamatrix L, pch2matrix X,
   (void) tm;
   (void) tol;
 
-  printf("The function lowersolve_amatrix_h2matrix_3 has not yet "
+  error("The function lowersolve_amatrix_h2matrix_3 has not yet "
 	 "been implemented\n");
-  abort();
 }
 
 /* L^T = T^{-T}*X^T 
@@ -1895,9 +1894,8 @@ uppersolve_amatrix_2_h2matrix(bool unit, pcamatrix L, ph2matrix R,
   (void) tm;
   (void) tol;
 
-  printf("The function uppersolve_amatrix_h2matrix_2 has not yet "
+  error("The function uppersolve_amatrix_h2matrix_2 has not yet "
 	 "been implemented\n");
-  abort();
 }
 
 /* L = T^{-T}*X 
@@ -1915,9 +1913,8 @@ uppersolve_amatrix_3_h2matrix(bool unit, pcamatrix L, ph2matrix R,
   (void) tm;
   (void) tol;
 
-  printf("The function uppersolve_amatrix_h2matrix_3 has not yet "
+  error("The function uppersolve_amatrix_h2matrix_3 has not yet "
 	 "been implemented\n");
-  abort();
 }
 
 /* L^T = T^{-T}*X^T 
@@ -2160,9 +2157,8 @@ lowersolve_h2matrix_3_h2matrix(bool unit, pch2matrix R, ph2matrix X,
   (void) tm;
   (void) tol;
 
-  printf("The function lowersolve_h2matrix_3_h2matrix has not yet "
+  error("The function lowersolve_h2matrix_3_h2matrix has not yet "
 	 "been implemented\n");
-  abort();
 }
 
 /* L^* = T^{-T}X^*
@@ -2355,9 +2351,8 @@ uppersolve_h2matrix_2_h2matrix(bool unit, pch2matrix a, ph2matrix x,
   (void) tm;
   (void) tol;
 
-  printf("The function uppersolve_h2matrix_2_h2matrix has not yet "
+  error("The function uppersolve_h2matrix_2_h2matrix has not yet "
 	 "been implemented\n");
-  abort();
 }
 
 /* x = T^{-T}*x
@@ -2375,9 +2370,8 @@ uppersolve_h2matrix_3_h2matrix(bool unit, pch2matrix a, ph2matrix x,
   (void) tm;
   (void) tol;
 
-  printf("The function uppersolve_h2matrix_3_h2matrix has not yet "
+  error("The function uppersolve_h2matrix_3_h2matrix has not yet "
 	 "been implemented\n");
-  abort();
 }
 
 /* x^* = T^{-T}*x^*

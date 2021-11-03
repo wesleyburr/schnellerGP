@@ -1,4 +1,6 @@
 #include "mclasses/HODLR_Matrix.hpp"
+#include <Rcpp.h>
+using namespace Rcpp;
 
 Vec HODLR_Matrix::getRow(const int j, const int n_col_start, const int n_cols) 
 {
@@ -166,7 +168,9 @@ void HODLR_Matrix::rookPiv(int n_row_start, int n_col_start,
                 if(use_randomization == true)
                 {
                     std::set<int>::const_iterator it(remaining_row_ind.begin());
-                    std::advance(it, rand() % remaining_row_ind.size());
+		    double random_inc1 = R::runif(1, n_rows + 1);
+		    int random1 = random_inc1;
+                    std::advance(it, random1 % remaining_row_ind.size());
                     new_row_ind = *it;
                 }
 
@@ -267,7 +271,9 @@ void HODLR_Matrix::rookPiv(int n_row_start, int n_col_start,
                 if(use_randomization == true)
                 {
                     std::set<int>::const_iterator it(remaining_col_ind.begin());
-                    std::advance(it, rand() % remaining_col_ind.size());
+		    double random_inc2 = R::runif(1, n_cols + 1);
+		    int random2 = random_inc2;
+                    std::advance(it, random2 % remaining_col_ind.size());
                     new_col_ind = *it;
                 }
 

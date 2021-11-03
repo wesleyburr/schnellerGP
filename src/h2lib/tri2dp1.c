@@ -174,8 +174,9 @@ build_tri2dp1_prolongation_sparsematrix(pctri2dp1 dfine, pctri2dp1 dcoarse,
 	}
 	break;
       default:
-	(void) fprintf(stderr,
-		       "Unknown father type %u of vertex %u\n", rf->xf[i], i);
+	error("Unknown father type of vertex.\n");
+/*	(void) fprintf(stderr,
+		       "Unknown father type %u of vertex %u\n", rf->xf[i], i);*/
 	del_sparsepattern(sp);
 	return 0;
       }
@@ -210,8 +211,9 @@ build_tri2dp1_prolongation_sparsematrix(pctri2dp1 dfine, pctri2dp1 dcoarse,
 	}
 	break;
       default:
-	(void) fprintf(stderr,
-		       "Unknown father type %u of vertex %u\n", rf->xf[i], i);
+	error("Unknown father type of vertex.\n");
+/*	(void) fprintf(stderr,
+		       "Unknown father type %u of vertex %u\n", rf->xf[i], i);*/
 	del_sparsematrix(P);
 	return 0;
       }

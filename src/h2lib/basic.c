@@ -53,8 +53,7 @@ init_h2lib(int *argc, char ***argv)
   int       i, j;
 
   if (omp_in_parallel()) {
-    fprintf(stderr, "Calling init_h2lib in parallel section is forbidden.\n");
-    abort();
+    error("Calling init_h2lib in parallel section is forbidden.\n");
   }
   omp_set_nested(1);
 
@@ -110,9 +109,9 @@ _h2_allocmem(size_t sz, const char *filename, int line)
 
   ptr = h2_malloc(sz);
   if (ptr == NULL && sz > 0) {
-    (void) fprintf(stderr, "Memory allocation of %lu bytes failed in %s:%d\n",
-		   (unsigned long) sz, filename, line);
-    abort();
+     error("Memory allocation failed.");
+  /*  (void) fprintf(stderr, "Memory allocation of %lu bytes failed in %s:%d\n",
+		   (unsigned long) sz, filename, line);*/
   }
 
   *((size_t *) ptr) = sz;
@@ -133,17 +132,17 @@ _h2_allocuint(size_t sz, const char *filename, int line)
 
   dsz = sizeof(uint) * sz + ALLOC_OFFSET;
   if ((dsz - ALLOC_OFFSET) / sizeof(uint) != sz) {
-    (void) fprintf(stderr, "Integer overflow in vector allocation in %s:%d\n",
-		   filename, line);
-    abort();
+    error("Integer overflow in vector allocation.");
+/*    (void) fprintf(stderr, "Integer overflow in vector allocation in %s:%d\n",
+		   filename, line);*/
   }
 
   ptr = (uint *) h2_malloc(dsz);
   if (ptr == NULL && dsz > 0) {
-    (void) fprintf(stderr,
+	  error("Vector allocation failed.");
+  /*  (void) fprintf(stderr,
 		   "Vector allocation of %lu entries failed in %s:%d\n",
-		   (unsigned long) sz, filename, line);
-    abort();
+		   (unsigned long) sz, filename, line);*/
   }
 
   *((size_t *) ptr) = dsz;
@@ -164,17 +163,17 @@ _h2_allocreal(size_t sz, const char *filename, int line)
 
   dsz = sizeof(real) * sz + ALLOC_OFFSET;
   if ((dsz - ALLOC_OFFSET) / sizeof(real) != sz) {
-    (void) fprintf(stderr, "Integer overflow in vector allocation in %s:%d\n",
-		   filename, line);
-    abort();
+	  error("Integer overflow in vector allocation.");
+  /*  (void) fprintf(stderr, "Integer overflow in vector allocation in %s:%d\n",
+		   filename, line);*/
   }
 
   ptr = (real *) h2_malloc(dsz);
   if (ptr == NULL && dsz > 0) {
-    (void) fprintf(stderr,
+	  error("Vector allocation failed.");
+/*    (void) fprintf(stderr,
 		   "Vector allocation of %lu entries failed in %s:%d\n",
-		   (unsigned long) sz, filename, line);
-    abort();
+		   (unsigned long) sz, filename, line);*/
   }
 
   *((size_t *) ptr) = dsz;
@@ -195,17 +194,17 @@ _h2_allocfield(size_t sz, const char *filename, int line)
 
   dsz = sizeof(field) * sz + ALLOC_OFFSET;
   if ((dsz - ALLOC_OFFSET) / sizeof(field) != sz) {
-    (void) fprintf(stderr, "Integer overflow in vector allocation in %s:%d\n",
-		   filename, line);
-    abort();
+	  error("Integer overflow in vector allocation.");
+  /*  (void) fprintf(stderr, "Integer overflow in vector allocation in %s:%d\n",
+		   filename, line);*/
   }
 
   ptr = (field *) h2_malloc(dsz);
   if (ptr == NULL && dsz > 0) {
-    (void) fprintf(stderr,
+	  error("Vector allocation failed.");
+/*    (void) fprintf(stderr,
 		   "Vector allocation of %lu entries failed in %s:%d\n",
-		   (unsigned long) sz, filename, line);
-    abort();
+		   (unsigned long) sz, filename, line);*/
   }
 
   *((size_t *) ptr) = dsz;
@@ -226,18 +225,18 @@ _h2_allocmatrix(size_t rows, size_t cols, const char *filename, int line)
 
   dsz = sizeof(field) * rows * cols + ALLOC_OFFSET;
   if ((dsz - ALLOC_OFFSET) / sizeof(field) != rows * cols) {
-    (void) fprintf(stderr, "Integer overflow in matrix allocation in %s:%d\n",
-		   filename, line);
-    abort();
+	  error("Integer overflow in matrix allocation.");
+/*    (void) fprintf(stderr, "Integer overflow in matrix allocation in %s:%d\n",
+		   filename, line);*/
   }
 
   ptr = (field *) h2_malloc(dsz);
   if (ptr == NULL && dsz > 0) {
-    (void) fprintf(stderr,
+	  error("Matrix allocation failed.");
+/*    (void) fprintf(stderr,
 		   "Matrix allocation with %lu rows and %lu columns failed in %s:%d\n",
 		   (unsigned long) rows, (unsigned long) cols, filename,
-		   line);
-    abort();
+		   line);*/
   }
 
   *((size_t *) ptr) = dsz;
@@ -282,9 +281,9 @@ _h2_allocmem(size_t sz, const char *filename, int line)
 
   ptr = h2_malloc(sz);
   if (ptr == NULL && sz > 0) {
-    (void) fprintf(stderr, "Memory allocation of %lu bytes failed in %s:%d\n",
-		   (unsigned long) sz, filename, line);
-    abort();
+	  error("Memory allocation failed.");
+  /*  (void) fprintf(stderr, "Memory allocation of %lu bytes failed in %s:%d\n",
+		   (unsigned long) sz, filename, line);*/
   }
 
   return ptr;
@@ -298,17 +297,17 @@ _h2_allocuint(size_t sz, const char *filename, int line)
 
   dsz = sizeof(uint) * sz;
   if (dsz / sizeof(uint) != sz) {
-    (void) fprintf(stderr, "Integer overflow in vector allocation in %s:%d\n",
-		   filename, line);
-    abort();
+	  error("Integer overflow in vector allocation.");
+/*    (void) fprintf(stderr, "Integer overflow in vector allocation in %s:%d\n",
+		   filename, line);*/
   }
 
   ptr = (uint *) h2_malloc(dsz);
   if (ptr == NULL && dsz > 0) {
-    (void) fprintf(stderr,
+	  error("Vector allocation failed.");
+/*    (void) fprintf(stderr,
 		   "Vector allocation of %lu entries failed in %s:%d\n",
-		   (unsigned long) sz, filename, line);
-    abort();
+		   (unsigned long) sz, filename, line);*/
   }
 
   return ptr;
@@ -322,17 +321,17 @@ _h2_allocreal(size_t sz, const char *filename, int line)
 
   dsz = sizeof(real) * sz;
   if (dsz / sizeof(real) != sz) {
-    (void) fprintf(stderr, "Integer overflow in vector allocation in %s:%d\n",
-		   filename, line);
-    abort();
+	  error("Integer overflow in vector allocation.");
+  /*  (void) fprintf(stderr, "Integer overflow in vector allocation in %s:%d\n",
+		   filename, line);*/
   }
 
   ptr = (real *) h2_malloc(dsz);
   if (ptr == NULL && dsz > 0) {
-    (void) fprintf(stderr,
+	  error("Vector allocation failed.");
+  /*  (void) fprintf(stderr,
 		   "Vector allocation of %lu entries failed in %s:%d\n",
-		   (unsigned long) sz, filename, line);
-    abort();
+		   (unsigned long) sz, filename, line);*/
   }
 
   return ptr;
@@ -346,17 +345,17 @@ _h2_allocfield(size_t sz, const char *filename, int line)
 
   dsz = sizeof(field) * sz;
   if (dsz / sizeof(field) != sz) {
-    (void) fprintf(stderr, "Integer overflow in vector allocation in %s:%d\n",
-		   filename, line);
-    abort();
+	  error("Integer overflow in vector allocation.");
+  /*  (void) fprintf(stderr, "Integer overflow in vector allocation in %s:%d\n",
+		   filename, line);*/
   }
 
   ptr = (field *) h2_malloc(dsz);
   if (ptr == NULL && dsz > 0) {
-    (void) fprintf(stderr,
+	  error("Vector allocation failed.");
+  /*  (void) fprintf(stderr,
 		   "Vector allocation of %lu entries failed in %s:%d\n",
-		   (unsigned long) sz, filename, line);
-    abort();
+		   (unsigned long) sz, filename, line);*/
   }
 
   return ptr;
@@ -370,18 +369,18 @@ _h2_allocmatrix(size_t rows, size_t cols, const char *filename, int line)
 
   dsz = sizeof(field) * rows * cols;
   if (dsz / sizeof(field) != rows * cols) {
-    (void) fprintf(stderr, "Integer overflow in matrix allocation in %s:%d\n",
-		   filename, line);
-    abort();
+	  error("Integer overflow in matrix allocation.");
+/*    (void) fprintf(stderr, "Integer overflow in matrix allocation in %s:%d\n",
+		   filename, line);*/
   }
 
   ptr = (field *) h2_malloc(dsz);
   if (ptr == NULL && dsz > 0) {
-    (void) fprintf(stderr,
+	  error("Matrix allocation failed.");
+/*    (void) fprintf(stderr,
 		   "Matrix allocation with %lu rows and %lu columns failed in %s:%d\n",
 		   (unsigned long) rows, (unsigned long) cols, filename,
-		   line);
-    abort();
+		   line);*/
   }
 
   return ptr;
@@ -398,8 +397,7 @@ freemem(void *ptr)
 size_t
 get_current_memory()
 {
-  fprintf(stderr, "Memory tracing not available!\n"
-	  "Please activate by setting TRACE_MEMORY compiler flag!\n");
+  error("Memory tracing not available! Please activate by setting TRACE_MEMORY compiler flag!\n");
   return 0;
 }
 #endif

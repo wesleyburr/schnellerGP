@@ -22,7 +22,7 @@ After setting up compressed memory storage, returns a pointer
  to a HODLR_Tree object. Specifically, in this case, the Matern kernel
  (default) is the case of $p=2$, or $nu = 5/2$.
 
-   K(r) = σ^2 * [1 + sqrt(5) * r / ρ + 5/3 * (r / ρ)^2] * exp[-sqrt(5) * r / ρ]
+   K(r) = sigma^2 * [1 + sqrt(5) * r / rho + 5/3 * (r / rho)^2] * exp[-sqrt(5) * r / rho]
 
  For this implementation, the diagonal elements for the nugget are set to 1e-8.
 }

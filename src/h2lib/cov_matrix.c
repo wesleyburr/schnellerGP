@@ -152,7 +152,7 @@ void print_cluster(pcluster c){
       print_cluster(c->son[i]);
     }
   }else{
-    printf("[%1.3f,%1.3f]\n",c->bmin[0],c->bmax[0]);
+    Rprintf("[%1.3f,%1.3f]\n",c->bmin[0],c->bmax[0]);
   }
 }
 
@@ -265,7 +265,7 @@ fill_h2matrix_covmatrix(pccovmatrix km, ph2matrix G)
       //printf("[%u]\n", G->cb->sons);
       /*for (int i = 0; i < G->rb->t->size; i++){
         for (int j = 0; j < G->cb->t->size; j++){
-          printf("[%u, %u]\n", G->rb->t->idx[i],G->cb->t->idx[j]);
+          Rprintf("[%u, %u]\n", G->rb->t->idx[i],G->cb->t->idx[j]);
         }
       }*/
       collectdense_h2matrix_covmatrix(km, G->rb,G->cb, &G->u->S);

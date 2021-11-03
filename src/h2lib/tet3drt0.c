@@ -52,10 +52,10 @@ void update_tet3drt0(ptet3drt0 rt0) {
   ndof = 0;
   for (i = 0; i < t3->faces; i++) {
     if (is_dof[i] == 0 || is_dof[i] == 1) {
-      idx2dof[i] = ndof++; // printf("0/1 \t");
+      idx2dof[i] = ndof++; // Rprintf("0/1 \t");
     }
     //else if (is_dof[i] == 1){
-    //  idx2dof[i] = ndof++; printf("1 \t");
+    //  idx2dof[i] = ndof++; Rprintf("1 \t");
     //}
     else {
       assert(is_dof[i] == 2);
@@ -773,20 +773,20 @@ void assemble_tet3drt0_darcy_A_sparsematrix(pctet3drt0 dc, psparsematrix A,
 
   //tetrahedra =1;
   for (d = 0; d < tetrahedra; d++) {
-    // printf("tetrahedra %d\n", d);
+    // Rprintf("tetrahedra %d\n", d);
     /*Get faces of tetrahedra d*/
     ft[0] = t[d][0];
     ft[1] = t[d][1];
     ft[2] = t[d][2];
     ft[3] = t[d][3];
-    // printf("faces %d %d %d %d\n", ft[0], ft[1], ft[2], ft[3]);
+    // Rprintf("faces %d %d %d %d\n", ft[0], ft[1], ft[2], ft[3]);
     /*Get vertices of tetrahedra d*/
     getvertices_tet3d(dc->t3, d, v);
-    //     printf("vertices\n");
-    // printf("%d %f %f %f\n", xt[0], x[xt[0]][0], x[xt[0]][1], x[xt[0]][2]);
-    // printf("%d %f %f %f\n", xt[1], x[xt[1]][0], x[xt[1]][1], x[xt[1]][2]);
-    // printf("%d %f %f %f\n", xt[2], x[xt[2]][0], x[xt[2]][1], x[xt[2]][2]);
-    // printf("%d %f %f %f\n", xt[3], x[xt[3]][0], x[xt[3]][1], x[xt[3]][2]);
+    //     Rprintf("vertices\n");
+    // Rprintf("%d %f %f %f\n", xt[0], x[xt[0]][0], x[xt[0]][1], x[xt[0]][2]);
+    // Rprintf("%d %f %f %f\n", xt[1], x[xt[1]][0], x[xt[1]][1], x[xt[1]][2]);
+    // Rprintf("%d %f %f %f\n", xt[2], x[xt[2]][0], x[xt[2]][1], x[xt[2]][2]);
+    // Rprintf("%d %f %f %f\n", xt[3], x[xt[3]][0], x[xt[3]][1], x[xt[3]][2]);
 
     /*volume of tetrahedra d*/
     T = (1.0 / 6.0) * fabs(
@@ -843,7 +843,7 @@ void assemble_tet3drt0_darcy_A_sparsematrix(pctet3drt0 dc, psparsematrix A,
             k = 0;
             l = 1;
           }
-          // printf("i=%d, j=%d, k=%d, l=%d \n",i,j,k,l);
+          // Rprintf("i=%d, j=%d, k=%d, l=%d \n",i,j,k,l);
 
           x_ij[0] = x[v[i]][0] - x[v[j]][0];
           x_ij[1] = x[v[i]][1] - x[v[j]][1];
@@ -1029,22 +1029,22 @@ void assemble_tet3drt0_b_f_avector(ptet3drt0 dc,
   for (d = 0; d < tetrahedra; d++) {
     //printf("tetrahedra %u\t", d);
     /*Get vertices of tetrahedra d*/
-    // printf("Get vertices\t");
+    // Rprintf("Get vertices\t");
     getvertices_tet3d(dc->t3, d, v);
-    //     printf("vertices\n");
-    // printf("%d %f %f %f\n", xt[0], x[xt[0]][0], x[xt[0]][1], x[xt[0]][2]);
-    // printf("%d %f %f %f\n", xt[1], x[xt[1]][0], x[xt[1]][1], x[xt[1]][2]);
-    // printf("%d %f %f %f\n", xt[2], x[xt[2]][0], x[xt[2]][1], x[xt[2]][2]);
-    // printf("%d %f %f %f\n", xt[3], x[xt[3]][0], x[xt[3]][1], x[xt[3]][2]);
+    //     Rprintf("vertices\n");
+    // Rprintf("%d %f %f %f\n", xt[0], x[xt[0]][0], x[xt[0]][1], x[xt[0]][2]);
+    // Rprintf("%d %f %f %f\n", xt[1], x[xt[1]][0], x[xt[1]][1], x[xt[1]][2]);
+    // Rprintf("%d %f %f %f\n", xt[2], x[xt[2]][0], x[xt[2]][1], x[xt[2]][2]);
+    // Rprintf("%d %f %f %f\n", xt[3], x[xt[3]][0], x[xt[3]][1], x[xt[3]][2]);
     /* Get vertex coordinates */
-    // printf("Get vertex coordinates\t");
+    // Rprintf("Get vertex coordinates\t");
     for (i = 0; i < 4; i++) {
       xt[i][0] = x[v[i]][0];
       xt[i][1] = x[v[i]][1];
       xt[i][2] = x[v[i]][2];
     }
     /*volume of tetrahedra d*/
-    // printf("vol\t");
+    // Rprintf("vol\t");
     vol = (1.0 / 6.0)
         * fabs(
             (xt[1][0] - xt[0][0]) * ((xt[2][1] - xt[0][1])
@@ -1098,14 +1098,14 @@ void assemble_tet3drt0_g_N_avector(ptet3drt0 dc,
 
   d = 0;
   for (i = 0; i < faces; i++) {
-    // printf("face %u\t", i);
+    // Rprintf("face %u\t", i);
 
     if (is_dof[i] == 2) { /*Neumann face*/
-      // printf("face %u\t", i);
+      // Rprintf("face %u\t", i);
 
       /*area of face i*/
       /*Get vertices of face i*/
-      // printf("Get vertives of face\t");
+      // Rprintf("Get vertives of face\t");
       getvertices_face_tet3d(dc->t3, i, v);
       /*Get coordinates of the vertices of face i*/
       //printf("Get vertex coordinates\t");
@@ -1125,7 +1125,7 @@ void assemble_tet3drt0_g_N_avector(ptet3drt0 dc,
       c[2] = xd[0][0] * xd[1][1] - xd[0][1] * xd[1][0];
       area = REAL_SQRT(c[0] * c[0] + c[1] * c[1] + c[2] * c[2]);
       area = area / 2;
-      // printf("Fill g\n");
+      // Rprintf("Fill g\n");
       g->v[d] = (f ? (area * f(e[i], data)) : 0.0);
       d = d + 1;
     }
@@ -1343,7 +1343,7 @@ real norml2_flux_centroid_tet3drt0(pctet3drt0 dc,
 
       }
     }
-    // printf("assemble\n");
+    // Rprintf("assemble\n");
     q(s, fdata, v_flux); /*q exact*/
     val[0] = val[0] - v_flux->v[0];
     val[1] = val[1] - v_flux->v[1];
@@ -1390,7 +1390,7 @@ real norml2_flux_facemidpoint_tet3drt0(pctet3drt0 dc,
     fd[1] = t[k][1];
     fd[2] = t[k][2];
     fd[3] = t[k][3];
-    // printf("f: %u %u %u %u\n", fd[0], fd[1], fd[2], fd[3]);
+    // Rprintf("f: %u %u %u %u\n", fd[0], fd[1], fd[2], fd[3]);
     /*Get vertices*/
     getvertices_tet3d(dc->t3, k, v);
 
@@ -1398,8 +1398,8 @@ real norml2_flux_facemidpoint_tet3drt0(pctet3drt0 dc,
     for (j = 0; j <= 3; j++) {/*faces of tetrahedra k, for sum calculation*/
       /*centroid of face j in tetrahedra k*/
       getvertices_byface_tet3d(dc->t3, k, j, v);
-      //  printf("face %u\n", j);
-      // printf("v: %u %u %u %u\n", v[0], v[1], v[2], v[3]);
+      //  Rprintf("face %u\n", j);
+      // Rprintf("v: %u %u %u %u\n", v[0], v[1], v[2], v[3]);
       alpha = 1.0 / 3.0;
       s[0] =
           alpha * (x[v[(j + 1) % 4]][0] + x[v[(j + 2) % 4]][0]
@@ -1417,7 +1417,7 @@ real norml2_flux_facemidpoint_tet3drt0(pctet3drt0 dc,
       for (l = 0; l <= faces; l++) { /*all faces*/
         if (fd[0] == l || fd[1] == l || fd[2] == l || fd[3] == l) { /*face l belongs to tetrahedra k*/
           getvertices_tet3d(dc->t3, k, v);
-          // printf("v: %u %u %u %u\n", v[0], v[1], v[2], v[3]);
+          // Rprintf("v: %u %u %u %u\n", v[0], v[1], v[2], v[3]);
           /*Find vertex opposite of face j*/
           if (l == fd[0])
             num = 0;

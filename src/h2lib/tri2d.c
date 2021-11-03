@@ -542,11 +542,11 @@ check_tri2d(pctri2d t2)
   /* Check if each edge contains only correct vertices */
   for (i = 0; i < edges; i++) {
     if (e[i][0] >= vertices) {
-      (void) printf(" Edge %u contains illegal vertex %u\n", i, e[i][0]);
+      (void) Rprintf(" Edge %u contains illegal vertex %u\n", i, e[i][0]);
       errors++;
     }
     if (e[i][1] >= vertices) {
-      (void) printf(" Edge %u contains illegal vertex %u\n", i, e[i][1]);
+      (void) Rprintf(" Edge %u contains illegal vertex %u\n", i, e[i][1]);
       errors++;
     }
   }
@@ -555,12 +555,12 @@ check_tri2d(pctri2d t2)
   for (i = 0; i < edges; i++) {
     if (eb[i] == 1) {
       if (xb[e[i][0]] == 0) {
-	(void) printf(" Boundary edge %u contains non-boundary vertex %u\n",
+	(void) Rprintf(" Boundary edge %u contains non-boundary vertex %u\n",
 		      i, e[i][0]);
 	errors++;
       }
       if (xb[e[i][1]] == 0) {
-	(void) printf(" Boundary edge %u contains non-boundary vertex %u\n",
+	(void) Rprintf(" Boundary edge %u contains non-boundary vertex %u\n",
 		      i, e[i][1]);
 	errors++;
       }
@@ -572,7 +572,7 @@ check_tri2d(pctri2d t2)
     j = 0;
     for (k = 0; k < 3; k++) {
       if (t[i][k] >= edges) {
-	(void) printf(" Trinagle %u contains illegal edge %u\n", i, t[i][k]);
+	(void) Rprintf(" Trinagle %u contains illegal edge %u\n", i, t[i][k]);
 	errors++;
       }
       else {
@@ -590,10 +590,10 @@ check_tri2d(pctri2d t2)
       }
     }
     if (j != 3) {
-      (void) printf(" Triangle %u consists of %u vertices:", i, j);
+      (void) Rprintf(" Triangle %u consists of %u vertices:", i, j);
       while (j-- > 0)
-	(void) printf(" %u", v[j]);
-      (void) printf("\n");
+	(void) Rprintf(" %u", v[j]);
+      (void) Rprintf("\n");
       errors++;
     }
   }
@@ -609,18 +609,18 @@ check_tri2d(pctri2d t2)
   }
   for (i = 0; i < edges; i++) {
     if (eb[i] == 0 && en[i] != 2) {
-      (void) printf(" Non-boundary edge %u adjacent to %u triangles\n", i,
+      (void) Rprintf(" Non-boundary edge %u adjacent to %u triangles\n", i,
 		    en[i]);
       errors++;
     }
     if (eb[i] == 1 && en[i] != 1) {
-      (void) printf(" Boundary edge %u adjacent to %u triangles\n", i, en[i]);
+      (void) Rprintf(" Boundary edge %u adjacent to %u triangles\n", i, en[i]);
       errors++;
     }
   }
   freemem(en);
 
-  (void) printf(" %u errors found\n", errors);
+  (void) Rprintf(" %u errors found\n", errors);
 }
 
 /* ------------------------------------------------------------
@@ -674,25 +674,25 @@ write_tri2d(pctri2d t2, const char *name)
 
   out = fopen(name, "w");
   if (!out) {
-    (void) fprintf(stderr, "Could not open file \"%s\" for writing\n", name);
+    error("Could not open file for writing.\n");
     return;
   }
 
-  (void) fprintf(out, "# Triangular mesh description\n"
+  (void) Rprintf(out, "# Triangular mesh description\n"
 		 "# Vertices, edges and triangles\n"
 		 "%u %u %u\n", vertices, edges, triangles);
 
-  (void) fprintf(out,
+  (void) Rprintf(out,
 		 "# List of vertices, given by coordinates and boundary flags\n");
   for (i = 0; i < vertices; i++)
-    (void) fprintf(out, "%.12e \t %.12e \t  %u\n", x[i][0], x[i][1], xb[i]);
-  (void) fprintf(out,
+    (void) Rprintf(out, "%.12e \t %.12e \t  %u\n", x[i][0], x[i][1], xb[i]);
+  (void) Rprintf(out,
 		 "# List of edges, given by vertex numbers and boundary flags\n");
   for (i = 0; i < edges; i++)
-    (void) fprintf(out, "%u \t %u\t  %u\n", e[i][0], e[i][1], eb[i]);
-  (void) fprintf(out, "# List of triangles, given by edge numbers\n");
+    (void) Rprintf(out, "%u \t %u\t  %u\n", e[i][0], e[i][1], eb[i]);
+  (void) Rprintf(out, "# List of triangles, given by edge numbers\n");
   for (i = 0; i < triangles; i++)
-    (void) fprintf(out, "%u \t %u \t%u\n", t[i][0], t[i][1], t[i][2]);
+    (void) Rprintf(out, "%u \t %u \t%u\n", t[i][0], t[i][1], t[i][2]);
 
   (void) fclose(out);
 }
@@ -716,7 +716,7 @@ read_tri2d(const char *name)
 
   in = fopen(name, "r");
   if (!in) {
-    (void) fprintf(stderr, "Could not open file \"%s\" for reading\n", name);
+    error("Could not open file for reading.\n");
     return 0;
   }
 
@@ -728,7 +728,7 @@ read_tri2d(const char *name)
   }
   items = sscanf(buf, "%u %u %u", &vertices, &edges, &triangles);
   if (items != 3) {
-    (void) fprintf(stderr, "Could not get sizes from file \"%s\"\n", name);
+	  error("Could not get sizes from file.\n");
     (void) fclose(in);
     return 0;
   }
@@ -751,8 +751,9 @@ read_tri2d(const char *name)
     items = sscanf(buf, "%" SCANF_PREFIX "f %" SCANF_PREFIX "f %u", x[i],
 		   x[i] + 1, xb + i);
     if (items != 3) {
-      (void) fprintf(stderr, "Could not read vertex %u from file \"%s\"\n", i,
-		     name);
+	    error("Could not get vertex from file.\n");
+/*      (void) Rprintf(stderr, "Could not read vertex %u from file \"%s\"\n", i,
+		     name);*/
       del_tri2d(t2);
       (void) fclose(in);
       return 0;
@@ -768,8 +769,9 @@ read_tri2d(const char *name)
     }
     items = sscanf(buf, "%u %u %u", e[i], e[i] + 1, eb + i);
     if (items != 3) {
-      (void) fprintf(stderr, "Could not read edge %u from file \"%s\"\n", i,
-		     name);
+	    error("Could not read edge from file.\n");
+/*      (void) Rprintf(stderr, "Could not read edge %u from file \"%s\"\n", i,
+		     name);*/
       del_tri2d(t2);
       (void) fclose(in);
       return 0;
@@ -785,8 +787,9 @@ read_tri2d(const char *name)
     }
     items = sscanf(buf, "%u %u %u", t[i], t[i] + 1, t[i] + 2);
     if (items != 3) {
-      (void) fprintf(stderr, "Could not read triangle %u from file \"%s\"\n",
-		     i, name);
+	    error("Could not read triangle from file.\n");
+/*      (void) Rprintf(stderr, "Could not read triangle %u from file \"%s\"\n",
+		     i, name);*/
       del_tri2d(t2);
       (void) fclose(in);
       return 0;
@@ -924,7 +927,7 @@ draw_cairo_tri2d(pctri2d t2, const char *filename, bool mark_refedges,
 
   cairo_destroy(cr);
 #else
-  fprintf(stderr, "CAIRO not supported.\n");
+  Rprintf("CAIRO not supported.\n");
 #endif
 }
 

@@ -12,6 +12,12 @@ solve_h2_vector_start(gp, d_precond, b, start, tolerance, iter)
 \item{d_precond}{A vector of pre-conditions.}
 
 \item{b}{A vector b, for equation $gp*x = b$, with dimension matching that of gp.}
+
+\item{start}{Initial conditions for solver.}
+
+\item{tolerance}{Tolerance for solver, passed on to solve_precond_vect}
+
+\item{iter}{Maximum number of iterations for solver, passed on to solve_precond_vect}
 }
 \value{
 Given inputs gp and b, solves for x in $Ax=b$, and returns it.

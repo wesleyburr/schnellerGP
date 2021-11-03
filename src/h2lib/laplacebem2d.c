@@ -155,8 +155,7 @@ fill_slp_cc_laplacebem2d(const uint * ridx, const uint * cidx,
 	    C = gr_x[edge_s[0]];
 	  }
 	  else {
-	    printf("ERROR!\n");
-	    exit(0);
+	    error("ERROR!\n");
 	  }
 
 	  for (q = 0; q < nq; ++q) {
@@ -242,8 +241,7 @@ fill_slp_cc_laplacebem2d(const uint * ridx, const uint * cidx,
 	    C = gr_x[edge_s[0]];
 	  }
 	  else {
-	    printf("ERROR!\n");
-	    exit(0);
+	    error("ERROR!\n");
 	  }
 
 	  for (q = 0; q < nq; ++q) {
@@ -398,8 +396,7 @@ fill_dlp_cc_laplacebem2d(const uint * ridx, const uint * cidx,
 	    C = gr_x[edge_s[0]];
 	  }
 	  else {
-	    printf("ERROR!\n");
-	    exit(0);
+	    error("ERROR!\n");
 	  }
 
 	  for (q = 0; q < nq; ++q) {
@@ -481,8 +478,7 @@ fill_dlp_cc_laplacebem2d(const uint * ridx, const uint * cidx,
 	    C = gr_x[edge_s[0]];
 	  }
 	  else {
-	    printf("ERROR!\n");
-	    exit(0);
+	    error("ERROR!\n");
 	  }
 
 	  for (q = 0; q < nq; ++q) {

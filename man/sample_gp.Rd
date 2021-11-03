@@ -11,6 +11,8 @@ sample_gp(h2, h, y, tX, sigma_p, tau)
 
 \item{h}{Cholesky decomposition of the covariance matrix}
 
+\item{y}{For solving}
+
 \item{tX}{Regression coefficients or weights}
 
 \item{sigma_p}{Precision of the variance-covariance matrix}

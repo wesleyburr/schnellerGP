@@ -9,6 +9,8 @@ setup_compressedMatrixGP_Matern_tP(X, tP, sigma, rho, tol, M)
 \arguments{
 \item{X}{Matrix of locations.}
 
+\item{tP}{Specified kernel.}
+
 \item{sigma}{Function standard deviation.}
 
 \item{rho}{Length-Scale.}
@@ -22,7 +24,7 @@ After setting up compressed memory storage, returns a pointer
  to a HODLR_Tree object. Specifically, in this case, the Matern_pX_Kernel
  refers to a kernel such that $p=2$, i.e.,
 
-   K(r) = σ^2 * (1 + sqrt(5) * r / ρ + 5/3 * (r / ρ)^2) * exp(-sqrt(5) * r / ρ)
+   K(r) = sigma^2 * (1 + sqrt(5) * r / rho + 5/3 * (r / rho)^2) * exp(-sqrt(5) * r / rho)
 
  but with the nugget diagonals being set to 1/P, for P a N*1 matrix.
 }

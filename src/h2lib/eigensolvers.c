@@ -187,7 +187,7 @@ check_lower_tridiag(pctridiag T, pcamatrix Ts)
 	val -= l[j];
 
       if (ABS(val) > 1e-10)
-	printf("%u %u %g\n", i, j, ABS(val));
+	Rprintf("%u %u %g\n", i, j, ABS(val));
       norm += ABSSQR(val);
     }
 
@@ -686,7 +686,7 @@ sb_muleig_tridiag(ptridiag T, pamatrix Q, uint maxiter)
 
   if (maxiter > 0 && iter == maxiter) {
     (void)
-      printf("  ### Eigensolver warning: did not converge after %u steps\n",
+      Rprintf("  ### Eigensolver warning: did not converge after %u steps\n",
 	     iter);
   }
 
@@ -1451,7 +1451,7 @@ sb_mulsvd_tridiag(ptridiag T, pamatrix U, pamatrix Vt, uint maxiter)
   }
 
   if (maxiter > 0 && iter >= maxiter) {
-    (void) printf("  ### SVD warning: did not converge after %u steps\n",
+    (void) Rprintf("  ### SVD warning: did not converge after %u steps\n",
 		  iter);
   }
 
@@ -2096,7 +2096,7 @@ bidiagonalize_verified_amatrix(pamatrix A, ptridiag T, pamatrix U,
   pamatrix  Acopy, Utmp, Vttmp;
   amatrix   tmp1, tmp2, tmp3;
   uint      k;
-  real      norm, error;
+  real      norm, error_val;
 
   k = UINT_MIN(A->rows, A->cols);
 
@@ -2118,10 +2118,9 @@ bidiagonalize_verified_amatrix(pamatrix A, ptridiag T, pamatrix U,
     norm = normfrob_amatrix(Acopy);
     lowereval_tridiag_amatrix(1.0, true, T, true, Utmp);
     addmul_amatrix(-1.0, false, Utmp, false, Vttmp, Acopy);
-    error = normfrob_amatrix(Acopy);
-    if (error > 1e-12 * norm) {
-      printf("  bidiag: %.4g\n", error);
-      abort();
+    error_val = normfrob_amatrix(Acopy);
+    if (error_val > 1e-12 * norm) {
+      error("Error larger than tolerance.\n");
     }
   }
 
@@ -2143,7 +2142,7 @@ sb_svd_amatrix(pamatrix A, prealavector sigma, pamatrix U, pamatrix Vt,
   amatrix   tmp2, tmp3, tmp4, tmp5;
   ptridiag  T;
   pamatrix  Acopy, Utmp, Vttmp, UT;
-  real      norm, error;
+  real      norm, error_val;
   uint      k;
   uint      iter;
   uint      i;
@@ -2180,17 +2179,17 @@ sb_svd_amatrix(pamatrix A, prealavector sigma, pamatrix U, pamatrix Vt,
 
   addmul_amatrix(-1.0, false, UT, false, Vttmp, Acopy);
 
-  error = normfrob_amatrix(Acopy);
+  error_val = normfrob_amatrix(Acopy);
 
-  if (error > H2_CHECK_TOLERANCE * norm)
-    (void) printf("  ### Poor bidiagonalization accuracy, %g\n",
+  if (error_val > H2_CHECK_TOLERANCE * norm)
+    (void) Rprintf("  ### Poor bidiagonalization accuracy, %g\n",
 		  error / norm);
 
   /* Compute SVD of bidiagonal matrix */
   iter = sb_mulsvd_tridiag(T, U, Vt, maxiter);
 
   if (maxiter > 0 && iter >= maxiter)
-    (void) printf("  ## SVD iteration did not converge after %u steps\n",
+    (void) Rprintf("  ## SVD iteration did not converge after %u steps\n",
 		  iter);
 
   /* Copy singular values */
@@ -2324,7 +2323,7 @@ svd_amatrix(pamatrix A, prealavector sigma, pamatrix U, pamatrix Vt)
   uint      iter, maxiter;
   pamatrix  Acopy, Utmp, Vttmp;
   amatrix   tmp1, tmp2, tmp3;
-  real      norm, error;
+  real      norm, error_val;
   uint      k;
 
   k = UINT_MIN(A->rows, A->cols);
@@ -2352,10 +2351,10 @@ svd_amatrix(pamatrix A, prealavector sigma, pamatrix U, pamatrix Vt)
   diageval_realavector_amatrix(1.0, true, sigma, true, Utmp);
   addmul_amatrix(-1.0, false, Utmp, false, Vttmp, Acopy);
 
-  error = normfrob_amatrix(Acopy);
+  error_val = normfrob_amatrix(Acopy);
 
-  if (error > H2_CHECK_TOLERANCE * norm)
-    (void) printf("  ### Poor SVD accuracy, %g\n", error / norm);
+  if (error_val > H2_CHECK_TOLERANCE * norm)
+    (void) Rprintf("  ### Poor SVD accuracy, %g\n", error / norm);
 
   uninit_amatrix(Vttmp);
   uninit_amatrix(Utmp);

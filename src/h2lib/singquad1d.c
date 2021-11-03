@@ -360,8 +360,7 @@ select_quadrature_singquad1d(pcsingquad1d sq, const uint * tv,
     *base = sq->base_id;
     break;
   default:
-    printf("ERROR: Unknown quadrature case!\n");
-    exit(0);
+    error("ERROR: Unknown quadrature case!\n");
     break;
   }
 

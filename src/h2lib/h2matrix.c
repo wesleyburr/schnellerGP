@@ -2360,7 +2360,7 @@ read_cdf_part(int nc_file, pclusterbasis rb, pclusterbasis cb,
 	assert(rb->sons == 0);
 
 	/* This should never happen */
-	fprintf(stderr, "Warning: son of h2matrix with leaf cluster bases\n");
+	error("Warning: son of h2matrix with leaf cluster bases\n");
 
 	/* Create subdivided matrix */
 	G = new_super_h2matrix(rb, cb, 1, 1);
@@ -2423,8 +2423,7 @@ read_cdf_part(int nc_file, pclusterbasis rb, pclusterbasis cb,
     break;
 
   default:
-    fprintf(stderr, "Unknown block type %d\n", val);
-    abort();
+    error("Unknown block type %d\n", val);
   }
 
   update_h2matrix(G);

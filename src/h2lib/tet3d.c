@@ -249,30 +249,31 @@ write_tet3d(pctet3d t3, const char *name)
 
   out = fopen(name, "w");
   if (!out) {
-    (void) fprintf(stderr, "Could not open file \"%s\" for writing\n", name);
+	  error("Cannot open file for writing.\n");
+/*    (void) Rprintf(stderr, "Could not open file \"%s\" for writing\n", name);*/
     return;
   }
 
-  (void) fprintf(out, "# Tetrahedral mesh description\n"
+  (void) Rprintf(out, "# Tetrahedral mesh description\n"
 		 "# Vertices, edges, faces and tetrahedra\n"
 		 "%u %u %u %u\n", vertices, edges, faces, tetrahedra);
 
-  (void) fprintf(out,
+  (void) Rprintf(out,
 		 "# List of vertices, given by coordinates and boundary flags\n");
   for (i = 0; i < vertices; i++)
-    (void) fprintf(out, "%.12e %.12e %.12e  %u\n", x[i][0], x[i][1], x[i][2],
+    (void) Rprintf(out, "%.12e %.12e %.12e  %u\n", x[i][0], x[i][1], x[i][2],
 		   xb[i]);
-  (void) fprintf(out,
+  (void) Rprintf(out,
 		 "# List of edges, given by vertex numbers and boundary flags\n");
   for (i = 0; i < edges; i++)
-    (void) fprintf(out, "%u %u  %u\n", e[i][0], e[i][1], eb[i]);
-  (void) fprintf(out,
+    (void) Rprintf(out, "%u %u  %u\n", e[i][0], e[i][1], eb[i]);
+  (void) Rprintf(out,
 		 "# List of faces, given by edge numbers and boundary flags\n");
   for (i = 0; i < faces; i++)
-    (void) fprintf(out, "%u %u %u  %u\n", f[i][0], f[i][1], f[i][2], fb[i]);
-  (void) fprintf(out, "# List of tetrahedra, given by face numbers\n");
+    (void) Rprintf(out, "%u %u %u  %u\n", f[i][0], f[i][1], f[i][2], fb[i]);
+  (void) Rprintf(out, "# List of tetrahedra, given by face numbers\n");
   for (i = 0; i < tetrahedra; i++)
-    (void) fprintf(out, "%u %u %u %u\n", t[i][0], t[i][1], t[i][2], t[i][3]);
+    (void) Rprintf(out, "%u %u %u %u\n", t[i][0], t[i][1], t[i][2], t[i][3]);
 
   (void) fclose(out);
 }
@@ -298,7 +299,8 @@ read_tet3d(const char *name)
 
   in = fopen(name, "r");
   if (!in) {
-    (void) fprintf(stderr, "Could not open file \"%s\" for reading\n", name);
+	  error("Cannot open file for reading.\n");
+/*    (void) Rprintf(stderr, "Could not open file \"%s\" for reading\n", name);*/
     return 0;
   }
 
@@ -307,7 +309,8 @@ read_tet3d(const char *name)
     line = fgets(buf, 80, in);
   items = sscanf(line, "%u %u %u %u", &vertices, &edges, &faces, &tetrahedra);
   if (items != 4) {
-    (void) fprintf(stderr, "Could not get sizes from file \"%s\"\n", name);
+	  error("Cannot get sizes from file.\n");
+/*    (void) Rprintf(stderr, "Could not get sizes from file \"%s\"\n", name);*/
     (void) fclose(in);
     return 0;
   }
@@ -329,8 +332,9 @@ read_tet3d(const char *name)
 		   "%" SCANF_PREFIX "f %" SCANF_PREFIX "f %" SCANF_PREFIX
 		   "f  %u", x[i], x[i] + 1, x[i] + 2, xb + i);
     if (items != 4) {
-      (void) fprintf(stderr, "Could not read vertex %u from file \"%s\"\n", i,
-		     name);
+	    error("Cannot read vertex from file.\n");
+/*      (void) Rprintf(stderr, "Could not read vertex %u from file \"%s\"\n", i,
+		     name);*/
       del_tet3d(t3);
       (void) fclose(in);
       return 0;
@@ -343,8 +347,9 @@ read_tet3d(const char *name)
       line = fgets(buf, 80, in);
     items = sscanf(line, "%u %u  %u", e[i], e[i] + 1, eb + i);
     if (items != 3) {
-      (void) fprintf(stderr, "Could not read edge %u from file \"%s\"\n", i,
-		     name);
+	    error("Cannot read edge from file.\n");
+/*      (void) Rprintf(stderr, "Could not read edge %u from file \"%s\"\n", i,
+		     name);*/
       del_tet3d(t3);
       (void) fclose(in);
       return 0;
@@ -357,8 +362,9 @@ read_tet3d(const char *name)
       line = fgets(buf, 80, in);
     items = sscanf(line, "%u %u %u  %u", f[i], f[i] + 1, f[i] + 2, fb + i);
     if (items != 4) {
-      (void) fprintf(stderr, "Could not read face %u from file \"%s\"\n", i,
-		     name);
+      error("Cannot read face from file.\n");
+/*      (void) Rprintf(stderr, "Could not read face %u from file \"%s\"\n", i,
+		     name);*/
       del_tet3d(t3);
       (void) fclose(in);
       return 0;
@@ -371,9 +377,10 @@ read_tet3d(const char *name)
       line = fgets(buf, 80, in);
     items = sscanf(line, "%u %u %u %u", t[i], t[i] + 1, t[i] + 2, t[i] + 3);
     if (items != 4) {
-      (void) fprintf(stderr,
+	    error("Cannot read tetrahedron from file.\n");
+/*      (void) Rprintf(stderr,
 		     "Could not read tetrahedron %u from file \"%s\"\n", i,
-		     name);
+		     name);*/
       del_tet3d(t3);
       (void) fclose(in);
       return 0;
@@ -606,11 +613,11 @@ check_tet3d(pctet3d t3)
   /* Check if each edge contains only correct vertices */
   for (i = 0; i < edges; i++) {
     if (e[i][0] >= vertices) {
-      (void) printf(" Edge %u contains illegal vertex %u\n", i, e[i][0]);
+      (void) Rprintf(" Edge %u contains illegal vertex %u\n", i, e[i][0]);
       errors++;
     }
     if (e[i][1] >= vertices) {
-      (void) printf(" Edge %u contains illegal vertex %u\n", i, e[i][1]);
+      (void) Rprintf(" Edge %u contains illegal vertex %u\n", i, e[i][1]);
       errors++;
     }
   }
@@ -620,7 +627,7 @@ check_tet3d(pctet3d t3)
     j = 0;
     for (k = 0; k < 3; k++) {
       if (f[i][k] >= edges) {
-	(void) printf(" Face %u contains illegal edge %u\n", i, f[i][k]);
+	(void) Rprintf(" Face %u contains illegal edge %u\n", i, f[i][k]);
 	errors++;
       }
       else {
@@ -638,10 +645,10 @@ check_tet3d(pctet3d t3)
       }
     }
     if (j != 3) {
-      (void) printf(" Face %u consists of %u vertices:", i, j);
+      (void) Rprintf(" Face %u consists of %u vertices:", i, j);
       while (j-- > 0)
-	(void) printf(" %u", v[j]);
-      (void) printf("\n");
+	(void) Rprintf(" %u", v[j]);
+      (void) Rprintf("\n");
       errors++;
     }
   }
@@ -651,7 +658,7 @@ check_tet3d(pctet3d t3)
     j = 0;
     for (k = 0; k < 4; k++) {
       if (t[i][k] >= faces) {
-	(void) printf(" Tetrahedron %u contains illegal face %u\n", i,
+	(void) Rprintf(" Tetrahedron %u contains illegal face %u\n", i,
 		      t[i][k]);
 	errors++;
       }
@@ -666,10 +673,10 @@ check_tet3d(pctet3d t3)
       }
     }
     if (j != 6) {
-      (void) printf(" Tetrahedron %u consists of %u edges:", i, j);
+      (void) Rprintf(" Tetrahedron %u consists of %u edges:", i, j);
       while (j-- > 0)
-	(void) printf(" %u", v[j]);
-      (void) printf("\n");
+	(void) Rprintf(" %u", v[j]);
+      (void) Rprintf("\n");
       errors++;
     }
   }
@@ -693,10 +700,10 @@ check_tet3d(pctet3d t3)
       }
     }
     if (j != 4) {
-      (void) printf(" Tetrahedron %u consists of %u vertices:", i, j);
+      (void) Rprintf(" Tetrahedron %u consists of %u vertices:", i, j);
       while (j-- > 0)
-	(void) printf(" %u", v[j]);
-      (void) printf("\n");
+	(void) Rprintf(" %u", v[j]);
+      (void) Rprintf("\n");
       errors++;
     }
   }
@@ -713,12 +720,12 @@ check_tet3d(pctet3d t3)
   }
   for (i = 0; i < faces; i++)
     if (!fb[i] && fn[i] != 2) {
-      (void) printf(" Face %u adjacent to %u tetrahedra\n", i, fn[i]);
+      (void) Rprintf(" Face %u adjacent to %u tetrahedra\n", i, fn[i]);
       errors++;
     }
   freemem(fn);
 
-  (void) printf(" %u errors found\n", errors);
+  (void) Rprintf(" %u errors found\n", errors);
 
 }
 

@@ -140,17 +140,17 @@ print_sparsepattern(pcsparsepattern sp)
   ppatentry e;
   uint      i;
 
-  (void) printf("sparsepattern, rows=%d, cols=%d\n", sp->rows, sp->cols);
+  (void) Rprintf("sparsepattern, rows=%d, cols=%d\n", sp->rows, sp->cols);
 
   for (i = 0; i < sp->rows; i++) {
-    (void) printf("  %u:", i);
+    (void) Rprintf("  %u:", i);
 
     e = sp->row[i];
     while (e != NULL) {
-      (void) printf(" %u", e->col);
+      (void) Rprintf(" %u", e->col);
 
       e = e->next;
     }
-    (void) printf("\n");
+    (void) Rprintf("\n");
   }
 }

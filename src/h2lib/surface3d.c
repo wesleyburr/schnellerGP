@@ -249,13 +249,13 @@ print_surface3d(pcsurface3d gr)
   const real *g = (const real *) gr->g;
   uint      i;
 
-  (void) printf("surface3d(%u,%u,%u)\n", vertices, edges, triangles);
+  (void) Rprintf("surface3d(%u,%u,%u)\n", vertices, edges, triangles);
   for (i = 0; i < vertices; i++)
-    (void) printf(" %d: (% .5e % .5e % .5e)\n", i, x[i][0], x[i][1], x[i][2]);
+    (void) Rprintf(" %d: (% .5e % .5e % .5e)\n", i, x[i][0], x[i][1], x[i][2]);
   for (i = 0; i < edges; i++)
-    (void) printf(" %d: (%u %u)\n", i, e[i][0], e[i][1]);
+    (void) Rprintf(" %d: (%u %u)\n", i, e[i][0], e[i][1]);
   for (i = 0; i < triangles; i++)
-    (void) printf(" %d: (%u %u %u  %u %u %u  % .5e % .5e % .5e  % .5e)\n", i,
+    (void) Rprintf(" %d: (%u %u %u  %u %u %u  % .5e % .5e % .5e  % .5e)\n", i,
 		  t[i][0], t[i][1], t[i][2], s[i][0], s[i][1], s[i][2],
 		  n[i][0], n[i][1], n[i][2], g[i]);
 }
@@ -276,32 +276,32 @@ check_surface3d(pcsurface3d gr)
   for (i = 0; i < edges; i++)
     for (j = 0; j < 2; j++)
       if (e[i][j] >= vertices) {
-	(void) printf(" Vertex %u in edge %u out of bounds\n", j, i);
+	(void) Rprintf(" Vertex %u in edge %u out of bounds\n", j, i);
 	problems++;
       }
 
   for (i = 0; i < triangles; i++)
     for (j = 0; j < 3; j++) {
       if (t[i][j] >= vertices) {
-	(void) printf(" Vertex %u in triangle %u out of bounds\n", j, i);
+	(void) Rprintf(" Vertex %u in triangle %u out of bounds\n", j, i);
 	problems++;
       }
 
       if (s[i][j] >= edges) {
-	(void) printf(" Edge %u in triangle %u out of bounds\n", j, i);
+	(void) Rprintf(" Edge %u in triangle %u out of bounds\n", j, i);
 	problems++;
       }
       else {
 	if (e[s[i][j]][0] == t[i][(j + 1) % 3]) {
 	  if (e[s[i][j]][1] != t[i][(j + 2) % 3]) {
-	    (void) printf(" Mismatched edge %u in triangle %u\n", j, i);
+	    (void) Rprintf(" Mismatched edge %u in triangle %u\n", j, i);
 	    problems++;
 	  }
 	}
 	else {
 	  if (e[s[i][j]][0] != t[i][(j + 2) % 3] || e[s[i][j]][1]
 	      != t[i][(j + 1) % 3]) {
-	    (void) printf(" *Mismatched edge %u in triangle %u\n", j, i);
+	    (void) Rprintf(" *Mismatched edge %u in triangle %u\n", j, i);
 	    problems++;
 	  }
 	}
@@ -519,8 +519,9 @@ write_surface3d(pcsurface3d gr, const char *filename)
 
   out = fopen(filename, "w");
   if (out == 0) {
-    (void) fprintf(stderr, "Could not open file \"%s\" for writing\n",
-		   filename);
+	  error("Cannot open file for writing.\n");
+/*    (void) fprintf(stderr, "Could not open file \"%s\" for writing\n",
+		   filename);*/
     return;
   }
 
@@ -587,8 +588,9 @@ read_surface3d(const char *filename)
   in = fopen(filename, "r");
 #endif
   if (in == 0) {
-    (void) fprintf(stderr, "Could not open file \"%s\" for reading\n",
-		   filename);
+	  error("Cannot open file for reading.\n");
+/*    (void) fprintf(stderr, "Could not open file \"%s\" for reading\n",
+		   filename);*/
     return 0;
   }
 
@@ -597,8 +599,9 @@ read_surface3d(const char *filename)
 
   if (line == 0 || sscanf(line, "%u %u %u", &vertices, &edges, &triangles)
       != 3) {
-    (void) fprintf(stderr, "Could not read first line of file \"%s\"\n",
-		   filename);
+	  error("Cannot read first line of file.\n");
+/*    (void) fprintf(stderr, "Could not read first line of file \"%s\"\n",
+		   filename);*/
 
 #ifdef USE_ZLIB
     gzclose(in);
@@ -620,9 +623,10 @@ read_surface3d(const char *filename)
     if (line == 0 || sscanf(line, "%" SCANF_PREFIX "f %" SCANF_PREFIX "f %"
 			    SCANF_PREFIX "f", x[i], x[i] + 1, x[i] + 2)
 	!= 3) {
-      (void) fprintf(stderr,
+	    error("Cannot read vertex in file.\n");
+/*      (void) fprintf(stderr,
 		     "Could not read vertex %u in line %u of file \"%s\"\n",
-		     i, ln, filename);
+		     i, ln, filename);*/
       del_surface3d(gr);
 
 #ifdef USE_ZLIB
@@ -637,9 +641,10 @@ read_surface3d(const char *filename)
     line = readline(buf, 80, in, &ln);
 
     if (line == 0 || sscanf(line, "%u %u", e[i], e[i] + 1) != 2) {
-      (void) fprintf(stderr,
+	    error("Cannot read edge in file.\n");
+/*      (void) fprintf(stderr,
 		     "Could not read edge %u in line %u of file \"%s\"\n", i,
-		     ln, filename);
+		     ln, filename);*/
       del_surface3d(gr);
 
 #ifdef USE_ZLIB
@@ -656,9 +661,10 @@ read_surface3d(const char *filename)
     if (line == 0 || sscanf(line, "%u %u %u  %u %u %u", t[i], t[i] + 1,
 			    t[i] + 2, s[i], s[i] + 1, s[i] + 2)
 	!= 6) {
-      (void) fprintf(stderr,
+	    error("Cannot read triangle in file.\n");
+/*      (void) fprintf(stderr,
 		     "Could not read triangle %u in line %u of file \"%s\"\n",
-		     i, ln, filename);
+		     i, ln, filename);*/
       del_surface3d(gr);
 
 #ifdef USE_ZLIB
@@ -685,8 +691,9 @@ static void
 nc_handle_error(int res)
 {
   if (res != NC_NOERR)
-    (void) fprintf(stderr, "NetCDF error %d, \"%s\"\n",
-		   res, nc_strerror(res));
+	  error("NetCDF error.\n");
+/*    (void) fprintf(stderr, "NetCDF error %d, \"%s\"\n",
+		   res, nc_strerror(res));*/
 }
 #endif
 
@@ -777,7 +784,7 @@ write_nc_surface3d(pcsurface3d gr, const char *filename)
   (void) gr;
   (void) filename;
 
-  (void) printf("Sorry, no NetCDF support.\n");
+  (void) Rprintf("Sorry, no NetCDF support.\n");
 #endif
 }
 
@@ -853,7 +860,7 @@ read_nc_surface3d(const char *filename)
 #else
   (void) filename;
 
-  (void) printf("Sorry, no NetCDF support.\n");
+  (void) Rprintf("Sorry, no NetCDF support.\n");
   return 0;
 #endif
 }
@@ -1019,8 +1026,9 @@ read_netgen_surface3d(const char *filename)
   in = fopen(filename, "r");
 #endif
   if (in == 0) {
-    (void) fprintf(stderr, "Could not open file \"%s\" for reading\n",
-		   filename);
+	  error("Cannot open file for reading.\n");
+/*    (void) fprintf(stderr, "Could not open file \"%s\" for reading\n",
+		   filename);*/
     return NULL;
   }
 
@@ -1054,7 +1062,8 @@ read_netgen_surface3d(const char *filename)
 	assert(i == triangles);
       }
       else {
-	(void) fprintf(stderr, "Unknown file format.\n");
+	      error("Unknown file format.\n");
+/*	(void) fprintf(stderr, "Unknown file format.\n");*/
       }
     }
 
@@ -1075,7 +1084,8 @@ read_netgen_surface3d(const char *filename)
 	assert(i == vertices);
       }
       else {
-	(void) fprintf(stderr, "Unknown file format.\n");
+	      error("Unknown file format.\n");
+/*	(void) fprintf(stderr, "Unknown file format.\n");*/
       }
     }
     line = readline(buf, 255, in, &ln);
@@ -1092,7 +1102,7 @@ read_netgen_surface3d(const char *filename)
   prepare_edges(vertices, t, triangles, e, edges);
   prepare_arrays_s(t, e, triangles, edges, s);
 
-  printf("geometry with %u vertices, %u edges, %u triangles read.\n",
+  Rprintf("geometry with %u vertices, %u edges, %u triangles read.\n",
 	 vertices, edges, triangles);
 
   gr = new_surface3d(vertices, edges, triangles);
@@ -1380,7 +1390,7 @@ read_unv_surface3d(char *filename)
   x = allocuint(vertices);
   t = allocuint(triangles);
 
-  printf("%d, %d, %d\n", vertices, edges, triangles);
+  Rprintf("%d, %d, %d\n", vertices, edges, triangles);
 
 #ifdef USE_ZLIB
   gzrewind(file);
@@ -1567,8 +1577,7 @@ refine_red_surface3d(psurface3d in)
 	gr->t[s][2] = gr->e[gr->s[s][0]][0];
       }
       else {
-	printf("ERROR!\n");
-	abort();
+	error("ERROR!\n");
       }
 
       s++;

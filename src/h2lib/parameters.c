@@ -22,7 +22,7 @@ askforint(const char *question, const char *envname, int deflt)
   if (env && sscanf(env, "%d", &res) == 1)
     return res;
 
-  (void) printf("%s (%d)\n", question, deflt);
+  (void) Rprintf("%s (%d)\n", question, deflt);
   res = deflt;
   if (fgets(buf, 80, stdin))
     sscanf(buf, "%d", &res);
@@ -44,14 +44,14 @@ askforchar(const char *question, const char *envname, const char *allowed,
     return tolower(res);
 
   do {
-    (void) printf("%s (", question);
+    (void) Rprintf("%s (", question);
     res = tolower(deflt);
     for (c = allowed; *c; c++)
       if (*c == res)
-	(void) printf("%c", toupper(*c));
+	(void) Rprintf("%c", toupper(*c));
       else
-	(void) printf("%c", tolower(*c));
-    (void) printf(")\n");
+	(void) Rprintf("%c", tolower(*c));
+    (void) Rprintf(")\n");
     if (fgets(buf, 80, stdin))
       sscanf(buf, " %c", &res);
     res = tolower(res);
@@ -73,7 +73,7 @@ askforreal(const char *question, const char *envname, real deflt)
   if (env && sscanf(env, "%" SCANF_PREFIX "f", &res) == 1)
     return res;
 
-  (void) printf("%s (%.3e)\n", question, deflt);
+  (void) Rprintf("%s (%.3e)\n", question, deflt);
   res = deflt;
   if (fgets(buf, 80, stdin))
     sscanf(buf, "%" SCANF_PREFIX "f", &res);
@@ -97,7 +97,7 @@ askforstring(const char *question, const char *envname, const char *deflt,
     return buffer;
   }
 
-  (void) printf("%s (%s)\n", question, deflt);
+  (void) Rprintf("%s (%s)\n", question, deflt);
   if (fgets(buffer, bufsize, stdin) && buffer[0] != '\n' && buffer[0] != '\0') {
     for (bufptr = buffer; *bufptr != '\n' && *bufptr != '\0'; bufptr++);
     *bufptr = '\0';

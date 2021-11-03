@@ -54,10 +54,10 @@ void update_tri2drt0(ptri2drt0 rt0){
  nfix = 0; ndof = 0;
  for(i=0; i<t2->edges;i++){
    if(is_dof[i] == 0 || is_dof[i] == 1) {
-     idx2dof[i] = ndof++;// printf("0/1 \t");
+     idx2dof[i] = ndof++;// Rprintf("0/1 \t");
    }
    //else if (is_dof[i] == 1){
-   //  idx2dof[i] = ndof++; printf("1 \t");
+   //  idx2dof[i] = ndof++; Rprintf("1 \t");
    //}
    else{
      assert(is_dof[i] == 2);
@@ -376,8 +376,8 @@ assemble_tri2drt0_darcy_A_sparsematrix(pctri2drt0 dc, psparsematrix A, psparsema
 	else {/*i=j*/ /*j is the vertex opposite of edge j*/
 	  i = ((j+1)%3);
 	  k = ((j+2)%3);
-	 // printf("i = %u, j = %u, k = %u\n", i, j, k);
-	 // printf("v[i] = %u, v[j] = %u, v[k] = %u\n", v[i], v[j], v[k]);
+	 // Rprintf("i = %u, j = %u, k = %u\n", i, j, k);
+	 // Rprintf("v[i] = %u, v[j] = %u, v[k] = %u\n", v[i], v[j], v[k]);
 	  x_ij[0] = x[v[i]][0] - x[v[j]][0]; x_ij[1] = x[v[i]][1] - x[v[j]][1]; 
 	  x_jk[0] = x[v[j]][0] - x[v[k]][0]; x_jk[1] = x[v[j]][1] - x[v[k]][1]; 
 	  x_ki[0] = x[v[k]][0] - x[v[i]][0]; x_ki[1] = x[v[k]][1] - x[v[i]][1];
@@ -389,11 +389,11 @@ assemble_tri2drt0_darcy_A_sparsematrix(pctri2drt0 dc, psparsematrix A, psparsema
       } 
     }
 
-   // printf("At = \n");
+   // Rprintf("At = \n");
    // for(i=0;i<3;i++){
    //   for(j=0;j<3;j++)
-   //     printf("At[%u][%u] = %f \t",i, j,  At[i][j]);
-   //  printf("\n"); 
+   //     Rprintf("At[%u][%u] = %f \t",i, j,  At[i][j]);
+   //  Rprintf("\n"); 
   //  }
       
     /* Add to system matrix */
@@ -403,7 +403,7 @@ assemble_tri2drt0_darcy_A_sparsematrix(pctri2drt0 dc, psparsematrix A, psparsema
 	for(j=0;j<3;j++){
 	  if(is_dof[et[j]] == 0 || is_dof[et[j]] == 1){
 	  jj = idx2dof[et[j]];
-	// printf("ii = %u jj = %u\n", ii, jj);
+	// Rprintf("ii = %u jj = %u\n", ii, jj);
 	  addentry_sparsematrix(A, ii, jj, At[i][j]);
 	 // print_sparsematrix(A);
 	  }
@@ -476,7 +476,7 @@ assemble_tri2drt0_darcy_B_sparsematrix(pctri2drt0 dc, psparsematrix A, psparsema
         }
       }  
     }
-   // printf("triangle %d\n", d);
+   // Rprintf("triangle %d\n", d);
     //print_sparsematrix(A);
   }
 }
@@ -801,7 +801,7 @@ norml2_flux_centroid_tri2drt0(pctri2drt0 dc,
 	
       }
     }
-   // printf("assemble\n");
+   // Rprintf("assemble\n");
     q(s, fdata, v_flux);
     val[0] = val[0] - v_flux->v[0];
     val[1] = val[1] - v_flux->v[1];

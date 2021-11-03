@@ -249,14 +249,14 @@ print_realavector(pcrealavector v)
   uint      dim = v->dim;
   uint      i;
 
-  (void) printf("realavector(%u)\n", dim);
+  (void) Rprintf("realavector(%u)\n", dim);
   if (dim == 0)
     return;
 
-  (void) printf("  (%.5e", v->v[0]);
+  (void) Rprintf("  (%.5e", v->v[0]);
   for (i = 1; i < dim; i++)
-    (void) printf(" %.5e", v->v[i]);
-  (void) printf(")\n");
+    (void) Rprintf(" %.5e", v->v[i]);
+  (void) Rprintf(")\n");
 }
 
 /* ------------------------------------------------------------

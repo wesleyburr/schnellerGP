@@ -276,15 +276,15 @@ save_current_content_ppm(char *prefix, uint paper_width, uint paper_height,
 
   snprintf(filename, MAX_FILE, "%s%d.ppm", prefix, snapshots);	/* Create ongoing numbering */
   FILE     *file = fopen(filename, "w");
-  fprintf(file, "P3\n%d %d\n%d\n", paper_width, paper_height, color_max);
+  Rprintf(file, "P3\n%d %d\n%d\n", paper_width, paper_height, color_max);
 
   for (i = 0; i < paper_height; i++) {	/* Write pixel values in file */
     for (j = 0; j < paper_width; j++) {
       current = format_bytes * ((paper_height - i - 1) * paper_width + j);
-      fprintf(file, "%3d %3d %3d ", pixels[current], pixels[current + 1],
+      Rprintf(file, "%3d %3d %3d ", pixels[current], pixels[current + 1],
 	      pixels[current + 2]);
     }
-    fprintf(file, "\n");
+    Rprintf(file, "\n");
   }
   fclose(file);
 }
@@ -320,25 +320,22 @@ save_current_content_png(char *prefix, uint paper_width, uint paper_height,
   png_structp png_snap =
     png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
   if (!png_snap) {		/* If something goes wrong */
-    printf(" No png_struct data could be allocated! \n");
-    abort();
+    error(" No png_struct data could be allocated! \n");
   }
 
   /* Allocate and init png_info object for the png_snap */
   png_infop info = png_create_info_struct(png_snap);
   if (!info) {
-    printf(" No png_info data could be allocated! \n");
     png_destroy_write_struct(&png_snap, (png_infopp) NULL);
-    abort();
+    error("No png_info data could be allocated! \n");
   }
   /* Okay, now the error handling.
      If an error turns up, libpng will call setjmp(),
      so if this happen, we are out of buisness */
   if (setjmp(png_jmpbuf(png_snap))) {
-    printf(" Error! File will be closed! \n");
     png_destroy_write_struct(&png_snap, &info);
     fclose(file);
-    abort();
+    error(" Error! File will be closed! \n");
   }
 
   /* Now the more important part =) 
@@ -378,25 +375,24 @@ read_file(const char *file, double scale, uint number, psolution sol,
 
   in = fopen(file, "r");
   if (in == NULL) {
-    fprintf(stderr, "No file");
+    error("No file");
   }
 
   /* Read size for points */
   line = fgets(buf, 80, in);
 
   if (line == 0) {
-    fprintf(stderr, "Could not read first line of \"%s\"\n", file);
+    error("Could not read first line of file");
     return -1;
   }
 
   args = sscanf(line, "%d %d %lf", &max_x, &max_y, &z);
 
   if (args != 3) {
-    fprintf(stderr,
-	    "First line of \"%s\" doesn't contain required numbers!\n", file);
-    fprintf(stderr, "It should be of the form \n");
-    fprintf(stderr,
-	    "# points x direction (uint)  # points y direction (uint)  z-value of the plane (double)  wave number (double)\n");
+    error("First line of file doesn't contain required numbers!\n");
+ /*   Rprintf(stderr, "It should be of the form \n");
+    Rprintf(stderr,
+	    "# points x direction (uint)  # points y direction (uint)  z-value of the plane (double)  wave number (double)\n");*/
     return -1;
   }
 
@@ -410,7 +406,7 @@ read_file(const char *file, double scale, uint number, psolution sol,
   for (i = 0; i < l; i++) {
     line = fgets(buf, 80, in);
     if (line == 0) {
-      fprintf(stderr, "Could not read line %lu of \"%s\"\n", i + 1, file);
+      error("Could not read line of file");
       del_grid(sol->gr[number]);
       return -1;
     }
@@ -423,9 +419,7 @@ read_file(const char *file, double scale, uint number, psolution sol,
 	     &(sol->gr[number]->point[i][6]));
 
     if (args != 5) {
-      fprintf(stderr,
-	      "Could not read five coordinates in line %lu of \"%s\"\n",
-	      i + 1, file);
+      error("Could not read five coordinates in line of file");
       del_grid(sol->gr[number]);
       return -1;
     }
@@ -475,7 +469,7 @@ read_file(const char *file, double scale, uint number, psolution sol,
 	   (sol->gr[number]->point[i][2 * (j + 1)] - maxpoint));
 	sol->timegr[number]->point[i][2 * (j + 1) + 1] =
 	  sol->gr[number]->point[i][2 * (j + 1) + 1];
-	//printf("%f %f \n", sol->gr[number]->point[i][2], sol->gr[number]->point[i][3]);  
+	//Rprintf("%f %f \n", sol->gr[number]->point[i][2], sol->gr[number]->point[i][3]);  
       }
     }
   }
@@ -508,7 +502,7 @@ read_file(const char *file, double scale, uint number, psolution sol,
 	  1.0 +
 	  (lenght * 2.0 *
 	   (sol->gr[number]->point[i][2 * (j + 1)] - maxpoint));
-	//printf("%f %f \n", sol->gr[number]->point[i][2], sol->gr[number]->point[i][3]);  
+	//Rprintf("%f %f \n", sol->gr[number]->point[i][2], sol->gr[number]->point[i][3]);  
       }
     }
 
@@ -549,7 +543,7 @@ read_file(const char *file, double scale, uint number, psolution sol,
     				nb->son[j + i * rsons] = buildfromblock_dblock(b->son[j + i * rsons], t, s->son[i]);
 				}
 				if((s->sons==0) && (t->sons == 0)){
-					printf("Something goes wrong!\n");
+					Rprintf("Something goes wrong!\n");
 				}
 			}
 			else{
@@ -855,7 +849,7 @@ draw_1c(pcdcluster c, uint count, uint geometry)
   glPopMatrix();
 
   if (bbox == true) {
-    printf("Bounding box [%.6e, %.6e]\n", c->bmin[0], c->bmax[0]);
+    Rprintf("Bounding box [%.6e, %.6e]\n", c->bmin[0], c->bmax[0]);
   }
 }
 
@@ -918,7 +912,7 @@ draw_1cc(pccluster c, uint count, uint geometry)
   glPopMatrix();
 
   if (bbox == true) {
-    printf("Bounding box [%.6e, %.6e]\n", c->bmin[0], c->bmax[0]);
+    Rprintf("Bounding box [%.6e, %.6e]\n", c->bmin[0], c->bmax[0]);
   }
 }
 
@@ -960,7 +954,7 @@ draw_2c(pcdcluster c, uint geometry)
   }
 
   if (bbox == true) {
-    printf("Bounding box [%.6e, %.6e] x [%.6e, %.6e]\n", c->bmin[0],
+    Rprintf("Bounding box [%.6e, %.6e] x [%.6e, %.6e]\n", c->bmin[0],
 	   c->bmax[0], c->bmin[1], c->bmax[1]);
   }
 
@@ -1004,7 +998,7 @@ draw_2cc(pccluster c, uint geometry)
   }
 
   if (bbox == true) {
-    printf("Bounding box [%.6e, %.6e] x [%.6e, %.6e]\n", c->bmin[0],
+    Rprintf("Bounding box [%.6e, %.6e] x [%.6e, %.6e]\n", c->bmin[0],
 	   c->bmax[0], c->bmin[1], c->bmax[1]);
   }
 
@@ -1074,7 +1068,7 @@ draw_3c(pcdcluster c, uint geometry)
   }
 
   if (bbox == true) {
-    printf("Bounding box [%.6e, %.6e] x [%.6e, %.6e] x [%.6e, %.6e]\n",
+    Rprintf("Bounding box [%.6e, %.6e] x [%.6e, %.6e] x [%.6e, %.6e]\n",
 	   c->bmin[0], c->bmax[0], c->bmin[1], c->bmax[1], c->bmin[2],
 	   c->bmax[2]);
   }
@@ -1146,7 +1140,7 @@ draw_3cc(pccluster c, uint geometry)
   }
 
   if (bbox == true) {
-    printf("Bounding box [%.6e, %.6e] x [%.6e, %.6e] x [%.6e, %.6e]\n",
+    Rprintf("Bounding box [%.6e, %.6e] x [%.6e, %.6e] x [%.6e, %.6e]\n",
 	   c->bmin[0], c->bmax[0], c->bmin[1], c->bmax[1], c->bmin[2],
 	   c->bmax[2]);
   }
@@ -1307,7 +1301,7 @@ midpoint_surface(pcsurface3d sur)
   scale = sqrt(scale);
 
   if (scale <= 0.0) {
-    printf("Something is wrong with the surface!\n");
+    Rprintf("Something is wrong with the surface!\n");
     return EXIT_FAILURE;
   }
 
@@ -1351,7 +1345,7 @@ midpoint_triangle(pctri2d tri)
   scale = sqrt(scale);
 
   if (scale <= 0.0) {
-    printf("Something is wrong with the triangulation!\n");
+    Rprintf("Something is wrong with the triangulation!\n");
     return;
   }
 
@@ -1401,7 +1395,7 @@ midpoint_tetrahedra(pctet3d tet)
   scale = sqrt(scale);
 
   if (scale <= 0.0) {
-    printf("Something is wrong with the triangulation!\n");
+    Rprintf("Something is wrong with the triangulation!\n");
     return;
   }
 
@@ -1545,7 +1539,7 @@ outline(uint version)
     break;
 
   default:
-    printf("Sorry, there is something wrong!");
+    Rprintf("Sorry, there is something wrong!");
     break;
   }
 
@@ -3487,7 +3481,7 @@ display_certain_dblock()
       count = 0;
       found = draw_certain_dblock(bl, count, roffsize, coffsize, mark);
       if (found == NULL) {
-	printf("Please choose a block to visualize.\n");
+	Rprintf("Please choose a block to visualize.\n");
       }
       move_1->dblock = found;
     }
@@ -3698,7 +3692,7 @@ display_certain_block()
       count = 0;
       found = draw_certain_block(bbl, count, roffsize, coffsize, mark);
       if (found == NULL) {
-	printf("Please choose a block to visualize.\n");
+	Rprintf("Please choose a block to visualize.\n");
       }
       move_1->block = found;
     }
@@ -6259,7 +6253,7 @@ mouse_table_tri(int button, int state, int position_x, int position_y)
     if (state == GLUT_DOWN) {
       if (position_x < move_t->pixel_x / 2) {
 	if (position_x < move_t->offset_x) {
-	  printf("Please choose a current triangle or change page.\n");
+	 Rprintf("Please choose a current triangle or change page.\n");
 	  return;
 	}
 	else {
@@ -6274,19 +6268,19 @@ mouse_table_tri(int button, int state, int position_x, int position_y)
 	    }
 	    if (i == 6) {
 	      move_t->target = last_target;
-	      printf("Please choose a current triangle or change page.\n");
+	     Rprintf("Please choose a current triangle or change page.\n");
 	      return;
 	    }
 	  }
 	  else {
-	    printf("Please choose a current triangle or change page.\n");
+	   Rprintf("Please choose a current triangle or change page.\n");
 	    return;
 	  }
 	}
       }
       else {
 	if (position_x > (move_t->pixel_x - move_t->offset_x)) {
-	  printf("Please choose a current triangle.\n");
+	 Rprintf("Please choose a current triangle.\n");
 	  return;
 	}
 	else {
@@ -6321,7 +6315,7 @@ mouse_table_tri(int button, int state, int position_x, int position_y)
 	    glutPostWindowRedisplay(table);
 	  }
 	  else {
-	    printf("Please choose a current triangle or change page.\n");
+	   Rprintf("Please choose a current triangle or change page.\n");
 	    return;
 	  }
 	}
@@ -6337,7 +6331,7 @@ mouse_table_tri(int button, int state, int position_x, int position_y)
 	}
 	else {
 	  mode = 0;
-	  printf("Please choose a current triangle or change page.\n");
+	 Rprintf("Please choose a current triangle or change page.\n");
 	  glutPostWindowRedisplay(one);
 	  glutPostWindowRedisplay(table);
 	}
@@ -6365,7 +6359,7 @@ mouse_table_tet(int button, int state, int position_x, int position_y)
     if (state == GLUT_DOWN) {
       if (position_x < move_t->pixel_x / 2) {
 	if (position_x < move_t->offset_x) {
-	  printf("Please choose a current tetrahedra or change page.\n");
+	 Rprintf("Please choose a current tetrahedra or change page.\n");
 	  return;
 	}
 	else {
@@ -6380,19 +6374,19 @@ mouse_table_tet(int button, int state, int position_x, int position_y)
 	    }
 	    if (i == 5) {
 	      move_t->target = last_target;
-	      printf("Please choose a current tetrahedra or change page.\n");
+	     Rprintf("Please choose a current tetrahedra or change page.\n");
 	      return;
 	    }
 	  }
 	  else {
-	    printf("Please choose a current tetrahedra or change page.\n");
+	   Rprintf("Please choose a current tetrahedra or change page.\n");
 	    return;
 	  }
 	}
       }
       else {
 	if (position_x > (move_t->pixel_x - move_t->offset_x)) {
-	  printf("Please choose a current tetrahedra.\n");
+	 Rprintf("Please choose a current tetrahedra.\n");
 	  return;
 	}
 	else {
@@ -6427,7 +6421,7 @@ mouse_table_tet(int button, int state, int position_x, int position_y)
 	    glutPostWindowRedisplay(table);
 	  }
 	  else {
-	    printf("Please choose a current tetrahedra or change page.\n");
+	   Rprintf("Please choose a current tetrahedra or change page.\n");
 	    return;
 	  }
 	}
@@ -6443,7 +6437,7 @@ mouse_table_tet(int button, int state, int position_x, int position_y)
 	}
 	else {
 	  mode = 0;
-	  printf("Please choose a current tetrahedra or change page.\n");
+	 Rprintf("Please choose a current tetrahedra or change page.\n");
 	  glutPostWindowRedisplay(one);
 	  glutPostWindowRedisplay(table);
 	}
@@ -6471,7 +6465,7 @@ mouse_table_sur(int button, int state, int position_x, int position_y)
     if (state == GLUT_DOWN) {
       if (position_x < move_t->pixel_x / 2) {
 	if (position_x < move_t->offset_x) {
-	  printf("Please choose a current triangle or change page.\n");
+	 Rprintf("Please choose a current triangle or change page.\n");
 	  return;
 	}
 	else {
@@ -6486,19 +6480,19 @@ mouse_table_sur(int button, int state, int position_x, int position_y)
 	    }
 	    if (i == 5) {
 	      move_t->target = last_target;
-	      printf("Please choose a current triangle or change page.\n");
+	     Rprintf("Please choose a current triangle or change page.\n");
 	      return;
 	    }
 	  }
 	  else {
-	    printf("Please choose a current triangle or change page.\n");
+	   Rprintf("Please choose a current triangle or change page.\n");
 	    return;
 	  }
 	}
       }
       else {
 	if (position_x > (move_t->pixel_x - move_t->offset_x)) {
-	  printf("Please choose a current triangle.\n");
+	 Rprintf("Please choose a current triangle.\n");
 	  return;
 	}
 	else {
@@ -6533,7 +6527,7 @@ mouse_table_sur(int button, int state, int position_x, int position_y)
 	    glutPostWindowRedisplay(table);
 	  }
 	  else {
-	    printf("Please choose a current triangle or change page.\n");
+	   Rprintf("Please choose a current triangle or change page.\n");
 	    return;
 	  }
 	}
@@ -6549,7 +6543,7 @@ mouse_table_sur(int button, int state, int position_x, int position_y)
 	}
 	else {
 	  mode = 0;
-	  printf("Please choose a current triangle or change page.\n");
+	 Rprintf("Please choose a current triangle or change page.\n");
 	  glutPostWindowRedisplay(one);
 	  glutPostWindowRedisplay(table);
 	}
@@ -6642,7 +6636,7 @@ key_ortho(unsigned char key, int x, int y)
 
     /* press 'space' for a snapshot */
   case 32:
-    printf("Take a snapshot\n");
+   Rprintf("Take a snapshot\n");
     take_a_shot[0] = true;
     glutPostRedisplay();
     break;
@@ -6743,7 +6737,7 @@ key_dcluster(unsigned char key, int x, int y)
     break;
     /* press 'space' for a snapshot */
   case 32:
-    printf("Take a snapshot\n");
+   Rprintf("Take a snapshot\n");
     take_a_shot[1] = true;
     glutPostRedisplay();
     break;
@@ -6837,7 +6831,7 @@ key_cluster(unsigned char key, int x, int y)
     break;
     /* press 'space' for a snapshot */
   case 32:
-    printf("Take a snapshot\n");
+   Rprintf("Take a snapshot\n");
     take_a_shot[1] = true;
     glutPostRedisplay();
     break;
@@ -6950,7 +6944,7 @@ key_mesh(unsigned char key, int x, int y)
     break;
     /* press 'space' for a snapshot */
   case 32:
-    printf("Take a snapshot\n");
+   Rprintf("Take a snapshot\n");
     take_a_shot[1] = true;
     glutPostRedisplay();
     break;
@@ -7061,7 +7055,7 @@ key_solution(unsigned char key, int x, int y)
     break;
     /* press 'space' for a snapshot */
   case 32:
-    printf("Take a snapshot\n");
+   Rprintf("Take a snapshot\n");
     take_a_shot[1] = true;
     glutPostRedisplay();
     break;
@@ -7186,7 +7180,7 @@ visualize_dblock_bbox(pcdblock b, pclustergeometry grc, pclustergeometry gcc,
 
   /* Checking if bounding boxes are given */
   if ((getdiam_2_dcluster(t) + getdiam_2_dcluster(s)) == 0.0) {
-    printf("Drawing isn't possible, because bounding boxes are empty.");
+   Rprintf("Drawing isn't possible, because bounding boxes are empty.");
     return;
   }
 
@@ -7198,22 +7192,22 @@ visualize_dblock_bbox(pcdblock b, pclustergeometry grc, pclustergeometry gcc,
       gt = gs;
     }
     points = 0;
-    printf("- - - - - - Caution! - - - - - -\n");
-    printf("Missing clustergeometry for drawing points!\n");
+   Rprintf("- - - - - - Caution! - - - - - -\n");
+   Rprintf("Missing clustergeometry for drawing points!\n");
   }
 
   if (t->dim > 3) {
-    printf("Row cluster dimension is with ");
-    printf("%u", t->dim);
-    printf(" to hight for drawing!");
+   Rprintf("Row cluster dimension is with ");
+   Rprintf("%u", t->dim);
+   Rprintf(" to hight for drawing!");
 
     return;
   }
 
   if (s->dim > 3) {
-    printf("Column cluster dimension is with ");
-    printf("%u", s->dim);
-    printf(" to hight for drawing!");
+   Rprintf("Column cluster dimension is with ");
+   Rprintf("%u", s->dim);
+   Rprintf(" to hight for drawing!");
 
     return;
   }
@@ -7256,33 +7250,33 @@ visualize_dblock_bbox(pcdblock b, pclustergeometry grc, pclustergeometry gcc,
   glutMotionFunc(motion_dcluster);
   glutKeyboardFunc(key_dcluster);
 
-  printf("------------------------------------\n");
-  printf("Visualize Block bounding boxes!\n");
-  printf("------------------------------------\n");
-  printf("Use left window to select level to\n");
-  printf("be drawn.\n");
-  printf("Right window will show the chosen\n");
-  printf("bounding boxes.\n");
-  printf("If bounding boxes are 3-dimensional\n");
-  printf("use mouse to chance perspective.\n");
-  printf("To zoom in use '+' and '-' to zoom\n");
-  printf("out.\n");
-  printf("Keys 'a', 'd', 'w' and 's' translate\n");
-  printf("perspective to the left, right, up\n");
-  printf("and down.\n");
-  printf("With 'n' perspective and zoom will\n");
-  printf("be set to start values.\n");
-  printf("Switch with 'p' between showing and\n");
-  printf("hiding points.\n");
-  printf("Fade in directions with '>'.\n");
-  printf("Make snapshots of the content from one\n");
-  printf("selcted window with 'space'. \n");
-  printf("Leave visualization with 'esc'.\n");
-  printf("------------------------------------\n");
+ Rprintf("------------------------------------\n");
+ Rprintf("Visualize Block bounding boxes!\n");
+ Rprintf("------------------------------------\n");
+ Rprintf("Use left window to select level to\n");
+ Rprintf("be drawn.\n");
+ Rprintf("Right window will show the chosen\n");
+ Rprintf("bounding boxes.\n");
+ Rprintf("If bounding boxes are 3-dimensional\n");
+ Rprintf("use mouse to chance perspective.\n");
+ Rprintf("To zoom in use '+' and '-' to zoom\n");
+ Rprintf("out.\n");
+ Rprintf("Keys 'a', 'd', 'w' and 's' translate\n");
+ Rprintf("perspective to the left, right, up\n");
+ Rprintf("and down.\n");
+ Rprintf("With 'n' perspective and zoom will\n");
+ Rprintf("be set to start values.\n");
+ Rprintf("Switch with 'p' between showing and\n");
+ Rprintf("hiding points.\n");
+ Rprintf("Fade in directions with '>'.\n");
+ Rprintf("Make snapshots of the content from one\n");
+ Rprintf("selcted window with 'space'. \n");
+ Rprintf("Leave visualization with 'esc'.\n");
+ Rprintf("------------------------------------\n");
 
   glutMainLoop();
 
-  printf("Visualization has been closed.\n");
+ Rprintf("Visualization has been closed.\n");
   del_activemovement(move_1);
   del_activemovement(move_2);
   del_orthomovement(move_o);
@@ -7322,7 +7316,7 @@ visualize_dblock_level_certain_bbox(pcdblock b, pclustergeometry grc,
 
   /* Checking if bounding boxes are given */
   if ((getdiam_2_dcluster(t) + getdiam_2_dcluster(s)) == 0.0) {
-    printf("Drawing isn't possible, because bounding boxes are empty.");
+   Rprintf("Drawing isn't possible, because bounding boxes are empty.");
     return;
   }
 
@@ -7334,40 +7328,40 @@ visualize_dblock_level_certain_bbox(pcdblock b, pclustergeometry grc,
       gt = gs;
     }
     points = 0;
-    printf("- - - - - - Caution! - - - - - -\n");
-    printf("Missing clustergeometry for drawing points!\n");
+   Rprintf("- - - - - - Caution! - - - - - -\n");
+   Rprintf("Missing clustergeometry for drawing points!\n");
   }
 
   if (t->dim > 3) {
-    printf("Row cluster dimension is with ");
-    printf("%u", t->dim);
-    printf(" to hight for drawing!");
+   Rprintf("Row cluster dimension is with ");
+   Rprintf("%u", t->dim);
+   Rprintf(" to hight for drawing!");
 
     return;
   }
 
   if (s->dim > 3) {
-    printf("Column cluster dimension is with ");
-    printf("%u", s->dim);
-    printf(" to hight for drawing!");
+   Rprintf("Column cluster dimension is with ");
+   Rprintf("%u", s->dim);
+   Rprintf(" to hight for drawing!");
 
     return;
   }
 
   depth = getdepth_dblock(b);
   if (depth < level) {
-    printf("Can't draw level ");
-    printf("%u", level);
-    printf(", because the block tree has only depth ");
-    printf("%u.", depth);
+   Rprintf("Can't draw level ");
+   Rprintf("%u", level);
+   Rprintf(", because the block tree has only depth ");
+   Rprintf("%u.", depth);
     return;
   }
 
   if (depth < level2) {
-    printf("Can't draw level ");
-    printf("%u", level2);
-    printf(", because the block tree has only depth ");
-    printf("%u.", depth);
+   Rprintf("Can't draw level ");
+   Rprintf("%u", level2);
+   Rprintf(", because the block tree has only depth ");
+   Rprintf("%u.", depth);
     return;
   }
 
@@ -7398,38 +7392,38 @@ visualize_dblock_level_certain_bbox(pcdblock b, pclustergeometry grc,
   glutMotionFunc(motion_dcluster);
   glutKeyboardFunc(key_dcluster);
 
-  printf("------------------------------------\n");
-  printf("Visualize Block bounding boxes!\n");
-  printf("------------------------------------\n");
-  printf("Use left window to select block to\n");
-  printf("be drawn.\n");
-  printf("Right window will show the chosen\n");
-  printf("clusters with bounding boxes.\n");
-  printf("Use rigth mouse button to switch to\n");
-  printf("the father block.\n");
-  printf("If bounding boxes are 3-dimensional\n");
-  printf("use left mouse button to chance\n");
-  printf("perspective.\n");
-  printf("To zoom in use '+' and '-' to zoom\n");
-  printf("out.\n");
-  printf("Keys 'a', 'd', 'w' and 's' translate\n");
-  printf("perspective to the left, right, up\n");
-  printf("and down.\n");
-  printf("With 'n' perspective and zoom will\n");
-  printf("be set to start values.\n");
-  printf("Switch with 'p' between showing and\n");
-  printf("hiding points.\n");
-  printf("Print bounding box values with 'b'.\n");
-  printf("Fade in directions with '>'.\n");
-  printf("Make snapshots of the content from one\n");
-  printf("selcted window with 'space'. \n");
-  printf("Leave visualization with 'esc'.\n");
-  printf("------------------------------------\n");
+ Rprintf("------------------------------------\n");
+ Rprintf("Visualize Block bounding boxes!\n");
+ Rprintf("------------------------------------\n");
+ Rprintf("Use left window to select block to\n");
+ Rprintf("be drawn.\n");
+ Rprintf("Right window will show the chosen\n");
+ Rprintf("clusters with bounding boxes.\n");
+ Rprintf("Use rigth mouse button to switch to\n");
+ Rprintf("the father block.\n");
+ Rprintf("If bounding boxes are 3-dimensional\n");
+ Rprintf("use left mouse button to chance\n");
+ Rprintf("perspective.\n");
+ Rprintf("To zoom in use '+' and '-' to zoom\n");
+ Rprintf("out.\n");
+ Rprintf("Keys 'a', 'd', 'w' and 's' translate\n");
+ Rprintf("perspective to the left, right, up\n");
+ Rprintf("and down.\n");
+ Rprintf("With 'n' perspective and zoom will\n");
+ Rprintf("be set to start values.\n");
+ Rprintf("Switch with 'p' between showing and\n");
+ Rprintf("hiding points.\n");
+ Rprintf("Print bounding box values with 'b'.\n");
+ Rprintf("Fade in directions with '>'.\n");
+ Rprintf("Make snapshots of the content from one\n");
+ Rprintf("selcted window with 'space'. \n");
+ Rprintf("Leave visualization with 'esc'.\n");
+ Rprintf("------------------------------------\n");
 
 
   glutMainLoop();
 
-  printf("Visualization has been closed.\n");
+ Rprintf("Visualization has been closed.\n");
   del_activemovement(move_1);
   del_orthomovement(move_o);
 }
@@ -7448,20 +7442,20 @@ visualize_dcluster_bbox(pcdcluster ti, pclustergeometry gti, bool c, int argc,
 
   /* Checking if bounding boxes are given */
   if (getdiam_2_dcluster(t) == 0.0) {
-    printf("Drawing isn't possible, because bounding boxes are empty.");
+   Rprintf("Drawing isn't possible, because bounding boxes are empty.");
     return;
   }
 
   if (gt == NULL) {
     points = 0;
-    printf("- - - - - - Caution! - - - - - -\n");
-    printf("Missing clustergeometry for drawing points!\n");
+   Rprintf("- - - - - - Caution! - - - - - -\n");
+   Rprintf("Missing clustergeometry for drawing points!\n");
   }
 
   if (t->dim > 3) {
-    printf("Dimension is with ");
-    printf("%u", t->dim);
-    printf(" to hight for drawing!");
+   Rprintf("Dimension is with ");
+   Rprintf("%u", t->dim);
+   Rprintf(" to hight for drawing!");
 
     return;
   }
@@ -7493,34 +7487,34 @@ visualize_dcluster_bbox(pcdcluster ti, pclustergeometry gti, bool c, int argc,
   glutMotionFunc(motion_dcluster);
   glutKeyboardFunc(key_dcluster);
 
-  printf("------------------------------------\n");
-  printf("Visualize Cluster bounding boxes!\n");
-  printf("------------------------------------\n");
-  printf("Use left window to select level to\n");
-  printf("be drawn.\n");
-  printf("Right window will show the chosen\n");
-  printf("bounding boxes.\n");
-  printf("If bounding boxes are 3-dimensional\n");
-  printf("use mouse to chance perspective.\n");
-  printf("To zoom in use '+' and '-' to zoom\n");
-  printf("out.\n");
-  printf("Keys 'a', 'd', 'w' and 's' translate\n");
-  printf("perspective to the left, right, up\n");
-  printf("and down.\n");
-  printf("With 'n' perspective and zoom will\n");
-  printf("be set to start values.\n");
-  printf("Switch with 'p' between showing and\n");
-  printf("hiding points.\n");
-  printf("Fade in directions with '>'.\n");
-  printf("Make snapshots of the content from one\n");
-  printf("selcted window with 'space'. \n");
-  printf("Leave visualization with 'esc'.\n");
-  printf("------------------------------------\n");
+ Rprintf("------------------------------------\n");
+ Rprintf("Visualize Cluster bounding boxes!\n");
+ Rprintf("------------------------------------\n");
+ Rprintf("Use left window to select level to\n");
+ Rprintf("be drawn.\n");
+ Rprintf("Right window will show the chosen\n");
+ Rprintf("bounding boxes.\n");
+ Rprintf("If bounding boxes are 3-dimensional\n");
+ Rprintf("use mouse to chance perspective.\n");
+ Rprintf("To zoom in use '+' and '-' to zoom\n");
+ Rprintf("out.\n");
+ Rprintf("Keys 'a', 'd', 'w' and 's' translate\n");
+ Rprintf("perspective to the left, right, up\n");
+ Rprintf("and down.\n");
+ Rprintf("With 'n' perspective and zoom will\n");
+ Rprintf("be set to start values.\n");
+ Rprintf("Switch with 'p' between showing and\n");
+ Rprintf("hiding points.\n");
+ Rprintf("Fade in directions with '>'.\n");
+ Rprintf("Make snapshots of the content from one\n");
+ Rprintf("selcted window with 'space'. \n");
+ Rprintf("Leave visualization with 'esc'.\n");
+ Rprintf("------------------------------------\n");
 
 
   glutMainLoop();
 
-  printf("Visualization has been closed.\n");
+ Rprintf("Visualization has been closed.\n");
   del_activemovement(move_1);
   del_orthomovement(move_o);
 }
@@ -7541,7 +7535,7 @@ visualize_block_bbox(pcblock b, pclustergeometry grc, pclustergeometry gcc,
 
   /* Checking if bounding boxes are given */
   if ((getdiam_2_cluster(ct) + getdiam_2_cluster(cs)) == 0.0) {
-    printf("Drawing isn't possible, because bounding boxes are empty.");
+   Rprintf("Drawing isn't possible, because bounding boxes are empty.");
     return;
   }
 
@@ -7553,22 +7547,22 @@ visualize_block_bbox(pcblock b, pclustergeometry grc, pclustergeometry gcc,
       gt = gs;
     }
     points = 0;
-    printf("- - - - - - Caution! - - - - - -\n");
-    printf("Missing clustergeometry for drawing points!\n");
+   Rprintf("- - - - - - Caution! - - - - - -\n");
+   Rprintf("Missing clustergeometry for drawing points!\n");
   }
 
   if (ct->dim > 3) {
-    printf("Row cluster dimension is with ");
-    printf("%u", ct->dim);
-    printf(" to hight for drawing!");
+   Rprintf("Row cluster dimension is with ");
+   Rprintf("%u", ct->dim);
+   Rprintf(" to hight for drawing!");
 
     return;
   }
 
   if (cs->dim > 3) {
-    printf("Column cluster dimension is with ");
-    printf("%u", cs->dim);
-    printf(" to hight for drawing!");
+   Rprintf("Column cluster dimension is with ");
+   Rprintf("%u", cs->dim);
+   Rprintf(" to hight for drawing!");
 
     return;
   }
@@ -7611,32 +7605,32 @@ visualize_block_bbox(pcblock b, pclustergeometry grc, pclustergeometry gcc,
   glutMotionFunc(motion_cluster);
   glutKeyboardFunc(key_cluster);
 
-  printf("------------------------------------\n");
-  printf("Visualize Block bounding boxes!\n");
-  printf("------------------------------------\n");
-  printf("Use left window to select level to\n");
-  printf("be drawn.\n");
-  printf("Right window will show the chosen\n");
-  printf("bounding boxes.\n");
-  printf("If bounding boxes are 3-dimensional\n");
-  printf("use mouse to chance perspective.\n");
-  printf("To zoom in use '+' and '-' to zoom\n");
-  printf("out.\n");
-  printf("Keys 'a', 'd', 'w' and 's' translate\n");
-  printf("perspective to the left, right, up\n");
-  printf("and down.\n");
-  printf("With 'n' perspective and zoom will\n");
-  printf("be set to start values.\n");
-  printf("Switch with 'p' between showing and\n");
-  printf("hiding points.\n");
-  printf("Make snapshots of the content from one\n");
-  printf("selcted window with 'space'. \n");
-  printf("Leave visualization with 'esc'.\n");
-  printf("------------------------------------\n");
+ Rprintf("------------------------------------\n");
+ Rprintf("Visualize Block bounding boxes!\n");
+ Rprintf("------------------------------------\n");
+ Rprintf("Use left window to select level to\n");
+ Rprintf("be drawn.\n");
+ Rprintf("Right window will show the chosen\n");
+ Rprintf("bounding boxes.\n");
+ Rprintf("If bounding boxes are 3-dimensional\n");
+ Rprintf("use mouse to chance perspective.\n");
+ Rprintf("To zoom in use '+' and '-' to zoom\n");
+ Rprintf("out.\n");
+ Rprintf("Keys 'a', 'd', 'w' and 's' translate\n");
+ Rprintf("perspective to the left, right, up\n");
+ Rprintf("and down.\n");
+ Rprintf("With 'n' perspective and zoom will\n");
+ Rprintf("be set to start values.\n");
+ Rprintf("Switch with 'p' between showing and\n");
+ Rprintf("hiding points.\n");
+ Rprintf("Make snapshots of the content from one\n");
+ Rprintf("selcted window with 'space'. \n");
+ Rprintf("Leave visualization with 'esc'.\n");
+ Rprintf("------------------------------------\n");
 
   glutMainLoop();
 
-  printf("Visualization has been closed.\n");
+ Rprintf("Visualization has been closed.\n");
   del_activemovement(move_1);
   del_activemovement(move_2);
   del_orthomovement(move_o);
@@ -7676,7 +7670,7 @@ visualize_block_level_certain_bbox(pcblock b, pclustergeometry grc,
 
   /* Checking if bounding boxes are given */
   if ((getdiam_2_cluster(ct) + getdiam_2_cluster(cs)) == 0.0) {
-    printf("Drawing isn't possible, because bounding boxes are empty.");
+   Rprintf("Drawing isn't possible, because bounding boxes are empty.");
     return;
   }
 
@@ -7688,40 +7682,40 @@ visualize_block_level_certain_bbox(pcblock b, pclustergeometry grc,
       gt = gs;
     }
     points = 0;
-    printf("- - - - - - Caution! - - - - - -\n");
-    printf("Missing clustergeometry for drawing points!\n");
+   Rprintf("- - - - - - Caution! - - - - - -\n");
+   Rprintf("Missing clustergeometry for drawing points!\n");
   }
 
   if (ct->dim > 3) {
-    printf("Row cluster dimension is with ");
-    printf("%u", ct->dim);
-    printf(" to hight for drawing!");
+   Rprintf("Row cluster dimension is with ");
+   Rprintf("%u", ct->dim);
+   Rprintf(" to hight for drawing!");
 
     return;
   }
 
   if (cs->dim > 3) {
-    printf("Column cluster dimension is with ");
-    printf("%u", cs->dim);
-    printf(" to hight for drawing!");
+   Rprintf("Column cluster dimension is with ");
+   Rprintf("%u", cs->dim);
+   Rprintf(" to hight for drawing!");
 
     return;
   }
 
   depth = getdepth_block(bbl);
   if (depth < level) {
-    printf("Can't draw level ");
-    printf("%u", level);
-    printf(", because the block tree has only depth ");
-    printf("%u.", depth);
+   Rprintf("Can't draw level ");
+   Rprintf("%u", level);
+   Rprintf(", because the block tree has only depth ");
+   Rprintf("%u.", depth);
     return;
   }
 
   if (depth < level2) {
-    printf("Can't draw level ");
-    printf("%u", level2);
-    printf(", because the block tree has only depth ");
-    printf("%u.", depth);
+   Rprintf("Can't draw level ");
+   Rprintf("%u", level2);
+   Rprintf(", because the block tree has only depth ");
+   Rprintf("%u.", depth);
     return;
   }
 
@@ -7752,37 +7746,37 @@ visualize_block_level_certain_bbox(pcblock b, pclustergeometry grc,
   glutMotionFunc(motion_cluster);
   glutKeyboardFunc(key_cluster);
 
-  printf("------------------------------------\n");
-  printf("Visualize Block bounding boxes!\n");
-  printf("------------------------------------\n");
-  printf("Use left window to select block to\n");
-  printf("be drawn.\n");
-  printf("Right window will show the chosen\n");
-  printf("clusters with bounding boxes.\n");
-  printf("Use rigth mouse button to switch to\n");
-  printf("the father block.\n");
-  printf("If bounding boxes are 3-dimensional\n");
-  printf("use left mouse button to chance\n");
-  printf("perspective.\n");
-  printf("To zoom in use '+' and '-' to zoom\n");
-  printf("out.\n");
-  printf("Keys 'a', 'd', 'w' and 's' translate\n");
-  printf("perspective to the left, right, up\n");
-  printf("and down.\n");
-  printf("With 'n' perspective and zoom will\n");
-  printf("be set to start values.\n");
-  printf("Switch with 'p' between showing and\n");
-  printf("hiding points.\n");
-  printf("Print bounding box values with 'b'.\n");
-  printf("Make snapshots of the content from one\n");
-  printf("selcted window with 'space'. \n");
-  printf("Leave visualization with 'esc'.\n");
-  printf("------------------------------------\n");
+ Rprintf("------------------------------------\n");
+ Rprintf("Visualize Block bounding boxes!\n");
+ Rprintf("------------------------------------\n");
+ Rprintf("Use left window to select block to\n");
+ Rprintf("be drawn.\n");
+ Rprintf("Right window will show the chosen\n");
+ Rprintf("clusters with bounding boxes.\n");
+ Rprintf("Use rigth mouse button to switch to\n");
+ Rprintf("the father block.\n");
+ Rprintf("If bounding boxes are 3-dimensional\n");
+ Rprintf("use left mouse button to chance\n");
+ Rprintf("perspective.\n");
+ Rprintf("To zoom in use '+' and '-' to zoom\n");
+ Rprintf("out.\n");
+ Rprintf("Keys 'a', 'd', 'w' and 's' translate\n");
+ Rprintf("perspective to the left, right, up\n");
+ Rprintf("and down.\n");
+ Rprintf("With 'n' perspective and zoom will\n");
+ Rprintf("be set to start values.\n");
+ Rprintf("Switch with 'p' between showing and\n");
+ Rprintf("hiding points.\n");
+ Rprintf("Print bounding box values with 'b'.\n");
+ Rprintf("Make snapshots of the content from one\n");
+ Rprintf("selcted window with 'space'. \n");
+ Rprintf("Leave visualization with 'esc'.\n");
+ Rprintf("------------------------------------\n");
 
 
   glutMainLoop();
 
-  printf("Visualization has been closed.\n");
+ Rprintf("Visualization has been closed.\n");
   del_activemovement(move_1);
   del_orthomovement(move_o);
 }
@@ -7801,21 +7795,21 @@ visualize_cluster_bbox(pccluster ti, pclustergeometry gti, bool c, int argc,
 
   /* Checking if bounding boxes are given */
   if (getdiam_2_cluster(ct) == 0.0) {
-    printf("Drawing isn't possible, because bounding boxes are empty.");
+   Rprintf("Drawing isn't possible, because bounding boxes are empty.");
     return;
   }
 
   if (gt == NULL) {
     points = 0;
-    printf("- - - - - - Caution! - - - - - -\n");
-    printf("Missing clustergeometry for drawing points!\n");
+   Rprintf("- - - - - - Caution! - - - - - -\n");
+   Rprintf("Missing clustergeometry for drawing points!\n");
   }
 
 
   if (ct->dim > 3) {
-    printf("Dimension is with ");
-    printf("%u", ct->dim);
-    printf(" to hight for drawing!");
+   Rprintf("Dimension is with ");
+   Rprintf("%u", ct->dim);
+   Rprintf(" to hight for drawing!");
 
     return;
   }
@@ -7847,33 +7841,33 @@ visualize_cluster_bbox(pccluster ti, pclustergeometry gti, bool c, int argc,
   glutMotionFunc(motion_cluster);
   glutKeyboardFunc(key_cluster);
 
-  printf("------------------------------------\n");
-  printf("Visualize Cluster bounding boxes!\n");
-  printf("------------------------------------\n");
-  printf("Use left window to select level to\n");
-  printf("be drawn.\n");
-  printf("Right window will show the chosen\n");
-  printf("bounding boxes.\n");
-  printf("If bounding boxes are 3-dimensional\n");
-  printf("use mouse to chance perspective.\n");
-  printf("To zoom in use '+' and '-' to zoom\n");
-  printf("out.\n");
-  printf("Keys 'a', 'd', 'w' and 's' translate\n");
-  printf("perspective to the left, right, up\n");
-  printf("and down.\n");
-  printf("With 'n' perspective and zoom will\n");
-  printf("be set to start values.\n");
-  printf("Switch with 'p' between showing and\n");
-  printf("hiding points.\n");
-  printf("Make snapshots of the content from one\n");
-  printf("selcted window with 'space'. \n");
-  printf("Leave visualization with 'esc'.\n");
-  printf("------------------------------------\n");
+ Rprintf("------------------------------------\n");
+ Rprintf("Visualize Cluster bounding boxes!\n");
+ Rprintf("------------------------------------\n");
+ Rprintf("Use left window to select level to\n");
+ Rprintf("be drawn.\n");
+ Rprintf("Right window will show the chosen\n");
+ Rprintf("bounding boxes.\n");
+ Rprintf("If bounding boxes are 3-dimensional\n");
+ Rprintf("use mouse to chance perspective.\n");
+ Rprintf("To zoom in use '+' and '-' to zoom\n");
+ Rprintf("out.\n");
+ Rprintf("Keys 'a', 'd', 'w' and 's' translate\n");
+ Rprintf("perspective to the left, right, up\n");
+ Rprintf("and down.\n");
+ Rprintf("With 'n' perspective and zoom will\n");
+ Rprintf("be set to start values.\n");
+ Rprintf("Switch with 'p' between showing and\n");
+ Rprintf("hiding points.\n");
+ Rprintf("Make snapshots of the content from one\n");
+ Rprintf("selcted window with 'space'. \n");
+ Rprintf("Leave visualization with 'esc'.\n");
+ Rprintf("------------------------------------\n");
 
 
   glutMainLoop();
 
-  printf("Visualization has been closed.\n");
+ Rprintf("Visualization has been closed.\n");
   del_activemovement(move_1);
   del_orthomovement(move_o);
 }
@@ -7897,7 +7891,7 @@ visualize_tri2d(pctri2d tri, int argc, char **argv)
   tr = new_tri2d(tri->vertices, tri->edges, tri->triangles);
 
   if (tr->vertices < 1) {
-    printf("There are no vertices to visualize.\n");
+    Rprintf("There are no vertices to visualize.\n");
     return;
   }
 
@@ -7934,27 +7928,27 @@ visualize_tri2d(pctri2d tri, int argc, char **argv)
   glutMouseFunc(mouse_mesh);
   glutMotionFunc(motion_mesh);
 
-  printf("----------------------------------\n");
-  printf("Visualize a complete triangulation!\n");
-  printf("----------------------------------\n");
-  printf("Use mouse to chance perspective.\n");
-  printf("To zoom in use '+' and '-' to zoom\n");
-  printf("out.\n");
-  printf("Keys 'a', 'd', 'w' and 's' translate\n");
-  printf("perspective to the left, right, up\n");
-  printf("and down.\n");
-  printf("With 'n' perspective and zoom will\n");
-  printf("be set to start values.\n");
-  printf("Switch with 'p' between showing and\n");
-  printf("hiding points.\n");
-  printf("Fade in a simple coordinate system\n");
-  printf("with 'c' and mark a single direction\n");
-  printf("with 'x', 'y' or 'z', to fade in the\n");
-  printf("origin use '0'.\n");
-  printf("Make snapshots of the content from one\n");
-  printf("selcted window with 'space'. \n");
-  printf("Close window with 'esc'.\n");
-  printf("----------------------------------\n");
+  Rprintf("----------------------------------\n");
+  Rprintf("Visualize a complete triangulation!\n");
+  Rprintf("----------------------------------\n");
+  Rprintf("Use mouse to chance perspective.\n");
+  Rprintf("To zoom in use '+' and '-' to zoom\n");
+  Rprintf("out.\n");
+  Rprintf("Keys 'a', 'd', 'w' and 's' translate\n");
+  Rprintf("perspective to the left, right, up\n");
+  Rprintf("and down.\n");
+  Rprintf("With 'n' perspective and zoom will\n");
+  Rprintf("be set to start values.\n");
+  Rprintf("Switch with 'p' between showing and\n");
+  Rprintf("hiding points.\n");
+  Rprintf("Fade in a simple coordinate system\n");
+  Rprintf("with 'c' and mark a single direction\n");
+  Rprintf("with 'x', 'y' or 'z', to fade in the\n");
+  Rprintf("origin use '0'.\n");
+  Rprintf("Make snapshots of the content from one\n");
+  Rprintf("selcted window with 'space'. \n");
+  Rprintf("Close window with 'esc'.\n");
+  Rprintf("----------------------------------\n");
 
   glutMainLoop();
 
@@ -7981,7 +7975,7 @@ visualize_certain_triangle(pctri2d tri, int argc, char **argv)
   tr = new_tri2d(tri->vertices, tri->edges, tri->triangles);
 
   if (tr->vertices < 1) {
-    printf("There are no vertices to visualize.\n");
+    Rprintf("There are no vertices to visualize.\n");
     return;
   }
 
@@ -8037,30 +8031,30 @@ visualize_certain_triangle(pctri2d tri, int argc, char **argv)
   glutMouseFunc(mouse_mesh);
   glutMotionFunc(motion_mesh);
 
-  printf("----------------------------------\n");
-  printf("Visualize a certain triangle out of\n");
-  printf("a complete triangulation!\n");
-  printf("----------------------------------\n");
-  printf("Use left window to select a certain\n");
-  printf("triangle to be drawn.\n");
-  printf("Right window will show the chosen\n");
-  printf("one.");
-  printf("Use mouse to chance perspective.\n");
-  printf("To zoom in use '+' and '-' to zoom\n");
-  printf("out.\n");
-  printf("Keys 'a', 'd', 'w' and 's' translate\n");
-  printf("perspective to the left, right, up\n");
-  printf("and down.\n");
-  printf("With 'n' perspective and zoom will\n");
-  printf("be set to start values.\n");
-  printf("Fade in a simple coordinate system\n");
-  printf("with 'c' and mark a single direction\n");
-  printf("with 'x', 'y' or 'z', to fade in the\n");
-  printf("origin use '0'.\n");
-  printf("Make snapshots of the content from one\n");
-  printf("selcted window with 'space'. \n");
-  printf("Close window with 'esc'.\n");
-  printf("----------------------------------\n");
+  Rprintf("----------------------------------\n");
+  Rprintf("Visualize a certain triangle out of\n");
+  Rprintf("a complete triangulation!\n");
+  Rprintf("----------------------------------\n");
+  Rprintf("Use left window to select a certain\n");
+  Rprintf("triangle to be drawn.\n");
+  Rprintf("Right window will show the chosen\n");
+  Rprintf("one.");
+  Rprintf("Use mouse to chance perspective.\n");
+  Rprintf("To zoom in use '+' and '-' to zoom\n");
+  Rprintf("out.\n");
+  Rprintf("Keys 'a', 'd', 'w' and 's' translate\n");
+  Rprintf("perspective to the left, right, up\n");
+  Rprintf("and down.\n");
+  Rprintf("With 'n' perspective and zoom will\n");
+  Rprintf("be set to start values.\n");
+  Rprintf("Fade in a simple coordinate system\n");
+  Rprintf("with 'c' and mark a single direction\n");
+  Rprintf("with 'x', 'y' or 'z', to fade in the\n");
+  Rprintf("origin use '0'.\n");
+  Rprintf("Make snapshots of the content from one\n");
+  Rprintf("selcted window with 'space'. \n");
+  Rprintf("Close window with 'esc'.\n");
+  Rprintf("----------------------------------\n");
 
   glutMainLoop();
 
@@ -8085,7 +8079,7 @@ visualize_tet3d(pctet3d tet, int argc, char **argv)
   th = new_tet3d(tet->vertices, tet->edges, tet->faces, tet->tetrahedra);
 
   if (th->vertices < 1) {
-    printf("There are no vertices to visualize.\n");
+   Rprintf("There are no vertices to visualize.\n");
     return;
   }
 
@@ -8130,27 +8124,27 @@ visualize_tet3d(pctet3d tet, int argc, char **argv)
   glutMouseFunc(mouse_mesh);
   glutMotionFunc(motion_mesh);
 
-  printf("----------------------------------\n");
-  printf("Visualize a complete triangulation!\n");
-  printf("----------------------------------\n");
-  printf("Use mouse to chance perspective.\n");
-  printf("To zoom in use '+' and '-' to zoom\n");
-  printf("out.\n");
-  printf("Keys 'a', 'd', 'w' and 's' translate\n");
-  printf("perspective to the left, right, up\n");
-  printf("and down.");
-  printf("With 'n' perspective and zoom will\n");
-  printf("be set to start values.\n");
-  printf("Switch with 'p' between showing and\n");
-  printf("hiding points.\n");
-  printf("Fade in a simple coordinate system\n");
-  printf("with 'c' and mark a single direction\n");
-  printf("with 'x', 'y' or 'z', to fade in the\n");
-  printf("origin use '0'.\n");
-  printf("Make snapshots of the content from one\n");
-  printf("selcted window with 'space'. \n");
-  printf("Close window with 'esc'.\n");
-  printf("----------------------------------\n");
+  Rprintf("----------------------------------\n");
+  Rprintf("Visualize a complete triangulation!\n");
+  Rprintf("----------------------------------\n");
+  Rprintf("Use mouse to chance perspective.\n");
+  Rprintf("To zoom in use '+' and '-' to zoom\n");
+  Rprintf("out.\n");
+  Rprintf("Keys 'a', 'd', 'w' and 's' translate\n");
+  Rprintf("perspective to the left, right, up\n");
+  Rprintf("and down.");
+  Rprintf("With 'n' perspective and zoom will\n");
+  Rprintf("be set to start values.\n");
+  Rprintf("Switch with 'p' between showing and\n");
+  Rprintf("hiding points.\n");
+  Rprintf("Fade in a simple coordinate system\n");
+  Rprintf("with 'c' and mark a single direction\n");
+  Rprintf("with 'x', 'y' or 'z', to fade in the\n");
+  Rprintf("origin use '0'.\n");
+  Rprintf("Make snapshots of the content from one\n");
+  Rprintf("selcted window with 'space'. \n");
+  Rprintf("Close window with 'esc'.\n");
+  Rprintf("----------------------------------\n");
 
   glutMainLoop();
 
@@ -8177,7 +8171,7 @@ visualize_certain_tetrahedra(pctet3d tet, int argc, char **argv)
   th = new_tet3d(tet->vertices, tet->edges, tet->faces, tet->tetrahedra);
 
   if (th->vertices < 1) {
-    printf("There are no vertices to visualize.\n");
+   Rprintf("There are no vertices to visualize.\n");
     return;
   }
 
@@ -8242,30 +8236,30 @@ visualize_certain_tetrahedra(pctet3d tet, int argc, char **argv)
   glutMotionFunc(motion_mesh);
 
 
-  printf("----------------------------------\n");
-  printf("Visualize a certain tetrahedra out\n");
-  printf("of a complete triangulation!\n");
-  printf("----------------------------------\n");
-  printf("Use left window to select a certain\n");
-  printf("tetrahedra to be drawn.\n");
-  printf("Right window will show the chosen\n");
-  printf("one.");
-  printf("Use mouse to chance perspective.\n");
-  printf("To zoom in use '+' and '-' to zoom\n");
-  printf("out.\n");
-  printf("Keys 'a', 'd', 'w' and 's' translate\n");
-  printf("perspective to the left, right, up\n");
-  printf("and down.\n");
-  printf("With 'n' perspective and zoom will\n");
-  printf("be set to start values.\n");
-  printf("Fade in a simple coordinate system\n");
-  printf("with 'c' and mark a single direction\n");
-  printf("with 'x', 'y' or 'z', to fade in the\n");
-  printf("origin use '0'.\n");
-  printf("Make snapshots of the content from one\n");
-  printf("selcted window with 'space'. \n");
-  printf("Close window with 'esc'.\n");
-  printf("----------------------------------\n");
+  Rprintf("----------------------------------\n");
+  Rprintf("Visualize a certain tetrahedra out\n");
+  Rprintf("of a complete triangulation!\n");
+  Rprintf("----------------------------------\n");
+  Rprintf("Use left window to select a certain\n");
+  Rprintf("tetrahedra to be drawn.\n");
+  Rprintf("Right window will show the chosen\n");
+  Rprintf("one.");
+  Rprintf("Use mouse to chance perspective.\n");
+  Rprintf("To zoom in use '+' and '-' to zoom\n");
+  Rprintf("out.\n");
+  Rprintf("Keys 'a', 'd', 'w' and 's' translate\n");
+  Rprintf("perspective to the left, right, up\n");
+  Rprintf("and down.\n");
+  Rprintf("With 'n' perspective and zoom will\n");
+  Rprintf("be set to start values.\n");
+  Rprintf("Fade in a simple coordinate system\n");
+  Rprintf("with 'c' and mark a single direction\n");
+  Rprintf("with 'x', 'y' or 'z', to fade in the\n");
+  Rprintf("origin use '0'.\n");
+  Rprintf("Make snapshots of the content from one\n");
+  Rprintf("selcted window with 'space'. \n");
+  Rprintf("Close window with 'esc'.\n");
+  Rprintf("----------------------------------\n");
 
 
   glutMainLoop();
@@ -8291,7 +8285,7 @@ visualize_surface3d(pcsurface3d sur, int argc, char **argv)
   gr = new_surface3d(sur->vertices, sur->edges, sur->triangles);
 
   if (gr->vertices < 1) {
-    printf("There are no vertices to visualize.\n");
+   Rprintf("There are no vertices to visualize.\n");
     return;
   }
 
@@ -8327,27 +8321,27 @@ visualize_surface3d(pcsurface3d sur, int argc, char **argv)
   glutMouseFunc(mouse_mesh);
   glutMotionFunc(motion_mesh);
 
-  printf("----------------------------------\n");
-  printf("Visualize a complete triangulation!\n");
-  printf("----------------------------------\n");
-  printf("Use mouse to chance perspective.\n");
-  printf("To zoom in use '+' and '-' to zoom\n");
-  printf("out.\n");
-  printf("Keys 'a', 'd', 'w' and 's' translate\n");
-  printf("perspective to the left, right, up\n");
-  printf("and down.\n");
-  printf("With 'n' perspective and zoom will\n");
-  printf("be set to start values.\n");
-  printf("Switch with 'p' between showing and\n");
-  printf("hiding points.\n");
-  printf("Fade in a simple coordinate system\n");
-  printf("with 'c' and mark a single direction\n");
-  printf("with 'x', 'y' or 'z', to fade in the\n");
-  printf("origin use '0'.\n");
-  printf("Make snapshots of the content from one\n");
-  printf("selcted window with 'space'. \n");
-  printf("Close window with 'esc'.\n");
-  printf("----------------------------------\n");
+  Rprintf("----------------------------------\n");
+  Rprintf("Visualize a complete triangulation!\n");
+  Rprintf("----------------------------------\n");
+  Rprintf("Use mouse to chance perspective.\n");
+  Rprintf("To zoom in use '+' and '-' to zoom\n");
+  Rprintf("out.\n");
+  Rprintf("Keys 'a', 'd', 'w' and 's' translate\n");
+  Rprintf("perspective to the left, right, up\n");
+  Rprintf("and down.\n");
+  Rprintf("With 'n' perspective and zoom will\n");
+  Rprintf("be set to start values.\n");
+  Rprintf("Switch with 'p' between showing and\n");
+  Rprintf("hiding points.\n");
+  Rprintf("Fade in a simple coordinate system\n");
+  Rprintf("with 'c' and mark a single direction\n");
+  Rprintf("with 'x', 'y' or 'z', to fade in the\n");
+  Rprintf("origin use '0'.\n");
+  Rprintf("Make snapshots of the content from one\n");
+  Rprintf("selcted window with 'space'. \n");
+  Rprintf("Close window with 'esc'.\n");
+  Rprintf("----------------------------------\n");
 
   glutMainLoop();
 
@@ -8374,7 +8368,7 @@ visualize_certain_surface_triangle(pcsurface3d sur, int argc, char **argv)
   gr = new_surface3d(sur->vertices, sur->edges, sur->triangles);
 
   if (gr->vertices < 1) {
-    printf("There are no vertices to visualize.\n");
+   Rprintf("There are no vertices to visualize.\n");
     return;
   }
 
@@ -8430,30 +8424,30 @@ visualize_certain_surface_triangle(pcsurface3d sur, int argc, char **argv)
   glutMotionFunc(motion_mesh);
 
 
-  printf("----------------------------------\n");
-  printf("Visualize a certain triangle out\n");
-  printf("of a complete surface triangulation!\n");
-  printf("----------------------------------\n");
-  printf("Use left window to select a certain\n");
-  printf("triangle to be drawn\n.");
-  printf("Right window will show the chosen\n");
-  printf("one.");
-  printf("Use mouse to chance perspective.\n");
-  printf("To zoom in use '+' and '-' to zoom\n");
-  printf("out.\n");
-  printf("Keys 'a', 'd', 'w' and 's' translate\n");
-  printf("perspective to the left, right, up\n");
-  printf("and down.\n");
-  printf("With 'n' perspective and zoom will\n");
-  printf("be set to start values.\n");
-  printf("Fade in a simple coordinate system\n");
-  printf("with 'c' and mark a single direction\n");
-  printf("with 'x', 'y' or 'z', to fade in the\n");
-  printf("origin use '0'.\n");
-  printf("Make snapshots of the content from one\n");
-  printf("selcted window with 'space'. \n");
-  printf("Close window with 'esc'.\n");
-  printf("----------------------------------\n");
+  Rprintf("----------------------------------\n");
+  Rprintf("Visualize a certain triangle out\n");
+  Rprintf("of a complete surface triangulation!\n");
+  Rprintf("----------------------------------\n");
+  Rprintf("Use left window to select a certain\n");
+  Rprintf("triangle to be drawn\n.");
+  Rprintf("Right window will show the chosen\n");
+  Rprintf("one.");
+  Rprintf("Use mouse to chance perspective.\n");
+  Rprintf("To zoom in use '+' and '-' to zoom\n");
+  Rprintf("out.\n");
+  Rprintf("Keys 'a', 'd', 'w' and 's' translate\n");
+  Rprintf("perspective to the left, right, up\n");
+  Rprintf("and down.\n");
+  Rprintf("With 'n' perspective and zoom will\n");
+  Rprintf("be set to start values.\n");
+  Rprintf("Fade in a simple coordinate system\n");
+  Rprintf("with 'c' and mark a single direction\n");
+  Rprintf("with 'x', 'y' or 'z', to fade in the\n");
+  Rprintf("origin use '0'.\n");
+  Rprintf("Make snapshots of the content from one\n");
+  Rprintf("selcted window with 'space'. \n");
+  Rprintf("Close window with 'esc'.\n");
+  Rprintf("----------------------------------\n");
 
 
   glutMainLoop();
@@ -8483,7 +8477,7 @@ visualize_boundaryvalue_surface_triangle(pcsurface3d sur, pcavector val,
   gr = new_surface3d(sur->vertices, sur->edges, sur->triangles);
 
   if (gr->vertices < 1) {
-    printf("There are no vertices to visualize.\n");
+   Rprintf("There are no vertices to visualize.\n");
     return;
   }
 
@@ -8565,27 +8559,27 @@ visualize_boundaryvalue_surface_triangle(pcsurface3d sur, pcavector val,
   glutKeyboardFunc(key_ortho);
 
 
-  printf("----------------------------------\n");
-  printf("Visualize values on surface!\n");
-  printf("----------------------------------\n");
-  printf("Left windows shows surface with \n");
-  printf("solution, right one the legend.\n");
-  printf("Use mouse to chance perspective.\n");
-  printf("To zoom in use '+' and '-' to zoom\n");
-  printf("out.\n");
-  printf("Keys 'a', 'd', 'w' and 's' translate\n");
-  printf("perspective to the left, right, up\n");
-  printf("and down.\n");
-  printf("With 'n' perspective and zoom will\n");
-  printf("be set to start values.\n");
-  printf("Fade in a simple coordinate system\n");
-  printf("with 'c' and mark a single direction\n");
-  printf("with 'x', 'y' or 'z', to fade in the\n");
-  printf("origin use '0'.\n");
-  printf("Make snapshots of the content from one\n");
-  printf("selcted window with 'space'. \n");
-  printf("Close window with 'esc'.\n");
-  printf("----------------------------------\n");
+  Rprintf("----------------------------------\n");
+  Rprintf("Visualize values on surface!\n");
+  Rprintf("----------------------------------\n");
+  Rprintf("Left windows shows surface with \n");
+  Rprintf("solution, right one the legend.\n");
+  Rprintf("Use mouse to chance perspective.\n");
+  Rprintf("To zoom in use '+' and '-' to zoom\n");
+  Rprintf("out.\n");
+  Rprintf("Keys 'a', 'd', 'w' and 's' translate\n");
+  Rprintf("perspective to the left, right, up\n");
+  Rprintf("and down.\n");
+  Rprintf("With 'n' perspective and zoom will\n");
+  Rprintf("be set to start values.\n");
+  Rprintf("Fade in a simple coordinate system\n");
+  Rprintf("with 'c' and mark a single direction\n");
+  Rprintf("with 'x', 'y' or 'z', to fade in the\n");
+  Rprintf("origin use '0'.\n");
+  Rprintf("Make snapshots of the content from one\n");
+  Rprintf("selcted window with 'space'. \n");
+  Rprintf("Close window with 'esc'.\n");
+  Rprintf("----------------------------------\n");
 
   glutMainLoop();
 
@@ -8611,7 +8605,7 @@ visualize_helmholtz_solution_surface(pcsurface3d sur, int argc, char **argv)
   gr = new_surface3d(sur->vertices, sur->edges, sur->triangles);
 
   if (gr->vertices < 1) {
-    printf("There are no vertices to visualize.\n");
+   Rprintf("There are no vertices to visualize.\n");
     return;
   }
 
@@ -8629,7 +8623,7 @@ visualize_helmholtz_solution_surface(pcsurface3d sur, int argc, char **argv)
   scale = midpoint_surface(sur);
   sol = new_solution(0, argc - 1, false);
 
-  printf("reading files\n");
+  Rprintf("reading files\n");
   fflush(stdout);
   /* Read files for solutions */
   if (argc == 1) {
@@ -8637,7 +8631,7 @@ visualize_helmholtz_solution_surface(pcsurface3d sur, int argc, char **argv)
     type = 0;
   }
   else {
-    printf("Reading files\n");
+    Rprintf("Reading files\n");
     type = 1;
     for (i = 1; i < argc; i++) {
       t = read_file(argv[i], scale, i - 1, sol, false);
@@ -8676,40 +8670,40 @@ visualize_helmholtz_solution_surface(pcsurface3d sur, int argc, char **argv)
     glutReshapeFunc(reshape_legend);
     glutKeyboardFunc(key_ortho);
 
-    printf("----------------------------------\n");
-    printf("Visualize values on surface!\n");
-    printf("----------------------------------\n");
-    printf("Left windows shows surface with \n");
-    printf("solution, right one the legend.\n");
-    printf("Use mouse to chance perspective.\n");
-    printf("To zoom in use '+' and '-' to zoom\n");
-    printf("out.\n");
-    printf("Keys 'a', 'd', 'w' and 's' translate\n");
-    printf("perspective to the left, right, up\n");
-    printf("and down.\n");
-    printf("With 'n' perspective and zoom will\n");
-    printf("be set to start values.\n");
-    printf("Fade in a simple coordinate system\n");
-    printf("with 'c' and mark a single direction\n");
-    printf("with 'x', 'y' or 'z', to fade in the\n");
-    printf("origin use '0'.\n");
-    printf("Change visibility of surface with 'm'\n");
-    printf("and solution with 'p'.\n");
-    printf("If more than one file is available, \n");
-    printf("change visualized file with '.'.\n");
-    printf("Make snapshots of the content from one\n");
-    printf("selcted window with 'space'. \n");
-    printf("Close window with 'esc'.\n");
-    printf("----------------------------------\n");
+    Rprintf("----------------------------------\n");
+    Rprintf("Visualize values on surface!\n");
+    Rprintf("----------------------------------\n");
+    Rprintf("Left windows shows surface with \n");
+    Rprintf("solution, right one the legend.\n");
+    Rprintf("Use mouse to chance perspective.\n");
+    Rprintf("To zoom in use '+' and '-' to zoom\n");
+    Rprintf("out.\n");
+    Rprintf("Keys 'a', 'd', 'w' and 's' translate\n");
+    Rprintf("perspective to the left, right, up\n");
+    Rprintf("and down.\n");
+    Rprintf("With 'n' perspective and zoom will\n");
+    Rprintf("be set to start values.\n");
+    Rprintf("Fade in a simple coordinate system\n");
+    Rprintf("with 'c' and mark a single direction\n");
+    Rprintf("with 'x', 'y' or 'z', to fade in the\n");
+    Rprintf("origin use '0'.\n");
+    Rprintf("Change visibility of surface with 'm'\n");
+    Rprintf("and solution with 'p'.\n");
+    Rprintf("If more than one file is available, \n");
+    Rprintf("change visualized file with '.'.\n");
+    Rprintf("Make snapshots of the content from one\n");
+    Rprintf("selcted window with 'space'. \n");
+    Rprintf("Close window with 'esc'.\n");
+    Rprintf("----------------------------------\n");
   }
   else {
-    printf("----------------------------------\n");
-    printf("Visualize values on surface!\n");
-    printf("----------------------------------\n");
-    printf("Missing files including data for \n");
-    printf("solutions on planes!\n");
-    printf("For more information take a look \n");
-    printf("at the visualize.h file. \n");
+    Rprintf("----------------------------------\n");
+    Rprintf("Visualize values on surface!\n");
+    Rprintf("----------------------------------\n");
+    Rprintf("Missing files including data for \n");
+    Rprintf("solutions on planes!\n");
+    Rprintf("For more information take a look \n");
+    Rprintf("at the visualize.h file. \n");
   }
 
 
@@ -8738,7 +8732,7 @@ animate_helmholtz_solution(pcsurface3d sur, int argc, char **argv)
   gr = new_surface3d(sur->vertices, sur->edges, sur->triangles);
 
   if (gr->vertices < 1) {
-    printf("There are no vertices to visualize.\n");
+   Rprintf("There are no vertices to visualize.\n");
     return;
   }
 
@@ -8760,18 +8754,18 @@ animate_helmholtz_solution(pcsurface3d sur, int argc, char **argv)
   if (argc == 1) {
     type = 0;
 
-    printf("----------------------------------\n");
-    printf("Animate Helmholtz solution in time!\n");
-    printf("----------------------------------\n");
-    printf("Missing files including data for \n");
-    printf("solutions on planes!\n");
-    printf("For more information take a look \n");
-    printf("at the visualize.h file. \n");
+    Rprintf("----------------------------------\n");
+    Rprintf("Animate Helmholtz solution in time!\n");
+    Rprintf("----------------------------------\n");
+    Rprintf("Missing files including data for \n");
+    Rprintf("solutions on planes!\n");
+    Rprintf("For more information take a look \n");
+    Rprintf("at the visualize.h file. \n");
 
     return;
   }
   else {
-    printf("Reading files\n");
+    Rprintf("Reading files\n");
     type = 1;
     for (i = 1; i < argc; i++) {
       t = read_file(argv[i], scale, i - 1, sol, true);
@@ -8819,33 +8813,33 @@ animate_helmholtz_solution(pcsurface3d sur, int argc, char **argv)
     glutReshapeFunc(reshape_legend);
     glutKeyboardFunc(key_ortho);
 
-    printf("----------------------------------\n");
-    printf("Animate Helmholtz solution in time!\n");
-    printf("----------------------------------\n");
-    printf("Left windows shows surface with \n");
-    printf("solution, right one the legend.\n");
-    printf("Use mouse to chance perspective.\n");
-    printf("Start and stop animation with 'enter',\n");
-    printf("faster animation '>' and slower '<' .\n");
-    printf("To zoom in use '+' and '-' to zoom\n");
-    printf("out.\n");
-    printf("Keys 'a', 'd', 'w' and 's' translate\n");
-    printf("perspective to the left, right, up\n");
-    printf("and down.\n");
-    printf("With 'n' perspective, zoom and\n");
-    printf("animation time set to start values.\n");
-    printf("Fade in a simple coordinate system\n");
-    printf("with 'c' and mark a single direction\n");
-    printf("with 'x', 'y' or 'z', to fade in the\n");
-    printf("origin use '0'.\n");
-    printf("Change visibility of surface with 'm'\n");
-    printf("and solution with 'p'.\n");
-    printf("If more than one file is available, \n");
-    printf("change visualized file with '.'.\n");
-    printf("Make snapshots of the content from one\n");
-    printf("selcted window with 'space'. \n");
-    printf("Close window with 'esc'.\n");
-    printf("----------------------------------\n");
+    Rprintf("----------------------------------\n");
+    Rprintf("Animate Helmholtz solution in time!\n");
+    Rprintf("----------------------------------\n");
+    Rprintf("Left windows shows surface with \n");
+    Rprintf("solution, right one the legend.\n");
+    Rprintf("Use mouse to chance perspective.\n");
+    Rprintf("Start and stop animation with 'enter',\n");
+    Rprintf("faster animation '>' and slower '<' .\n");
+    Rprintf("To zoom in use '+' and '-' to zoom\n");
+    Rprintf("out.\n");
+    Rprintf("Keys 'a', 'd', 'w' and 's' translate\n");
+    Rprintf("perspective to the left, right, up\n");
+    Rprintf("and down.\n");
+    Rprintf("With 'n' perspective, zoom and\n");
+    Rprintf("animation time set to start values.\n");
+    Rprintf("Fade in a simple coordinate system\n");
+    Rprintf("with 'c' and mark a single direction\n");
+    Rprintf("with 'x', 'y' or 'z', to fade in the\n");
+    Rprintf("origin use '0'.\n");
+    Rprintf("Change visibility of surface with 'm'\n");
+    Rprintf("and solution with 'p'.\n");
+    Rprintf("If more than one file is available, \n");
+    Rprintf("change visualized file with '.'.\n");
+    Rprintf("Make snapshots of the content from one\n");
+    Rprintf("selcted window with 'space'. \n");
+    Rprintf("Close window with 'esc'.\n");
+    Rprintf("----------------------------------\n");
   }
 
   glutMainLoop();
@@ -8866,7 +8860,7 @@ visualize_dblock_bbox(pcdblock b, pclustergeometry grc, pclustergeometry gcc,
   (void) b;
   (void) c;
 
-  fprintf(stderr, "Sorry, GLUT is not available.\n");
+  error("Sorry, GLUT is not available.\n");
 }
 
 void
@@ -8878,7 +8872,7 @@ visualize_dblock_certain_bbox(pcdblock b, pclustergeometry grc,
   (void) grc;
   (void) gcc;
 
-  fprintf(stderr, "Sorry, GLUT is not available.\n");
+  error("Sorry, GLUT is not available.\n");
 }
 
 void
@@ -8893,7 +8887,7 @@ visualize_dblock_level_certain_bbox(pcdblock b, pclustergeometry grc,
   (void) l1;
   (void) l2;
 
-  fprintf(stderr, "Sorry, GLUT is not available.\n");
+  error("Sorry, GLUT is not available.\n");
 }
 
 void
@@ -8905,7 +8899,7 @@ visualize_dcluster_bbox(pcdcluster ti, pclustergeometry gti, bool c, int argc,
   (void) ti;
   (void) c;
 
-  fprintf(stderr, "Sorry, GLUT is not available.\n");
+  error("Sorry, GLUT is not available.\n");
 }
 
 
@@ -8917,7 +8911,7 @@ visualize_block_bbox(pcblock b, pclustergeometry grc, pclustergeometry gcc,
   (void) b;
   (void) c;
 
-  fprintf(stderr, "Sorry, GLUT is not available.\n");
+  error("Sorry, GLUT is not available.\n");
 }
 
 void
@@ -8929,7 +8923,7 @@ visualize_block_certain_bbox(pcblock b, pclustergeometry grc,
   (void) grc;
   (void) gcc;
 
-  fprintf(stderr, "Sorry, GLUT is not available.\n");
+  error("Sorry, GLUT is not available.\n");
 }
 
 void
@@ -8944,7 +8938,7 @@ visualize_block_level_certain_bbox(pcblock b, pclustergeometry grc,
   (void) l1;
   (void) l2;
 
-  fprintf(stderr, "Sorry, GLUT is not available.\n");
+  error("Sorry, GLUT is not available.\n");
 }
 
 void
@@ -8956,49 +8950,49 @@ visualize_cluster_bbox(pccluster ti, pclustergeometry gti, bool c, int argc,
   (void) ti;
   (void) c;
 
-  fprintf(stderr, "Sorry, GLUT is not available.\n");
+  error("Sorry, GLUT is not available.\n");
 }
 
 void
 visualize_tri2d(pctri2d tri, int argc, char **argv)
 {
 
-  fprintf(stderr, "Sorry, GLUT is not available.\n");
+  error("Sorry, GLUT is not available.\n");
 }
 
 void
 visualize_tet3d(pctet3d tet, int argc, char **argv)
 {
 
-  fprintf(stderr, "Sorry, GLUT is not available.\n");
+  error("Sorry, GLUT is not available.\n");
 }
 
 void
 visualize_certain_triangle(pctri2d tri, int argc, char **argv)
 {
 
-  fprintf(stderr, "Sorry, GLUT is not available.\n");
+  error("Sorry, GLUT is not available.\n");
 }
 
 void
 visualize_certain_tetrahedra(pctet3d tet, int argc, char **argv)
 {
 
-  fprintf(stderr, "Sorry, GLUT is not available.\n");
+  error("Sorry, GLUT is not available.\n");
 }
 
 void
 visualize_surface3d(pcsurface3d sur, int argc, char **argv)
 {
 
-  fprintf(stderr, "Sorry, GLUT is not available.\n");
+  error("Sorry, GLUT is not available.\n");
 }
 
 void
 visualize_certain_surface_triangle(pcsurface3d sur, int argc, char **argv)
 {
 
-  fprintf(stderr, "Sorry, GLUT is not available.\n");
+  error("Sorry, GLUT is not available.\n");
 }
 
 void
@@ -9006,21 +9000,21 @@ visualize_boundaryvalue_surface_triangle(pcsurface3d sur, pcavector val,
 					 int argc, char **argv)
 {
 
-  fprintf(stderr, "Sorry, GLUT is not available.\n");
+  error("Sorry, GLUT is not available.\n");
 }
 
 void
 visualize_helmholtz_solution_surface(pcsurface3d sur, int argc, char **argv)
 {
 
-  fprintf(stderr, "Sorry, GLUT is not available.\n");
+  error("Sorry, GLUT is not available.\n");
 }
 
 void
 animate_helmholtz_solution(pcsurface3d sur, int argc, char **argv)
 {
 
-  fprintf(stderr, "Sorry, GLUT is not available.\n");
+  error("Sorry, GLUT is not available.\n");
 }
 
 #endif

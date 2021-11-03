@@ -795,7 +795,7 @@ solve_gmres(addeval_t addeval, void *A, pavector b, pavector x,
       step_gmres(addeval, A, b, x, rhat, q, &kk, qr, tau);
       norm = residualnorm_gmres(rhat, kk);
 #ifndef NDEBUG
-      printf("  Residual: %.5e\t Iterations: %u\r", norm, j + i);
+      Rprintf("  Residual: %.5e\t Iterations: %u\r", norm, j + i);
       fflush(stdout);
 #endif
       if (norm <= accuracy) {
@@ -811,7 +811,7 @@ solve_gmres(addeval_t addeval, void *A, pavector b, pavector x,
     }
   }
 #ifndef NDEBUG
-  printf("\n");
+  Rprintf("\n");
 #endif
 
   del_avector(rhat);

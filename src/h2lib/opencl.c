@@ -50,7 +50,7 @@ get_opencl_devices(cl_device_id ** devices, cl_uint * ndevices)
     assert(num_platform > 0);
   ocl_system.num_platforms = num_platform;
 
-  printf("%d platforms found:\n", num_platform);
+  Rprintf("%d platforms found:\n", num_platform);
 
   ocl_system.platforms =
     (cl_platform_id *) allocmem(num_platform * sizeof(cl_platform_id));
@@ -63,11 +63,11 @@ get_opencl_devices(cl_device_id ** devices, cl_uint * ndevices)
       clGetPlatformInfo(ocl_system.platforms[j], CL_PLATFORM_NAME, 255, buf,
 			NULL);
     CL_CHECK(res)
-      printf("  platform[%d]:\t\"%s\"\n", j, buf);
+      Rprintf("  platform[%d]:\t\"%s\"\n", j, buf);
     res = clGetPlatformInfo(ocl_system.platforms[j], CL_PLATFORM_VERSION, 255,
 			    buf, NULL);
     CL_CHECK(res)
-      printf("\t\t\"%s\"\n", buf);
+      Rprintf("\t\t\"%s\"\n", buf);
 
     /****************************************************
      * Check for devices
@@ -402,14 +402,15 @@ setup_kernels(const char *src_str, const uint num_kernels,
       size_t    len;
       char      buffer[204800];
       cl_build_status bldstatus;
-      printf("\nError %d: Failed to build program executable [ %s ]\n", res,
+      Rprintf("\nError %d: Failed to build program executable [ %s ]\n", res,
 	     get_error_string(res));
       res = clGetProgramBuildInfo(program, dev_id, CL_PROGRAM_BUILD_STATUS,
 				  sizeof(bldstatus), (void *) &bldstatus,
 				  &len);
       if (res != CL_SUCCESS) {
-	printf("Build Status error %d: %s\n", res, get_error_string(res));
-	exit(1);
+        error("Build Status error");	
+/*	      ("Build Status error %d: %s\n", res, get_error_string(res));
+	exit(1);*/
       }
       if (bldstatus == CL_BUILD_SUCCESS)
 	printf("Build Status: CL_BUILD_SUCCESS\n");
@@ -422,18 +423,19 @@ setup_kernels(const char *src_str, const uint num_kernels,
       res = clGetProgramBuildInfo(program, dev_id, CL_PROGRAM_BUILD_OPTIONS,
 				  sizeof(buffer), buffer, &len);
       if (res != CL_SUCCESS) {
-	printf("Build Options error %d: %s\n", res, get_error_string(res));
-	exit(1);
+	 error("Build options error.");
+/*	printf("Build Options error %d: %s\n", res, get_error_string(res));
+	exit(1);*/
       }
-      printf("Build Options: %s\n", buffer);
+      Rprintf("Build Options: %s\n", buffer);
       res = clGetProgramBuildInfo(program, dev_id, CL_PROGRAM_BUILD_LOG,
 				  sizeof(buffer), buffer, &len);
       if (res != CL_SUCCESS) {
-	printf("Build Log error %d: %s\n", res, get_error_string(res));
-	exit(1);
+	      error("Build log error");
+	/*printf("Build Log error %d: %s\n", res, get_error_string(res));
+	exit(1);*/
       }
-      printf("Build Log:\n%s\n", buffer);
-      abort();
+      error("Build Log:\n%s\n", buffer);
     }
 
     /****************************************************
@@ -518,8 +520,7 @@ get_list(taskgrouplist tgl)
     tg = &ready_taskgroups;
     break;
   default:
-    fprintf(stderr, "Unexpected list!\n");
-    abort();
+    error("Unexpected list!\n");
     break;
   }
 
@@ -539,8 +540,7 @@ get_lock(taskgrouplist tgl)
     lock = &ready_lock;
     break;
   default:
-    fprintf(stderr, "Unexpected list!\n");
-    abort();
+    error("Unexpected list!\n");
     break;
   }
 
@@ -662,8 +662,7 @@ unregister_fromlist_taskgroup(ptaskgroup tg, taskgrouplist tgl)
   }
 
   omp_unset_lock(lock);
-  fprintf(stderr, "Unexpected case in 'unregister_fromlist_taskgroup'!\n");
-  abort();
+  error("Unexpected case in 'unregister_fromlist_taskgroup'!\n");
 }
 
 ptaskgroup
@@ -963,12 +962,11 @@ start_scheduler(uint cpu_threads, uint gpu_threads)
 		execute_taskgroup_gpu(tg);
 	      }
 	      else {
-		fprintf(stderr, "HOUSTON! We have a problem!\n");
+		error("HOUSTON! We have a problem!\n");
 	      }
 	      break;
 	    default:
-	      fprintf(stderr, "Unknown task affinity!\n");
-	      abort();
+	      error("Unknown task affinity!\n");
 	      break;
 	    }
 

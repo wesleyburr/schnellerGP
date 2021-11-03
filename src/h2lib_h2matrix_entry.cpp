@@ -101,6 +101,8 @@ Rcpp::XPtr<matrix_h2> create_h2_kernel(arma::mat X,
 //' @param gp  An H2-matrix
 //' @param d_precond   A vector of pre-conditions.
 //' @param b  A vector b, for equation $gp*x = b$, with dimension matching that of gp.
+//' @param tolerance  Tolerance for solver, passed on to solve_precond_vect
+//' @param iter  Maximum number of iterations for solver, passed on to solve_precond_vect
 //' @export
 //' @return
 //'  Given inputs gp and b, solves for x in $Ax=b$, and returns it.
@@ -142,6 +144,9 @@ NumericMatrix solve_h2_vector(Rcpp::XPtr<matrix_h2> gp,
 //' @param gp  An H2-matrix
 //' @param d_precond   A vector of pre-conditions.
 //' @param b  A vector b, for equation $gp*x = b$, with dimension matching that of gp.
+//' @param start  Initial conditions for solver.
+//' @param tolerance  Tolerance for solver, passed on to solve_precond_vect
+//' @param iter  Maximum number of iterations for solver, passed on to solve_precond_vect
 //' @export
 //' @return
 //'  Given inputs gp and b, solves for x in $Ax=b$, and returns it.
@@ -293,6 +298,7 @@ void save_h2_matrix(string file,Rcpp::XPtr<matrix_h2> gp){
 //' @export
 //' @return rv An H2-matrix.
 //'
+//[[Rcpp::export]]
 Rcpp::XPtr<matrix_h2> read_h2_matrix(string file){
   matrix_h2 *hmat  = new matrix_h2(file);
   Rcpp:XPtr<matrix_h2> rv(hmat, true);
@@ -309,6 +315,7 @@ Rcpp::XPtr<matrix_h2> read_h2_matrix(string file){
 //' @export
 //' @return  The indexes of the input.
 //'
+//[[Rcpp::export]]
 arma::umat get_h2_idx(Rcpp::XPtr<matrix_h2> gp){
   return gp -> getIndex()+1;
 }

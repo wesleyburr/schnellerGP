@@ -1,4 +1,5 @@
 #include "mclasses/HODLR_Node.hpp"
+#include <Rcpp.h>
 
 HODLR_Node::HODLR_Node(int level_number, int node_number, int local_number, 
                        int n_start, int n_size, double tolerance
@@ -58,26 +59,26 @@ void HODLR_Node::matmatProductNonLeaf(Mat x, Mat& b)
 
 void HODLR_Node::printNodeDetails()
 {
-    std::cout << "Level Number       :" << level_number << std::endl;
-    std::cout << "Node Number        :" << node_number << std::endl;
-    std::cout << "Start of Node      :" << n_start <<  std::endl;
-    std::cout << "Size of Node       :" << n_size <<  std::endl;
-    std::cout << "Tolerance          :" << tolerance << std::endl;
+	Rcpp::Rcout << "Level Number       :" << level_number << std::endl;
+	Rcpp::Rcout << "Node Number        :" << node_number << std::endl;
+	Rcpp::Rcout << "Start of Node      :" << n_start <<  std::endl;
+	Rcpp::Rcout << "Size of Node       :" << n_size <<  std::endl;
+	Rcpp::Rcout << "Tolerance          :" << tolerance << std::endl;
 
     for(int i = 0; i < 2; i++)
     {
         if(i == 0)
-            std::cout << "Left Child:" << std::endl;
+            Rcpp::Rcout << "Left Child:" << std::endl;
         else
-            std::cout << "Right Child:" << std::endl;
+            Rcpp::Rcout << "Right Child:" << std::endl;
 
-        std::cout << "Start of Child Node:" << c_start[i] <<  std::endl;
-        std::cout << "Size of Child Node :" << c_size[i]  <<  std::endl;
+	Rcpp::Rcout << "Start of Child Node:" << c_start[i] <<  std::endl;
+	Rcpp::Rcout << "Size of Child Node :" << c_size[i]  <<  std::endl;
     }
 
-    std::cout << "Shape of U[0]      :" << U[0].rows() << ", " << U[0].cols() << std::endl;
-    std::cout << "Shape of U[1]      :" << U[1].rows() << ", " << U[1].cols() << std::endl;
-    std::cout << "Shape of V[0]      :" << V[0].rows() << ", " << V[0].cols() << std::endl;
-    std::cout << "Shape of V[1]      :" << V[1].rows() << ", " << V[1].cols() << std::endl;
-    std::cout << "Shape of K         :" << K.rows() << ", " << K.cols() << std::endl;
+    Rcpp::Rcout << "Shape of U[0]      :" << U[0].rows() << ", " << U[0].cols() << std::endl;
+    Rcpp::Rcout << "Shape of U[1]      :" << U[1].rows() << ", " << U[1].cols() << std::endl;
+    Rcpp::Rcout << "Shape of V[0]      :" << V[0].rows() << ", " << V[0].cols() << std::endl;
+    Rcpp::Rcout << "Shape of V[1]      :" << V[1].rows() << ", " << V[1].cols() << std::endl;
+    Rcpp::Rcout << "Shape of K         :" << K.rows() << ", " << K.cols() << std::endl;
 }

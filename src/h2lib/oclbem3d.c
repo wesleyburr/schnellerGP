@@ -252,8 +252,7 @@ add_nf_entry(pcbem3d bem, op_callbacks * op_cb, uint c, uint tt, uint ss,
     lock = &nf_iden_lock;
     break;
   default:
-    fprintf(stderr, "Unknown quadrature case!\n");
-    abort();
+    error("Unknown quadrature case!\n");
     break;
   }
 
@@ -281,8 +280,7 @@ add_nf_entry(pcbem3d bem, op_callbacks * op_cb, uint c, uint tt, uint ss,
     close_taskgroup = close_nf_iden;
     break;
   default:
-    fprintf(stderr, "Unknown quadrature case!\n");
-    abort();
+    error("Unknown quadrature case!\n");
     break;
   }
 

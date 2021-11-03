@@ -6,6 +6,9 @@
 #' @param tX Regression coefficients or weights
 #' @param sigma_p Precision of the variance-covariance matrix
 #' @param tau Data precision.
+#' @importFrom stats rnorm
+#'
+#'
 ########################################################
 sample_gp <- function(h2,
                       h,

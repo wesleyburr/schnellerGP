@@ -6,9 +6,6 @@
 \alias{schnellerGP-package}
 \title{schnellerGP: Fast Bayesian GP sampling using H and H^2 matrices}
 \description{
-This package provides various functionality
-    to utilize H/H^2 matrices for near exact GP sampling in O(n log^2 n) time
-    versus the traditional O(n^3) time. An effort is made to both provide a 
-    vanilla GP sampler as well as individual 1-at-a-time conditional Gibbs samples.
+This package provides various functionality to utilize H/H^2 matrices for near exact GP sampling in O(n log^2 n) time versus the traditional O(n^3) time. An effort is made to both provide a vanilla GP sampler as well as individual 1-at-a-time conditional Gibbs samples.
 }
 \keyword{internal}

@@ -760,7 +760,7 @@ void
 view_block(pcblock b)
 {
   (void) b;
-  (void) fprintf(stderr, "Sorry, GLUT is not available.\n");
+  error("Sorry, GLUT is not available.\n");
 }
 #endif
 

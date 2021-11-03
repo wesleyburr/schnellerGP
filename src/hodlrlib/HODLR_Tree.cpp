@@ -1,4 +1,5 @@
 #include "mclasses/HODLR_Tree.hpp"
+#include <Rcpp.h>
 
 // Contructor for the HODLR Tree class:
 HODLR_Tree::HODLR_Tree(int n_levels, double tolerance, HODLR_Matrix* A) 
@@ -120,9 +121,9 @@ void HODLR_Tree::printTreeDetails()
         for(int k = 0; k < nodes_in_level[j]; k++)
         {
             this->printNodeDetails(j, k);
-            std::cout << "=======================================================================================================================================" << std::endl;
+            Rcpp::Rcout << "=======================================================================================================================================" << std::endl;
         }
-        std::cout << std::endl << std::endl;
+        Rcpp::Rcout << std::endl << std::endl;
     }
 }
 
@@ -202,6 +203,6 @@ void HODLR_Tree::plotTree(std::string image_name)
     }
     // Closing the file:
     myfile.close();
-    std::cout << "Plotting Tree..." << std::endl;
+    Rcpp::Rcout << "Plotting Tree..." << std::endl;
     system(command.c_str());
 }

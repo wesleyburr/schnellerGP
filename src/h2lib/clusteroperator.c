@@ -286,9 +286,9 @@ print_tree(pcclusteroperator co, uint level)
   uint      i;
 
   for (i = 0; i < level; i++)
-    printf("  ");
+    Rprintf("  ");
 
-  printf("%u %u %.4g\n", co->krow, co->kcol, norm2_amatrix(&(co->C)));
+  Rprintf("%u %u %.4g\n", co->krow, co->kcol, norm2_amatrix(&(co->C)));
 
   for (i = 0; i < co->sons; i++)
     print_tree(co->son[i], level + 1);
@@ -306,15 +306,15 @@ norm2diff(pcclusteroperator co1, pcclusteroperator co2, uint level)
   uint      i;
 
   for (i = 0; i < level; i++)
-    printf("  ");
+    Rprintf("  ");
 
   if (co1->sons != co2->sons)
-    printf("Tree mismatch ");
+    Rprintf("Tree mismatch ");
 
   if (co1->krow != co2->krow || co1->kcol != co2->kcol)
-    printf("Dimension mismatch\n");
+    Rprintf("Dimension mismatch\n");
   else
-    printf("%g %g\n",
+    Rprintf("%g %g\n",
 	   norm2_amatrix(&co1->C), norm2diff_amatrix(&co1->C, &co2->C));
 
   if (co1->sons == co2->sons)
@@ -354,7 +354,7 @@ compareweights(pcclusteroperator co1, pcclusteroperator co2, uint level)
     error /= norm;
 
   if (co1->sons != co2->sons)
-    printf("Tree mismatch");
+    Rprintf("Tree mismatch");
   else
     for (i = 0; i < co1->sons; i++) {
       error1 = compareweights(co1->son[i], co2->son[i], level + 1);

@@ -795,7 +795,7 @@ build_adaptive_fromcluster_cluster(pcluster ctri, pclustergeometry cg,
 	else if (flag[i] == 0)
 	  flag[i] = 2;		/*edge of son2 */
 	else
-	  printf("error Kante übrig\t");
+	  Rprintf("error Kante übrig\t");
       }
     }
     flag2 = allocuint(size);	/*flag2 is copy of flag */
@@ -834,7 +834,7 @@ build_adaptive_fromcluster_cluster(pcluster ctri, pclustergeometry cg,
       if (flag2[i] == 3)
 	size3++;
       else
-	printf("error size\t");
+	Rprintf("error size\t");
     }
     //printf("cg->nidx = %u size1 = %u size2 = %u size3 = %u size = %u\n", cg->nidx, size1, size2, size3, size);
     if (size1 > 0) {
@@ -928,7 +928,7 @@ build_adaptive_fromcluster_cluster(pcluster ctri, pclustergeometry cg,
 							 clf, dim, 1);
 	}
 	else {
-	  printf("error\n");
+	  Rprintf("error\n");
 	  c = new_cluster(size, idx, 0, ctri->dim);
 	}
 

@@ -225,7 +225,7 @@ build_from_dclusterbasis_dclusteroperator(pcdclusterbasis cb)
     (cb->son ? new_dclusteroperator(cb->t) :
      new_leaf_dclusteroperator(cb->t));
 
-//        printf("cb->dir %u, co->dir %u\n", cb->directions, co->dir);
+//        Rprintf("cb->dir %u, co->dir %u\n", cb->directions, co->dir);
   for (i = 0; i < cb->directions; i++) {
     resize_dclusteroperator(co, 0, cb->k[i], i);
   }
@@ -273,11 +273,11 @@ print_tree(pcdclusteroperator co, uint level)
 
   uint      i;
 
-  printf("level %u\n", level);
-  printf("----------------------------------------------\n");
+  Rprintf("level %u\n", level);
+  Rprintf("----------------------------------------------\n");
 
   for (i = 0; i < co->dir; i++) {
-    printf("direction: %u Size: %u %u %.4g\n", i, co->krow[i], co->kcol[i],
+    Rprintf("direction: %u Size: %u %u %.4g\n", i, co->krow[i], co->kcol[i],
 	   norm2_amatrix(&(co->C[i])));
   }
 

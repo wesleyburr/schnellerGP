@@ -302,14 +302,14 @@ print_avector(pcavector v)
   uint      dim = v->dim;
   uint      i;
 
-  (void) printf("avector(%u)\n", dim);
+  (void) Rprintf("avector(%u)\n", dim);
   if (dim == 0)
     return;
 
-  (void) printf("  (" FIELD_CS(.5, e), FIELD_ARG(v->v[0]));
+  (void) Rprintf("  (" FIELD_CS(.5, e), FIELD_ARG(v->v[0]));
   for (i = 1; i < dim; i++)
-    (void) printf(" " FIELD_CS(.5, e), FIELD_ARG(v->v[i]));
-  (void) printf(")\n");
+    (void) Rprintf(" " FIELD_CS(.5, e), FIELD_ARG(v->v[i]));
+  (void) Rprintf(")\n");
 }
 
 /* ------------------------------------------------------------

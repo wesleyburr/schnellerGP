@@ -5101,8 +5101,7 @@ build_bem3d_cube_quadpoints(pcbem3d bem, const real a[3], const real b[3],
       velo = (b[0] - a[0] + 2.0 * delta) * (b[2] - a[2] + 2.0 * delta) * 0.25;
       break;
     default:
-      printf("ERROR: unknown gammanumber!\n");
-      exit(0);
+      error("ERROR: unknown gammanumber!\n");
       break;
     }
 

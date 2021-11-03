@@ -425,11 +425,11 @@ print_tree(pcdclusterbasis cb, uint level)
   directions = cb->directions;
 
   for (i = 0; i < level; i++)
-    printf("  ");
-  printf("k=(%u", cb->k[0]);
+    Rprintf("  ");
+  Rprintf("k=(%u", cb->k[0]);
   for (i = 1; i < directions; i++)
-    printf(",%u", cb->k[i]);
-  printf("), ktree=%u, size=%u\n", cb->ktree, cb->t->size);
+    Rprintf(",%u", cb->k[i]);
+  Rprintf("), ktree=%u, size=%u\n", cb->ktree, cb->t->size);
 
   for (j = 0; j < cb->sons; j++)
     print_tree(cb->son[j], level + 1);

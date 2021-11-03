@@ -780,7 +780,7 @@ build_from_macrosurface3d_surface3d(pcmacrosurface3d mg, uint split)
 	  mg->phi(i, 0.0, 1.0, mg->phidata, x[vcount]);
 	  break;
 	default:
-	  abort();
+	  error("No case possible.");
 	}
 	vcount++;
 
@@ -808,7 +808,7 @@ build_from_macrosurface3d_surface3d(pcmacrosurface3d mg, uint split)
 	    mg->phi(i, alpha, 0.0, mg->phidata, x[vcount]);
 	    break;
 	  default:
-	    abort();
+	    error("No case possible.");
 	  }
 	  vcount++;
 	}
@@ -1032,7 +1032,7 @@ build_interactive_surface3d()
   gr = 0;
 
   do {
-    (void) printf("Name of grid? (file name or built-in)\n");
+    (void) Rprintf("Name of grid? (file name or built-in)\n");
     buf[0] = '\0';
     res = fgets(buf, 100, stdin);
     assert(res != NULL);
@@ -1043,14 +1043,14 @@ build_interactive_surface3d()
     grid = fopen(buf, "r");
     if (grid) {
       fclose(grid);
-      (void) printf("Reading file \"%s\"\n", buf);
+      (void) Rprintf("Reading file \"%s\"\n", buf);
       gr = read_surface3d(buf);
     }
     else {
       switch (buf[0]) {
       case 's':
 	if (sscanf(buf + 1, "%u", &r) == 1) {
-	  (void) printf("Creating sphere geometry with %u subdivisions\n", r);
+	  (void) Rprintf("Creating sphere geometry with %u subdivisions\n", r);
 	  mg = new_sphere_macrosurface3d();
 	  gr = build_from_macrosurface3d_surface3d(mg, r);
 	  del_macrosurface3d(mg);
@@ -1060,7 +1060,7 @@ build_interactive_surface3d()
 	switch (buf[1]) {
 	case 'u':
 	  if (sscanf(buf + 2, "%u", &r) == 1) {
-	    (void) printf("Creating cube geometry with %u subdivisions\n", r);
+	    (void) Rprintf("Creating cube geometry with %u subdivisions\n", r);
 	    mg = new_cube_macrosurface3d();
 	    gr = build_from_macrosurface3d_surface3d(mg, r);
 	    del_macrosurface3d(mg);
@@ -1068,7 +1068,7 @@ build_interactive_surface3d()
 	  break;
 	case 'y':
 	  if (sscanf(buf + 2, "%u", &r) == 1) {
-	    (void) printf("Creating cylinder geometry with %u subdivisions\n",
+	    (void) Rprintf("Creating cylinder geometry with %u subdivisions\n",
 			  r);
 	    mg = new_cylinder_macrosurface3d();
 	    gr = build_from_macrosurface3d_surface3d(mg, r);
@@ -1084,7 +1084,7 @@ build_interactive_surface3d()
       case 'p':
 	if (sscanf(buf + 1, "%u", &r) == 1) {
 	  (void)
-	    printf
+	    Rprintf
 	    ("Creating parabolic mirror geometry with %u subdivisions\n", r);
 	  mg = new_parabolic_mirror_macrosurface3d();
 	  gr = build_from_macrosurface3d_surface3d(mg, r);
@@ -1100,7 +1100,7 @@ build_interactive_surface3d()
 
   prepare_surface3d(gr);
 
-  (void) printf("%u vertices, %u edges, %u triangles\n", gr->vertices,
+  (void) Rprintf("%u vertices, %u edges, %u triangles\n", gr->vertices,
 		gr->edges, gr->triangles);
 
   return gr;

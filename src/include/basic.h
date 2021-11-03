@@ -33,6 +33,9 @@ typedef stopwatch *pstopwatch;
 #include "simd.h"
 #endif
 
+// add R ref so we can access R internal RNG 
+#include <R.h>
+
 /* ------------------------------------------------------------
  * Miscellaneous
  * ------------------------------------------------------------ */
@@ -460,7 +463,12 @@ INLINE_PREFIX real _h2_realmin3(real x, real y, real z) {
  *
  *  @returns Random number in @f$[-1,1]@f$. */
 INLINE_PREFIX real _h2_realrand() {
-  return 2.0 * rand() / RAND_MAX - 1.0;
+  double val = 2.0;
+  GetRNGstate();
+  val = val * unif_rand() - 1.0;
+  PutRNGstate();
+  return val;
+  //return 2.0 * rand() / RAND_MAX - 1.0;
 }
 
 /** @brief Compute the maximum @f$\max\{x,y\}@f$ of two unsigned integers @f$x@f$ and @f$y@f$.

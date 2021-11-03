@@ -8,6 +8,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // create_h2_kernel
 Rcpp::XPtr<matrix_h2> create_h2_kernel(arma::mat X, arma::mat hp, NumericVector kt);
 RcppExport SEXP _schnellerGP_create_h2_kernel(SEXP XSEXP, SEXP hpSEXP, SEXP ktSEXP) {
@@ -106,6 +111,28 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::XPtr<matrix_h2> >::type gp(gpSEXP);
     save_h2_matrix(file, gp);
     return R_NilValue;
+END_RCPP
+}
+// read_h2_matrix
+Rcpp::XPtr<matrix_h2> read_h2_matrix(string file);
+RcppExport SEXP _schnellerGP_read_h2_matrix(SEXP fileSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< string >::type file(fileSEXP);
+    rcpp_result_gen = Rcpp::wrap(read_h2_matrix(file));
+    return rcpp_result_gen;
+END_RCPP
+}
+// get_h2_idx
+arma::umat get_h2_idx(Rcpp::XPtr<matrix_h2> gp);
+RcppExport SEXP _schnellerGP_get_h2_idx(SEXP gpSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<matrix_h2> >::type gp(gpSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_h2_idx(gp));
+    return rcpp_result_gen;
 END_RCPP
 }
 // cholesky_hmatrix
@@ -333,6 +360,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_schnellerGP_multiply_h2_stdnorm", (DL_FUNC) &_schnellerGP_multiply_h2_stdnorm, 1},
     {"_schnellerGP_convert_h2_to_h_matrix", (DL_FUNC) &_schnellerGP_convert_h2_to_h_matrix, 1},
     {"_schnellerGP_save_h2_matrix", (DL_FUNC) &_schnellerGP_save_h2_matrix, 2},
+    {"_schnellerGP_read_h2_matrix", (DL_FUNC) &_schnellerGP_read_h2_matrix, 1},
+    {"_schnellerGP_get_h2_idx", (DL_FUNC) &_schnellerGP_get_h2_idx, 1},
     {"_schnellerGP_cholesky_hmatrix", (DL_FUNC) &_schnellerGP_cholesky_hmatrix, 1},
     {"_schnellerGP_solve_hmatrix", (DL_FUNC) &_schnellerGP_solve_hmatrix, 2},
     {"_schnellerGP_log_sqrt_determinant_hmatrix", (DL_FUNC) &_schnellerGP_log_sqrt_determinant_hmatrix, 1},

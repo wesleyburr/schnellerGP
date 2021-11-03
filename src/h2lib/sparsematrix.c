@@ -244,16 +244,16 @@ print_sparsematrix(pcsparsematrix a)
   coeff = a->coeff;
   rows = a->rows;
 
-  (void) printf("sparsematrix(%u,%u,%u)\n", rows, a->cols, a->nz);
+  (void) Rprintf("sparsematrix(%u,%u,%u)\n", rows, a->cols, a->nz);
   if (a->nz > 0) {
     for (i = 0; i < rows; i++) {
-      (void) printf("  %u:", i);
+      (void) Rprintf("  %u:", i);
 
       for (j = row[i]; j < row[i + 1]; j++)
-	(void) printf(" (%u " FIELD_CS(.5, e) ")", col[j],
+	(void) Rprintf(" (%u " FIELD_CS(.5, e) ")", col[j],
 		      FIELD_ARG(coeff[j]));
 
-      (void) printf("\n");
+      (void) Rprintf("\n");
     }
   }
 }
