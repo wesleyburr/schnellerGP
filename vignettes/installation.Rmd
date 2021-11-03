@@ -1,0 +1,153 @@
+---
+title: "schnellerGP: Installation"
+author: Wesley S. Burr^1^
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{schnellerGP: Installation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+^1^ Department of Mathematics, Trent University, Peterborough, ON, Canada
+
+# Introduction
+
+The schnellerGP package contains interfaces to two source libraries (in C
+and C++): H2Lib and HODLR. In addition, the package assumes access to 
+BLAS, LAPACK, and other standard code libraries. As such, the installation
+can be a bit tricky, especially if you haven't previously set up an optimized
+BLAS library for your personal system. This vignette will go through
+the process of configuring your environment for the installation of the
+package, for five different operating system frameworks: Windows 7, Windows 10,
+Ubuntu 20.04, Fedora 35, and Mac OSX. Please note that the installation has
+**not** been tested on the new M1 Mac chipset, and will not be until one of the
+authors gains access to such a machine.
+
+
+# Windows 7
+
+For Windows, because packages are not as easily installed as, say, a Linux operating
+system, the instructions are somewhat more complex. As with the others, if you would
+like to optimize a BLAS installation, please refer to the Optimization Vignette.
+Note that these instructions are only for installing the **latest** version of
+schnellerGP from **source** - compiled Windows binaries can gloss over most of these
+issues. Unfortunately, this takes work, and we won't always have the latest versions
+available. 
+
+Start by ensuring you have the latest version of **R tools** installed for your version
+of R. Testing has been done against R 4.1 and later, but not on R 3.5 or 3.6.
+This can be found on [https://cran.r-project.org/bin/windows/Rtools/](CRAN),
+as with the R interpreter and interface. Generally speaking, Rtools provides a
+miniaturized Linux environment and compiler-linker chain for Windows, based on a 
+system called MinGW. Because of this, once you install Rtools there will be a link in your
+Start Menu under Rtools 4.0 for **Rtools MinGW 64-bit**. If you click this, you will get
+a terminal in the environment that R uses for compiling packages from source. 
+
+There is a note in the Rtools installation guidelines on CRAN, which states that
+
+
+    After installation is complete, you need to perform one more step to be able to compile R 
+    packages: you need to put the location of the Rtools make utilities (bash, make, etc) on the 
+    PATH. The easiest way to do so is create a text file .Renviron in your Documents folder which 
+    contains the following line:
+     
+    PATH="${RTOOLS40_HOME}\usr\bin;${PATH}"
+    
+    If you then restart R, you can verify that make can be found, which should show the path to 
+    your Rtools installation:
+
+    ```{r, eval = FALSE}
+    Sys.which("make")
+    ```
+ 
+Make sure that you name the file **.Renviron** exactly, and not something like **.Renviron.txt**,
+which will not work. Since you're already in R to test the above command, also install the
+required packages:
+
+```{r, eval = FALSE}
+install.packages(c("Rcpp", "RcppEigen", "RcppArmadillo", "knitr", "rmarkdown"))
+```
+
+Now, we do the tricky bits, starting with setting up the build environment.
+    
+## Setting up the pacman / mingw world
+
+If you run Rtools MinGW 64-bit from your start menu, you can then use the **pacman** package manager
+to organize system libraries that can be used to compile against. Start with updating the
+indexes (package databases):
+
+```bash
+pacman -Sy
+```
+
+Then, we need the same dependencies that we would compile against for Linux: netCDF, BLAS,
+and Cairo. Pandoc we will get by installing rmarkdown, which brings it along on Windows.
+We will install cairo, BLAS and netcdf, and for both the 32-bit and 64-bit architectures
+(because Windows is weird, and sometimes will just randomly decide to install the i386 version
+of a package). The glib2 is required for Cairo to work automatically in the configure.win
+call.
+
+```bash
+pacman -S mingw-w64-x86_64-netcdf mingw-w64-i686-netcdf
+pacman -S mingw-w64-i686-cairo mingw-w64-x86_64-cairo
+pacman -S mingw-w64-i686-openblas mingw-w64-x86_64-openblas
+pacman -S mingw-w64-i686-glib2 mingw-w64-x86_64-glib2
+```
+
+That should set things up (ignoring the customized BLAS - for that, see the Optimization Vignette)
+so you can compile. Return to R, and on the prompt run:
+
+```{r, eval = FALSE}
+install.packages("schnellerGP_0.1.0.tar.gz", type = "source")
+```
+
+(assuming you have placed the .tar.gz file in the current working directory). Alternatively,
+use the menu system and run Packages -> Install package(s) from local files ..., then
+point the interface at the .tar.gz file and allow it to proceed. If the package compiles
+successfully, you can then load it in the usual way, and proceed with your modeling!
+
+# Windows 10
+
+# Ubuntu Desktop 20.04
+
+# Fedora Desktop 35
+
+Assuming you have a working installation of Fedora (tested on 34 and 35), you should have installed
+a few background applications:
+
+```bash
+sudo dnf install R netcdf netcdf-devel blas blas-devel cairo-devel pandoc
+```
+
+In addition, the package depends on several R dependencies, which will be automatically taken
+care of if you install via, e.g., RStudio's system. If you prefer to do things manually, 
+you will need the following (knitr and rmarkdown are to allow the vignettes to be installed):
+
+```{r, eval = FALSE}
+install.packages(c("Rcpp", "RcppEigen", "RcppArmadillo", "knitr", "rmarkdown"))
+```
+
+Note that setting up alternative BLAS options for Linux is fairly straightforward:
+see the Optimization Vignette for more on how to do this for Fedora.
+
+Once you have ensured the dependencies are available, the installation is straightforward. 
+From within R, you can run:
+
+```{r, eval = FALSE}
+install.packages("schnellerGP_0.1.0.tar.gz", type = "source")
+```
+or from the command line,
+```bash
+
+```
+# Mac OSX 10.??
+
+
+

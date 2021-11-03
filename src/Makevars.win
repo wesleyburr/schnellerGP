@@ -5,39 +5,38 @@
 #################################################
 #Options Necessary for H2Lib
 #################################################
-H2LIB_FLAGS  =
-H2LIB_FLAGS += -O3 -march=native -funroll-loops
-H2LIB_FLAGS += -DUSE_BLAS
-H2LIB_FLAGS += -DUSE_SIMD 
-H2LIB_FLAGS += -DUSE_OPENMP -fopenmp
 
-H2LIB_LIBS   =
-H2LIB_LIBS  += -lgfortran
-H2LIB_LIBS  += -lm -lR -lRlapack -lRblas 
+H2LIB_FLAGS  = -O3 -march=native -funroll-loops
+H2LIB_FLAGS += -DUSE_BLAS -DUSE_SIMD -DUSE_OPENMP -fopenmp
 
-HODLR_FLAGS =  -DUSE_DOUBLE -O3 -march=native -funroll-loops
+H2LIB_LIBS   = -lm -lR 
+HODLR_FLAGS  = -DUSE_DOUBLE
 
 ##################################################
 #Final Package Setup
 ##################################################
 
-ifeq "$(WIN)" "64"
-BITS=64
-else
-BITS=32
-endif
+#PKG_CPPFLAGS  = $(shell /mingw64/bin/pkg-config --cflags cairo) - loaded at end
+#PKG_CPPFLAGS += $(shell pkg-config --cflags netcdf) - loaded at end
 
-PKG_CPPFLAGS = -I. -Iwin$(BITS) $(XTRA_PKG_CPPFLAGS) -I../inst/include -I./include $(shell pkg-config --cflags cairo) -w -DCURL_STATICLIB
-#PKG_CPPFLAGS += -DUSE_NETCDF $(shell pkg-config --cflags netcdf) 
-PKG_CPPFLAGS += $(HODLR_FLAGS) $(H2LIB_FLAGS)
+PKG_CPPFLAGS  = 
+PKG_CPPFLAGS += $(H2LIB_FLAGS) -I../inst/include -I./include -w
+PKG_CPPFLAGS += -DUSE_NETCDF 
+PKG_CPPFLAGS += $(HODLR_FLAGS) -DCURL_STATICLIB
 
-#PKG_LIBS  = win$(BITS)/libcairo.a win$(BITS)/libpng.a win$(BITS)/libz.a -lgdi32 -lmsimg32
-
-PKG_LIBS  =  $(H2LIB_LIBS) -fopenmp -lwinmm 
-#-lcrypto -lcrypt32 -lssl -lssh2 -lcurl -lwinmm   -lwldap32  $(shell pkg-config --libs netcdf)    -lhdf5_hl -lhdf5 -lws2_32  -lz 
+PKG_LIBS   =
+PKG_LIBS  += $(H2LIB_LIBS) -fopenmp -lwinmm 
+PKG_LIBS  += $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
+#PKG_LIBS += $(shell /mingw64/bin/pkg-config --libs cairo) - loaded at end
+#PKG_LIBS += $(shell /mingw64/bin/pkg-config --libs netcdf) - loaded at end
 
 HODLR        = $(wildcard hodlrlib/*.cpp)
 WRAPPERS     = $(wildcard classes/*.cpp)
 H2LIB        = $(wildcard   h2lib/*.c)
 MAIN         = $(wildcard *.cpp)
-OBJECTS      = $(MAIN:.cpp=.o) $(H2LIB:.c=.o) $(WRAPPERS:.cpp=.o)	$(HODLR:.cpp=.o)
+OBJECTS      = $(MAIN:.cpp=.o) $(H2LIB:.c=.o) $(WRAPPERS:.cpp=.o) $(HODLR:.cpp=.o)
+
+#
+#  Configure.win should append the required pkg-config calls for cairo and netcdf! *SHOULD*
+#
+# 

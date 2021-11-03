@@ -8,11 +8,6 @@
 
 using namespace Rcpp;
 
-#ifdef RCPP_USE_GLOBAL_ROSTREAM
-Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
-Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
-#endif
-
 // create_h2_kernel
 Rcpp::XPtr<matrix_h2> create_h2_kernel(arma::mat X, arma::mat hp, NumericVector kt);
 RcppExport SEXP _schnellerGP_create_h2_kernel(SEXP XSEXP, SEXP hpSEXP, SEXP ktSEXP) {

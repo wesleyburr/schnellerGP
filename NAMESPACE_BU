@@ -1,4 +1,0 @@
-useDynLib(schnellerGP, .registration=TRUE)
-exportPattern("^[[:alpha:]]+")
-importFrom(Rcpp, evalCpp)
-import(Matrix)

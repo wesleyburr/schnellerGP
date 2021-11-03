@@ -1,0 +1,13 @@
+#!/bin/bash
+export PATH=/mingw64/bin:$PATH
+echo PKG_CPPFLAGS += \\ >> ./src/Makevars.win
+pkg-config cairo --cflags >> ./src/Makevars.win
+echo PKG_CPPFLAGS += \\ >> ./src/Makevars.win
+pkg-config netcdf --cflags >> ./src/Makevars.win
+
+echo PKG_LIBS += \\ >> ./src/Makevars.win
+pkg-config cairo --libs >> ./src/Makevars.win
+echo PKG_LIBS += \\ >> ./src/Makevars.win
+pkg-config netcdf --libs >> ./src/Makevars.win
+
+#cat ./src/Makevars.win

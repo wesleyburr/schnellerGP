@@ -5,44 +5,28 @@
 #################################################
 #Options Necessary for H2Lib
 #################################################
-H2LIB_FLAGS  =
-H2LIB_FLAGS += -O3 -march=native -funroll-loops
-H2LIB_FLAGS += -DUSE_BLAS
-H2LIB_FLAGS += -DUSE_SIMD 
-H2LIB_FLAGS += -DUSE_OPENMP -fopenmp
 
-H2LIB_LIBS   =
-H2LIB_LIBS  += -lgfortran
-H2LIB_LIBS  += -lm -lR -llapack -lblas 
+H2LIB_FLAGS  = -O3 -march=native -funroll-loops
+H2LIB_FLAGS += -DUSE_BLAS -DUSE_SIMD -DUSE_OPENMP -fopenmp
 
-HODLR_FLAGS =  -DUSE_DOUBLE -march=native -funroll-loops
+H2LIB_LIBS   = -lgfortran -lm -lR -llapack -lblas 
 
-H2LIB_FLAGS =
-H2LIB_LIBS =
-
-#H2LIB_FLAGS += -O3 -march=native -funroll-loops
-#H2LIB_FLAGS += -DUSE_BLAS
-#H2LIB_FLAGS += -DUSE_SIMD -DUSE_CAIRO
-# CFLAGS += -DUSE_CAIRO $(shell pkg-config --cflags cairo)
-#LIBS    += $(shell pkg-config --libs cairo)
-#H2LIB_FLAGS += -DUSE_OPENMP -fopenmp
-#HODLR_FLAGS =  -DUSE_DOUBLE
-
-#H2LIB_LIBS  += -llapack -lblas -lgfortran
-#H2LIB_LIBS  += -lm
+HODLR_FLAGS  = -DUSE_DOUBLE 
 
 ##################################################
 #Final Package Setup
 ##################################################
 
-PKG_CPPFLAGS = -I/usr/include/cairo -I/usr/local/include/cairo $(H2LIB_FLAGS) -I../inst/include -I./include -w
+PKG_CPPFLAGS  = $(shell pkg-config --cflags cairo) 
+PKG_CPPFLAGS += $(H2LIB_FLAGS) -I../inst/include -I./include -w
 PKG_CPPFLAGS += -DUSE_NETCDF $(shell pkg-config --cflags netcdf) $(HODLR_FLAGS)
 
-PKG_LIBS     = -L/usr/local/lib  -lcairo $(H2LIB_LIBS)
-PKG_LIBS     += $(shell pkg-config --libs netcdf) -lnetcdf
+PKG_LIBS     = -L/usr/local/lib  $(H2LIB_LIBS)
+PKG_LIBS     += $(shell pkg-config --libs cairo) 
+PKG_LIBS     += $(shell pkg-config --libs netcdf)
 
 HODLR        = $(wildcard hodlrlib/*.cpp)
 WRAPPERS     = $(wildcard classes/*.cpp)
 H2LIB        = $(wildcard   h2lib/*.c)
 MAIN         = $(wildcard *.cpp)
-OBJECTS      = $(MAIN:.cpp=.o) $(H2LIB:.c=.o) $(WRAPPERS:.cpp=.o)	$(HODLR:.cpp=.o)
+OBJECTS      = $(MAIN:.cpp=.o) $(H2LIB:.c=.o) $(WRAPPERS:.cpp=.o) $(HODLR:.cpp=.o)

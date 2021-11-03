@@ -5,11 +5,12 @@ in O(n log^2 n) time using H and H^2 matrix decompositions.
 
 # Installing in R
 
-To install this package in R, begin by downloading the source copy of the package from the [releases folder](https://github.com/wesleyburr/schnellerGP/releases) and 
+To install this package in R, begin by downloading the source copy of the package from the 
+[releases folder](https://github.com/wesleyburr/schnellerGP/releases) and 
 install it using type = "source". To install from source, you will require several
-libraries for your system: LAPACK, BLAS, gFortran, and NetCDF. Some attempt
+libraries for your system: LAPACK, BLAS, gFortran, NetCDF and Cairo. Some attempt
 has been made at describing how to install these for common architectures
-in the **Optimization Vignette**, below. 
+in the **Installation Vignette**, below. 
 
 The package has no external dependencies, but requires several libraries
 that are built-in via source (C++ libraries for H2 (h2lib) and HODLR (hodlrlib)).
@@ -26,9 +27,10 @@ name as necessary to whatever the copy you downloaded was set to for versioning.
 
 # Getting Started
 
-Refer to the [vignette on optimization and installation](link.html)
-for details on installation and optimization of the environment, and to
-[vignette on common use](link2.html) for some worked examples of the functionality.
+Refer to the [vignette on installation](installation.html)
+for details on installation and how to compile from source. An additional vignette
+(TBD) [on optimization](optimization.html) is also included, discussing setting up a 
+faster BLAS environment. Two ... blah blah.
 
 # Contributing?
 

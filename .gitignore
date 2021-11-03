@@ -4,6 +4,8 @@
 .Ruserdata
 inst/doc
 src/*.o
+src/*.so
+src/*.dll
 src/classes/*.o
 src/h2lib/*.o
 src/hodlrlib/*.o

@@ -1,7 +1,8 @@
 Package: schnellerGP
 Type: Package
 Title: Fast Bayesian GP sampling using H and H^2 matrices
-Version: 0.1.0
+Version: 0.1.1
+Date: 2021-11-02
 Author: Matt Wheeler, Kelly R. Moran, Steffen Börm, Wesley S. Burr
 Maintainer: Matt Wheeler <matt.wheeler@nih.gov>
 Description: This package provides various functionality

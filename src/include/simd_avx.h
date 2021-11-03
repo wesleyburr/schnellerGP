@@ -201,8 +201,8 @@
  * Implementation of FMA function, if needed for float
  ****************************************************/
 
-#ifndef __FMA__
-static inline vecf _mm256_fmadd_ps(vecf a, vecf b, vecf c) {
+/*#ifndef __FMA__
+static vecf _mm256_fmadd_ps(vecf a, vecf b, vecf c)  {
   return vadd_ps(vmul_ps(a, b), c);
 }
 
@@ -217,13 +217,13 @@ static inline vecf _mm256_fnmadd_ps(vecf a, vecf b, vecf c) {
 static inline vecf _mm256_fnmsub_ps(vecf a, vecf b, vecf c) {
   return vmul_ps(vset1_ps(-1.0f), vadd_ps(vmul_ps(a, b), c));
 }
-#endif
+#endif */
 
 /****************************************************
  * Implementation of FMA function, if needed for double
  ****************************************************/
 
-#ifndef __FMA__
+/*#ifndef __FMA__
 static inline vecd _mm256_fmadd_pd(vecd a, vecd b, vecd c) {
   return vadd_pd(vmul_pd(a, b), c);
 }
@@ -239,7 +239,7 @@ static inline vecd _mm256_fnmadd_pd(vecd a, vecd b, vecd c) {
 static inline vecd _mm256_fnmsub_pd(vecd a, vecd b, vecd c) {
   return vmul_pd(vset1_pd(-1.0), vadd_pd(vmul_pd(a, b), c));
 }
-#endif
+#endif*/
 
 /****************************************************
  * Implementations of basic vector functions
