@@ -504,3 +504,20 @@ solve_HODLR <- function(GPobj, b) {
     .Call(`_schnellerGP_solve_HODLR`, GPobj, b)
 }
 
+#' log_det_HODLR
+#'
+#' Returns the log-determinant of a  HODLR matrix
+#'
+#' Givne a HODLR matrix A returns \log | A |
+#' 
+#'
+#' @param GPobj  The H matrix, assembled and factorized for use.
+#' 
+#' @export
+#' @return \log |A| where |A| is the determinant of the matrix.,   
+#' 
+#'
+log_det_HODLR <- function(GPobj) {
+    .Call(`_schnellerGP_log_det_HODLR`, GPobj)
+}
+

@@ -350,6 +350,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// log_det_HODLR
+NumericVector log_det_HODLR(Rcpp::XPtr<HODLR_Tree> GPobj);
+RcppExport SEXP _schnellerGP_log_det_HODLR(SEXP GPobjSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<HODLR_Tree> >::type GPobj(GPobjSEXP);
+    rcpp_result_gen = Rcpp::wrap(log_det_HODLR(GPobj));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_schnellerGP_create_h2_kernel", (DL_FUNC) &_schnellerGP_create_h2_kernel, 3},
@@ -379,6 +390,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_schnellerGP_getSymmetricFactor", (DL_FUNC) &_schnellerGP_getSymmetricFactor, 1},
     {"_schnellerGP_matmatProduct", (DL_FUNC) &_schnellerGP_matmatProduct, 2},
     {"_schnellerGP_solve_HODLR", (DL_FUNC) &_schnellerGP_solve_HODLR, 2},
+    {"_schnellerGP_log_det_HODLR", (DL_FUNC) &_schnellerGP_log_det_HODLR, 1},
     {NULL, NULL, 0}
 };
 
