@@ -135,7 +135,6 @@ HODLR_TP_sample_ls <- function(ls,Y,TP,x,cur_tau,bounds,idx = NULL,kernel="mater
 #'
 #' @examples
 #' add_numbers(1, 2) ## returns 3
-#'
 HODLR_TP_sample_scale <- function(Y,TP,cur_tau,mean=0,prec=1){
         if (length(Y)!=nrow(TP)){
                 stop("The data and the TP dimensions do not match.")
@@ -144,7 +143,7 @@ HODLR_TP_sample_scale <- function(Y,TP,cur_tau,mean=0,prec=1){
         tY = as.matrix(Y)
         tX = as.matrix(apply(TP,1,prod))
         tV = 1/(t(tX)%*%tX*cur_tau + prec)
-        tM = tV*t(tX)%*%((cur_tau*tY)+mean*prec)
+        tM = tV*(t(tX)%*%cur_tau*Y)+mean*prec)
         return(rnorm(1,tM,sqrt(tV)))
 
 }
