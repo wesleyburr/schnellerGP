@@ -339,3 +339,23 @@ NumericVector solve_HODLR(Rcpp::XPtr<HODLR_Tree> GPobj, Mat b) {
 }
 
 
+//' log_det_HODLR
+//'
+//' Returns the log-determinant of a  HODLR matrix
+//'
+//' Givne a HODLR matrix A returns \log | A |
+//' 
+//'
+//' @param GPobj  The H matrix, assembled and factorized for use.
+//' 
+//' @export
+//' @return \log |A| where |A| is the determinant of the matrix.,   
+//' 
+//'
+// [[Rcpp::export]]
+NumericVector log_det_HODLR(Rcpp::XPtr<HODLR_Tree> GPobj) {
+
+  double  returnx = GPobj->logDeterminant(); 
+  return wrap(returnx);
+}
+
