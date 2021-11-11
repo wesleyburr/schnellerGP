@@ -143,7 +143,7 @@ HODLR_TP_sample_scale <- function(Y,TP,cur_tau,mean=0,prec=1){
         tY = as.matrix(Y)
         tX = as.matrix(apply(TP,1,prod))
         tV = 1/(t(tX)%*%tX * cur_tau + prec)
-        tM = tV*(t(tX)%*%cur_tau*Y + mean*prec)
+        tM = tV*(t(tX)%*%(cur_tau*Y) + mean*prec)
         return(rnorm(1,tM,sqrt(tV)))
 
 }
