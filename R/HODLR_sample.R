@@ -109,7 +109,7 @@ HODLR_TP_sample_ls <- function(ls,Y,TP,x,cur_tau,bounds,idx = NULL,kernel="mater
         num_like      <- sum(solve_HODLR(QP2,as.matrix(ny))*ny)
         num_det       <- log_det_HODLR(QP2)
         test = 0.5*(-num_like - num_det) - 0.5*( -denom_like - denom_det)
-        if (exp(test)> runif(1))
+        if (exp(test) > runif(1))
         {
                 return(nls)
         }else{
@@ -142,8 +142,8 @@ HODLR_TP_sample_scale <- function(Y,TP,cur_tau,mean=0,prec=1){
         
         tY = as.matrix(Y)
         tX = as.matrix(apply(TP,1,prod))
-        tV = 1/(t(tX)%*%(tX*cur_tau + prec))
-        tM = tV*(t(tX)%*%(cur_tau*Y + mean*prec))
+        tV = 1/(t(tX)%*%tX * cur_tau + prec)
+        tM = tV*(t(tX)%*%cur_tau*Y + mean*prec)
         return(rnorm(1,tM,sqrt(tV)))
 
 }
