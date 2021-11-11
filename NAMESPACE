@@ -30,3 +30,7 @@ export(solve_HODLR)
 export(solve_h2_vector)
 export(solve_h2_vector_start)
 export(solve_hmatrix)
+export(HODLR_TP_sample)
+export(HODLR_TP_sample_ls)
+export(HODLR_TP_sample_scale)
+
