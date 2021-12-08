@@ -84,7 +84,7 @@ HODLR_TP_sample <- function(Y,TP,x,cur_tau,l_scale,idx = NULL, kernel = "matern"
 HODLR_TP_sample_ls <- function(ls,Y,TP,x,cur_tau,bounds,idx = NULL,kernel="matern"){
         
         nls <- runif(1,-0.5,0.5)+ls
-        if ( (ls < bounds[1]) || ( ls > bounds[2]) ){
+        if ( (nls < bounds[1]) || ( nls > bounds[2]) ){
                 return(ls)
         }
         if (is.null(idx)){
