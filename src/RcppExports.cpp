@@ -3,7 +3,6 @@
 
 #include "../inst/include/schnellerGP.h"
 #include <RcppEigen.h>
-#include <RcppArmadillo.h>
 #include <Rcpp.h>
 
 using namespace Rcpp;
@@ -13,195 +12,6 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// create_h2_kernel
-Rcpp::XPtr<matrix_h2> create_h2_kernel(arma::mat X, arma::mat hp, NumericVector kt);
-RcppExport SEXP _schnellerGP_create_h2_kernel(SEXP XSEXP, SEXP hpSEXP, SEXP ktSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type X(XSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type hp(hpSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type kt(ktSEXP);
-    rcpp_result_gen = Rcpp::wrap(create_h2_kernel(X, hp, kt));
-    return rcpp_result_gen;
-END_RCPP
-}
-// solve_h2_vector
-NumericMatrix solve_h2_vector(Rcpp::XPtr<matrix_h2> gp, arma::vec d_precond, arma::vec b, double tolerance, uint iter);
-RcppExport SEXP _schnellerGP_solve_h2_vector(SEXP gpSEXP, SEXP d_precondSEXP, SEXP bSEXP, SEXP toleranceSEXP, SEXP iterSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<matrix_h2> >::type gp(gpSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type d_precond(d_precondSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type b(bSEXP);
-    Rcpp::traits::input_parameter< double >::type tolerance(toleranceSEXP);
-    Rcpp::traits::input_parameter< uint >::type iter(iterSEXP);
-    rcpp_result_gen = Rcpp::wrap(solve_h2_vector(gp, d_precond, b, tolerance, iter));
-    return rcpp_result_gen;
-END_RCPP
-}
-// solve_h2_vector_start
-NumericMatrix solve_h2_vector_start(Rcpp::XPtr<matrix_h2> gp, arma::vec d_precond, arma::vec b, arma::vec start, double tolerance, uint iter);
-RcppExport SEXP _schnellerGP_solve_h2_vector_start(SEXP gpSEXP, SEXP d_precondSEXP, SEXP bSEXP, SEXP startSEXP, SEXP toleranceSEXP, SEXP iterSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<matrix_h2> >::type gp(gpSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type d_precond(d_precondSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type b(bSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type start(startSEXP);
-    Rcpp::traits::input_parameter< double >::type tolerance(toleranceSEXP);
-    Rcpp::traits::input_parameter< uint >::type iter(iterSEXP);
-    rcpp_result_gen = Rcpp::wrap(solve_h2_vector_start(gp, d_precond, b, start, tolerance, iter));
-    return rcpp_result_gen;
-END_RCPP
-}
-// add_diag
-void add_diag(Rcpp::XPtr<matrix_h2> gp, arma::vec dv);
-RcppExport SEXP _schnellerGP_add_diag(SEXP gpSEXP, SEXP dvSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<matrix_h2> >::type gp(gpSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type dv(dvSEXP);
-    add_diag(gp, dv);
-    return R_NilValue;
-END_RCPP
-}
-// multiply_h2_vector
-NumericMatrix multiply_h2_vector(Rcpp::XPtr<matrix_h2> gp, arma::vec dv);
-RcppExport SEXP _schnellerGP_multiply_h2_vector(SEXP gpSEXP, SEXP dvSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<matrix_h2> >::type gp(gpSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type dv(dvSEXP);
-    rcpp_result_gen = Rcpp::wrap(multiply_h2_vector(gp, dv));
-    return rcpp_result_gen;
-END_RCPP
-}
-// multiply_h2_stdnorm
-NumericMatrix multiply_h2_stdnorm(Rcpp::XPtr<matrix_h2> gp);
-RcppExport SEXP _schnellerGP_multiply_h2_stdnorm(SEXP gpSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<matrix_h2> >::type gp(gpSEXP);
-    rcpp_result_gen = Rcpp::wrap(multiply_h2_stdnorm(gp));
-    return rcpp_result_gen;
-END_RCPP
-}
-// convert_h2_to_h_matrix
-Rcpp::XPtr<matrix_h> convert_h2_to_h_matrix(Rcpp::XPtr<matrix_h2> gp);
-RcppExport SEXP _schnellerGP_convert_h2_to_h_matrix(SEXP gpSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<matrix_h2> >::type gp(gpSEXP);
-    rcpp_result_gen = Rcpp::wrap(convert_h2_to_h_matrix(gp));
-    return rcpp_result_gen;
-END_RCPP
-}
-// save_h2_matrix
-void save_h2_matrix(string file, Rcpp::XPtr<matrix_h2> gp);
-RcppExport SEXP _schnellerGP_save_h2_matrix(SEXP fileSEXP, SEXP gpSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< string >::type file(fileSEXP);
-    Rcpp::traits::input_parameter< Rcpp::XPtr<matrix_h2> >::type gp(gpSEXP);
-    save_h2_matrix(file, gp);
-    return R_NilValue;
-END_RCPP
-}
-// read_h2_matrix
-Rcpp::XPtr<matrix_h2> read_h2_matrix(string file);
-RcppExport SEXP _schnellerGP_read_h2_matrix(SEXP fileSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< string >::type file(fileSEXP);
-    rcpp_result_gen = Rcpp::wrap(read_h2_matrix(file));
-    return rcpp_result_gen;
-END_RCPP
-}
-// get_h2_idx
-arma::umat get_h2_idx(Rcpp::XPtr<matrix_h2> gp);
-RcppExport SEXP _schnellerGP_get_h2_idx(SEXP gpSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<matrix_h2> >::type gp(gpSEXP);
-    rcpp_result_gen = Rcpp::wrap(get_h2_idx(gp));
-    return rcpp_result_gen;
-END_RCPP
-}
-// cholesky_hmatrix
-void cholesky_hmatrix(Rcpp::XPtr<matrix_h> gp);
-RcppExport SEXP _schnellerGP_cholesky_hmatrix(SEXP gpSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<matrix_h> >::type gp(gpSEXP);
-    cholesky_hmatrix(gp);
-    return R_NilValue;
-END_RCPP
-}
-// solve_hmatrix
-NumericMatrix solve_hmatrix(Rcpp::XPtr<matrix_h> gp, arma::vec b);
-RcppExport SEXP _schnellerGP_solve_hmatrix(SEXP gpSEXP, SEXP bSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<matrix_h> >::type gp(gpSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(solve_hmatrix(gp, b));
-    return rcpp_result_gen;
-END_RCPP
-}
-// log_sqrt_determinant_hmatrix
-double log_sqrt_determinant_hmatrix(Rcpp::XPtr<matrix_h> gp);
-RcppExport SEXP _schnellerGP_log_sqrt_determinant_hmatrix(SEXP gpSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<matrix_h> >::type gp(gpSEXP);
-    rcpp_result_gen = Rcpp::wrap(log_sqrt_determinant_hmatrix(gp));
-    return rcpp_result_gen;
-END_RCPP
-}
-// save_h_matrix
-void save_h_matrix(string file, Rcpp::XPtr<matrix_h> gp);
-RcppExport SEXP _schnellerGP_save_h_matrix(SEXP fileSEXP, SEXP gpSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< string >::type file(fileSEXP);
-    Rcpp::traits::input_parameter< Rcpp::XPtr<matrix_h> >::type gp(gpSEXP);
-    save_h_matrix(file, gp);
-    return R_NilValue;
-END_RCPP
-}
-// read_h_matrix
-Rcpp::XPtr<matrix_h> read_h_matrix(string file);
-RcppExport SEXP _schnellerGP_read_h_matrix(SEXP fileSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< string >::type file(fileSEXP);
-    rcpp_result_gen = Rcpp::wrap(read_h_matrix(file));
-    return rcpp_result_gen;
-END_RCPP
-}
-// multiply_hmat_vec
-arma::vec multiply_hmat_vec(Rcpp::XPtr<matrix_h> h, arma::vec v);
-RcppExport SEXP _schnellerGP_multiply_hmat_vec(SEXP hSEXP, SEXP vSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<matrix_h> >::type h(hSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type v(vSEXP);
-    rcpp_result_gen = Rcpp::wrap(multiply_hmat_vec(h, v));
-    return rcpp_result_gen;
-END_RCPP
-}
 // get_n_levels
 int get_n_levels(int N, int M);
 RcppExport SEXP _schnellerGP_get_n_levels(SEXP NSEXP, SEXP MSEXP) {
@@ -257,6 +67,22 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
     Rcpp::traits::input_parameter< int >::type M(MSEXP);
     rcpp_result_gen = Rcpp::wrap(setup_compressedMatrixGP_Matern_tP(X, tP, sigma, rho, tol, M));
+    return rcpp_result_gen;
+END_RCPP
+}
+// setup_compressedMatrixGP_sqrExp_tP
+Rcpp::XPtr<HODLR_Tree> setup_compressedMatrixGP_sqrExp_tP(Mat X, Mat tP, double sigma, double rho, double tol, int M);
+RcppExport SEXP _schnellerGP_setup_compressedMatrixGP_sqrExp_tP(SEXP XSEXP, SEXP tPSEXP, SEXP sigmaSEXP, SEXP rhoSEXP, SEXP tolSEXP, SEXP MSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Mat >::type X(XSEXP);
+    Rcpp::traits::input_parameter< Mat >::type tP(tPSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< double >::type rho(rhoSEXP);
+    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
+    Rcpp::traits::input_parameter< int >::type M(MSEXP);
+    rcpp_result_gen = Rcpp::wrap(setup_compressedMatrixGP_sqrExp_tP(X, tP, sigma, rho, tol, M));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -363,26 +189,11 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_schnellerGP_create_h2_kernel", (DL_FUNC) &_schnellerGP_create_h2_kernel, 3},
-    {"_schnellerGP_solve_h2_vector", (DL_FUNC) &_schnellerGP_solve_h2_vector, 5},
-    {"_schnellerGP_solve_h2_vector_start", (DL_FUNC) &_schnellerGP_solve_h2_vector_start, 6},
-    {"_schnellerGP_add_diag", (DL_FUNC) &_schnellerGP_add_diag, 2},
-    {"_schnellerGP_multiply_h2_vector", (DL_FUNC) &_schnellerGP_multiply_h2_vector, 2},
-    {"_schnellerGP_multiply_h2_stdnorm", (DL_FUNC) &_schnellerGP_multiply_h2_stdnorm, 1},
-    {"_schnellerGP_convert_h2_to_h_matrix", (DL_FUNC) &_schnellerGP_convert_h2_to_h_matrix, 1},
-    {"_schnellerGP_save_h2_matrix", (DL_FUNC) &_schnellerGP_save_h2_matrix, 2},
-    {"_schnellerGP_read_h2_matrix", (DL_FUNC) &_schnellerGP_read_h2_matrix, 1},
-    {"_schnellerGP_get_h2_idx", (DL_FUNC) &_schnellerGP_get_h2_idx, 1},
-    {"_schnellerGP_cholesky_hmatrix", (DL_FUNC) &_schnellerGP_cholesky_hmatrix, 1},
-    {"_schnellerGP_solve_hmatrix", (DL_FUNC) &_schnellerGP_solve_hmatrix, 2},
-    {"_schnellerGP_log_sqrt_determinant_hmatrix", (DL_FUNC) &_schnellerGP_log_sqrt_determinant_hmatrix, 1},
-    {"_schnellerGP_save_h_matrix", (DL_FUNC) &_schnellerGP_save_h_matrix, 2},
-    {"_schnellerGP_read_h_matrix", (DL_FUNC) &_schnellerGP_read_h_matrix, 1},
-    {"_schnellerGP_multiply_hmat_vec", (DL_FUNC) &_schnellerGP_multiply_hmat_vec, 2},
     {"_schnellerGP_get_n_levels", (DL_FUNC) &_schnellerGP_get_n_levels, 2},
     {"_schnellerGP_setup_compressedMatrixGP_Matern", (DL_FUNC) &_schnellerGP_setup_compressedMatrixGP_Matern, 5},
     {"_schnellerGP_setup_compressedMatrixGP_MaternP1", (DL_FUNC) &_schnellerGP_setup_compressedMatrixGP_MaternP1, 5},
     {"_schnellerGP_setup_compressedMatrixGP_Matern_tP", (DL_FUNC) &_schnellerGP_setup_compressedMatrixGP_Matern_tP, 6},
+    {"_schnellerGP_setup_compressedMatrixGP_sqrExp_tP", (DL_FUNC) &_schnellerGP_setup_compressedMatrixGP_sqrExp_tP, 6},
     {"_schnellerGP_setup_compressedMatrixGP_sqrExp", (DL_FUNC) &_schnellerGP_setup_compressedMatrixGP_sqrExp, 5},
     {"_schnellerGP_setup_compressedMatrixGP_sqrExpP1", (DL_FUNC) &_schnellerGP_setup_compressedMatrixGP_sqrExpP1, 5},
     {"_schnellerGP_simulate_compressedMatrixGP", (DL_FUNC) &_schnellerGP_simulate_compressedMatrixGP, 2},

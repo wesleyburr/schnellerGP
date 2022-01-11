@@ -97,8 +97,9 @@ HODLR_TP_sample_ls <- function(ls,Y,TP,x,cur_tau,bounds,idx = NULL,kernel="mater
                 QP1   <- setup_compressedMatrixGP_Matern_tP(as.matrix(x[idx]),as.matrix(1/W),1,ls,1e-14,50)
                 QP2   <- setup_compressedMatrixGP_Matern_tP(as.matrix(x[idx]),as.matrix(1/W),1,nls,1e-14,50)
         }else if (kernel == "sqr-exp"){
-                QP1   <- setup_compressedMatrixGP_sqrExpP1(as.matrix(x[idx]),as.matrix(1/W),1,ls,1e-14,50)
-                QP2   <- setup_compressedMatrixGP_sqrExpP1(as.matrix(x[idx]),as.matrix(1/W),1,nls,1e-14,50)
+                function(X, sigma, rho, tol, M)
+                QP1   <- setup_compressedMatrixGP_sqrExp_tP(as.matrix(x[idx]),as.matrix(1/W),1,ls,1e-14,50)
+                QP2   <- setup_compressedMatrixGP_sqrExp_tP(as.matrix(x[idx]),as.matrix(1/W),1,nls,1e-14,50)
                 
         }else{
                 stop("Undefined kernel specified.") 

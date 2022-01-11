@@ -1,4 +1,4 @@
-#include "mclasses/HODLR_Tree.hpp"
+#include "HODLR_Tree.hpp"
 #include <Rcpp.h>
 
 // Contructor for the HODLR Tree class:
