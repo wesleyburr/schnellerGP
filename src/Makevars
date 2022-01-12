@@ -6,7 +6,7 @@
 #Options Necessary for H2Lib
 #################################################
 
-HODLR_FLAGS  = -DUSE_DOUBLE --std=c++11 -O3 -funroll-loops 
+HODLR_FLAGS  = -DUSE_DOUBLE 
 
 ##################################################
 #Final Package Setup
@@ -15,6 +15,5 @@ HODLR_FLAGS  = -DUSE_DOUBLE --std=c++11 -O3 -funroll-loops
 PKG_CPPFLAGS +=  -I"./include" $(HODLR_FLAGS)
 
 HODLR        = $(wildcard hodlrlib/*.cpp)
-WRAPPERS     = $(wildcard classes/*.cpp)
 MAIN         = $(wildcard *.cpp)
 OBJECTS      = $(MAIN:.cpp=.o) $(WRAPPERS:.cpp=.o) $(HODLR:.cpp=.o)
