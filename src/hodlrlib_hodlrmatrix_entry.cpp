@@ -1,12 +1,12 @@
 #include <RcppEigen.h>
 #include <Rcpp.h>
-#include <mclasses/squaredeMat.hpp> //squared exponential kernel
-#include <mclasses/maternMat.hpp> //squared exponential kernel
-#include <mclasses/HODLR_Matrix.hpp>
-#include <mclasses/HODLR_Tree.hpp>
-#include <mclasses/squaredMat_ptau.hpp>
-#include <mclasses/maternMat_ptau.hpp>
-#include <mclasses/maternMat_pX.hpp>
+#include <squaredeMat.hpp> //squared exponential kernel
+#include <maternMat.hpp> //squared exponential kernel
+#include <HODLR_Matrix.hpp>
+#include <HODLR_Tree.hpp>
+#include <squaredMat_ptau.hpp>
+#include <maternMat_ptau.hpp>
+#include <maternMat_pX.hpp>
 
 using namespace Rcpp;
 
@@ -147,6 +147,47 @@ Rcpp::XPtr<HODLR_Tree> setup_compressedMatrixGP_Matern_tP(Mat X,
   T->factorize();
   return ptr;
 
+}
+
+//' setup_compressedMatrixGP_sqrExpP1
+//'
+//' Set Up Compressed Gaussian Process with Square Exponential (P1) Kernel
+//'
+//' Given a matrix of locations X, standard deviation sigma, and length
+//' scale rho, sets up a compressed matrix for a Gaussian process using
+//' the Squared Exponential kernel.
+//'
+//' @param X  Matrix of locations.
+//' @param sigma  Function standard deviation.
+//' @param rho  Length-Scale.
+//' @param tol  Tolerance for accuracy of calculations.
+//' @param M  Maximum sub-matrix size.
+//' @export
+//' @return After setting up compressed memory storage, returns a pointer
+//'  to a HODLR_Tree object. Specifically, in this case, kernel is the
+//'  Squared Exponential Kernel:
+//'
+//'    K(r) = sigma^2 * exp[ -rho * ||r||^2 ]
+//'
+//'  with the nugget diagonals set to 1.0, as with the Matern p1 case.
+// [[Rcpp::export]]
+Rcpp::XPtr<HODLR_Tree> setup_compressedMatrixGP_sqrExp_tP(Mat X,
+                                                          Mat tP,
+                                                          double sigma,
+                                                          double rho,
+                                                          double tol,
+                                                          int M) {
+  bool is_sym = true;
+  bool is_pd = true;
+  int N = X.rows();
+  SQRExponential_pX_Kernel* K  = new SQRExponential_pX_Kernel(X, N, sigma, rho, tP);
+  int n_levels = get_n_levels(N, M);
+  HODLR_Tree* T = new HODLR_Tree(n_levels, tol, K);
+  Rcpp::XPtr<HODLR_Tree> ptr(T);
+  T->assembleTree(is_sym, is_pd);
+  T->factorize();
+  return ptr;
+  
 }
 
 //******************************************************************************//

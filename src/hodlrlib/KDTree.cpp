@@ -1,4 +1,4 @@
-#include "mclasses/KDTree.hpp"
+#include "KDTree.hpp"
 
 void mergeSortedLists(Mat& list1, Mat& list2, unsigned index, Mat& final_list) 
 {

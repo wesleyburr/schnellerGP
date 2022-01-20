@@ -1,4 +1,4 @@
-#include "mclasses/HODLR_Node.hpp"
+#include "HODLR_Node.hpp"
 #include <Rcpp.h>
 
 HODLR_Node::HODLR_Node(int level_number, int node_number, int local_number, 

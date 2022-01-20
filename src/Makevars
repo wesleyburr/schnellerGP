@@ -6,27 +6,14 @@
 #Options Necessary for H2Lib
 #################################################
 
-H2LIB_FLAGS  = -O3 -march=native -funroll-loops
-H2LIB_FLAGS += -DUSE_BLAS -DUSE_SIMD -DUSE_OPENMP -fopenmp
-
-H2LIB_LIBS   = -lgfortran -lm -lR -llapack -lblas 
-
 HODLR_FLAGS  = -DUSE_DOUBLE 
 
 ##################################################
 #Final Package Setup
 ##################################################
 
-PKG_CPPFLAGS  = $(shell pkg-config --cflags cairo) 
-PKG_CPPFLAGS += $(H2LIB_FLAGS) -I../inst/include -I./include -w
-PKG_CPPFLAGS += -DUSE_NETCDF $(shell pkg-config --cflags netcdf) $(HODLR_FLAGS)
-
-PKG_LIBS     = -L/usr/local/lib  $(H2LIB_LIBS)
-PKG_LIBS     += $(shell pkg-config --libs cairo) 
-PKG_LIBS     += $(shell pkg-config --libs netcdf)
+PKG_CPPFLAGS +=  -I"./include" $(HODLR_FLAGS)
 
 HODLR        = $(wildcard hodlrlib/*.cpp)
-WRAPPERS     = $(wildcard classes/*.cpp)
-H2LIB        = $(wildcard   h2lib/*.c)
 MAIN         = $(wildcard *.cpp)
-OBJECTS      = $(MAIN:.cpp=.o) $(H2LIB:.c=.o) $(WRAPPERS:.cpp=.o) $(HODLR:.cpp=.o)
+OBJECTS      = $(MAIN:.cpp=.o) $(WRAPPERS:.cpp=.o) $(HODLR:.cpp=.o)

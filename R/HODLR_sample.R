@@ -36,7 +36,7 @@ HODLR_TP_sample <- function(Y,TP,x,cur_tau,l_scale,idx = NULL, kernel = "matern"
                 QP1      <- setup_compressedMatrixGP_Matern_tP(as.matrix(x[idx]),W,1,l_scale,1e-14,50)
         }else if (kernel == "sqr-exp"){
                 Q        <- setup_compressedMatrixGP_sqrExp(as.matrix(x[idx]),1,l_scale,1e-14,50)
-                QP1      <- setup_compressedMatrixGP_sqrExp_P1(as.matrix(x[idx]),W,1,l_scale,1e-14,50)
+                QP1      <- setup_compressedMatrixGP_sqrExp_tP(as.matrix(x[idx]),W,1,l_scale,1e-14,50)
         }else{
                 stop("Undefined kernel specified.")            
         }
@@ -97,8 +97,9 @@ HODLR_TP_sample_ls <- function(ls,Y,TP,x,cur_tau,bounds,idx = NULL,kernel="mater
                 QP1   <- setup_compressedMatrixGP_Matern_tP(as.matrix(x[idx]),as.matrix(1/W),1,ls,1e-14,50)
                 QP2   <- setup_compressedMatrixGP_Matern_tP(as.matrix(x[idx]),as.matrix(1/W),1,nls,1e-14,50)
         }else if (kernel == "sqr-exp"){
-                QP1   <- setup_compressedMatrixGP_sqrExpP1(as.matrix(x[idx]),as.matrix(1/W),1,ls,1e-14,50)
-                QP2   <- setup_compressedMatrixGP_sqrExpP1(as.matrix(x[idx]),as.matrix(1/W),1,nls,1e-14,50)
+                function(X, sigma, rho, tol, M)
+                QP1   <- setup_compressedMatrixGP_sqrExp_tP(as.matrix(x[idx]),as.matrix(1/W),1,ls,1e-14,50)
+                QP2   <- setup_compressedMatrixGP_sqrExp_tP(as.matrix(x[idx]),as.matrix(1/W),1,nls,1e-14,50)
                 
         }else{
                 stop("Undefined kernel specified.") 

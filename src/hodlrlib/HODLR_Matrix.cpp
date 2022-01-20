@@ -1,4 +1,4 @@
-#include "mclasses/HODLR_Matrix.hpp"
+#include "HODLR_Matrix.hpp"
 #include <Rcpp.h>
 using namespace Rcpp;
 

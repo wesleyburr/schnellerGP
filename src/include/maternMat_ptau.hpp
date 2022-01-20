@@ -33,7 +33,7 @@ class Matern_p1_Kernel : public HODLR_Matrix
     }
     double R_by_rho = sqrt(temp) / rho;
     double nugget = (i ==j)?1:0.0;
-    return sigma_squared * (1 + sqrt(5) * R_by_rho + (5/3) * (R_by_rho * R_by_rho)) * exp(-sqrt(5) * R_by_rho)+nugget;
+    return sigma_squared * (1.0 + sqrt(5.0) * R_by_rho + (5.0/3.0) * (R_by_rho * R_by_rho)) * exp(-sqrt(5.0) * R_by_rho)+nugget;
   }
 
   // Destructor:

@@ -11,8 +11,8 @@ Description: This package provides various functionality
     vanilla GP sampler as well as individual 1-at-a-time conditional Gibbs samples. 
 License: GPL (>=2)
 Imports: Rcpp (>= 1.0.0), Matrix 
-Include: Rcpp, RcppEigen, RcppArmadillo
-LinkingTo: Rcpp, RcppEigen, RcppArmadillo
+Include: Rcpp, RcppEigen
+LinkingTo: Rcpp, RcppEigen
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.2
