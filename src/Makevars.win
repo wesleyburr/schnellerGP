@@ -3,40 +3,17 @@
 #################################################
 
 #################################################
-#Options Necessary for H2Lib
+#Options Necessary for HODLR
 #################################################
 
-H2LIB_FLAGS  = -O3 -march=native -funroll-loops
-H2LIB_FLAGS += -DUSE_BLAS -DUSE_SIMD -DUSE_OPENMP -fopenmp
-
-H2LIB_LIBS   = -lm -lR 
-HODLR_FLAGS  = -DUSE_DOUBLE
+HODLR_FLAGS  = -DUSE_DOUBLE 
 
 ##################################################
 #Final Package Setup
 ##################################################
 
-#PKG_CPPFLAGS  = $(shell /mingw64/bin/pkg-config --cflags cairo) - loaded at end
-#PKG_CPPFLAGS += $(shell pkg-config --cflags netcdf) - loaded at end
-
-PKG_CPPFLAGS  = 
-PKG_CPPFLAGS += $(H2LIB_FLAGS) -I../inst/include -I./include -w
-PKG_CPPFLAGS += -DUSE_NETCDF 
-PKG_CPPFLAGS += $(HODLR_FLAGS) -DCURL_STATICLIB
-
-PKG_LIBS   =
-PKG_LIBS  += $(H2LIB_LIBS) -fopenmp -lwinmm 
-PKG_LIBS  += $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
-#PKG_LIBS += $(shell /mingw64/bin/pkg-config --libs cairo) - loaded at end
-#PKG_LIBS += $(shell /mingw64/bin/pkg-config --libs netcdf) - loaded at end
+PKG_CPPFLAGS +=  -I"./include" $(HODLR_FLAGS)
 
 HODLR        = $(wildcard hodlrlib/*.cpp)
-WRAPPERS     = $(wildcard classes/*.cpp)
-H2LIB        = $(wildcard   h2lib/*.c)
 MAIN         = $(wildcard *.cpp)
-OBJECTS      = $(MAIN:.cpp=.o) $(H2LIB:.c=.o) $(WRAPPERS:.cpp=.o) $(HODLR:.cpp=.o)
-
-#
-#  Configure.win should append the required pkg-config calls for cairo and netcdf! *SHOULD*
-#
-# 
+OBJECTS      = $(MAIN:.cpp=.o) $(WRAPPERS:.cpp=.o) $(HODLR:.cpp=.o)
