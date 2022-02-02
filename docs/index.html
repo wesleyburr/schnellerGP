@@ -22,6 +22,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -34,18 +36,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">schnellerGP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -57,10 +53,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/h2matrix.html">schnellerGP: H2-matrix Functionality</a>
-    </li>
-    <li>
-      <a href="articles/hmatrix.html">schnellerGP: H-matrix Functionality</a>
+      <a href="articles/installation.html">schnellerGP: Installation and Performance</a>
     </li>
   </ul>
 </li>
@@ -78,28 +71,29 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<div id="schnellergp" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#schnellergp" class="anchor"></a>schnellerGP</h1></div>
-<p>schnellerGP is an R package for fast, near-exact Gaussian Process sampling in O(n log^2 n) time using H and H^2 matrix decompositions.</p>
+<div class="section level1">
+<div class="page-header"><h1 id="schnellergp">schnellerGP<a class="anchor" aria-label="anchor" href="#schnellergp"></a>
+</h1></div>
+<p>schnellerGP is an R package for fast, near-exact Gaussian Process sampling in O(n log^2 n) time using the HODLRlib library of fast matrix operations.</p>
 </div>
-<div id="installing-in-r" class="section level1">
-<h1 class="hasAnchor">
-<a href="#installing-in-r" class="anchor"></a>Installing in R</h1>
-<p>To install this package in R, begin by downloading the source copy of the package from the <a href="https://github.com/wesleyburr/schnellerGP/releases">releases folder</a> and install it using type = “source”. To install from source, you will require several libraries for your system: LAPACK, BLAS, gFortran, and NetCDF. Some attempt has been made at describing how to install these for common architectures in the <strong>Optimization Vignette</strong>, below.</p>
-<p>The package has no external dependencies, but requires several libraries that are built-in via source (C++ libraries for H2 (h2lib) and HODLR (hodlrlib)). This requires (for a source compilation) a C++ compiler and a number of external libraries, as mentioned above.</p>
-<p>Once you’re setup, you can install the package manually via the command:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"schnellerGP-0.1-0.tar.gz"</span>, <span class="at">type =</span> <span class="st">"source"</span>)</span></code></pre></div>
+<div class="section level1">
+<h1 id="installing-in-r">Installing in R<a class="anchor" aria-label="anchor" href="#installing-in-r"></a>
+</h1>
+<p>To install this package in R, begin by downloading the source copy of the package from the <a href="https://github.com/wesleyburr/schnellerGP/releases" class="external-link">releases folder</a> and install it using type = “source”. You will need several R packages, namely Rcpp and RcppArmadillo, but should require no external dependencies. Note that HODLRlib will perform much faster if you have access to OpenMP and have installed the Intel MKL BLAS-replacement library (details in the <strong>Performance Vignette</strong> below).</p>
+<p>The C++ code from HODLRlib and the underpinnings of the methods require a C++11 compiler. Note that if you are on a Mac, the clang compiler does not seem to reliably compile the package - we are still debugging the Makefile to force that option. No issues have been observed on Linux installations, and Windows binaries are available at the releases folder on GitHub.</p>
+<p>Once you’re ready, you can install the package manually via the command:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">install.packages</span>(<span class="st">"schnellerGP-0.1-1.tar.gz"</span>, <span class="dt">type =</span> <span class="st">"source"</span>)</span></code></pre></div>
 <p>or by using the <strong>Install Packages</strong> GUI interface in RStudio (use the drop-down to select <em>Package Archive File</em>, and then select the .tar.gz). Update the file name as necessary to whatever the copy you downloaded was set to for versioning.</p>
 </div>
-<div id="getting-started" class="section level1">
-<h1 class="hasAnchor">
-<a href="#getting-started" class="anchor"></a>Getting Started</h1>
-<p>Refer to the <a href="link.html">vignette on optimization and installation</a> for details on installation and optimization of the environment, and to <a href="link2.html">vignette on common use</a> for some worked examples of the functionality.</p>
+<div class="section level1">
+<h1 id="getting-started">Getting Started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
+</h1>
+<p>Refer to the <a href="installation.html">vignette on performance and installation</a> for details on installation and how to compile from source.</p>
+<p>More vignettes to come.</p>
 </div>
-<div id="contributing" class="section level1">
-<h1 class="hasAnchor">
-<a href="#contributing" class="anchor"></a>Contributing?</h1>
+<div class="section level1">
+<h1 id="contributing">Contributing?<a class="anchor" aria-label="anchor" href="#contributing"></a>
+</h1>
 <p>Examine our <a href="Contributing.html">contribution guidelines</a> for more.</p>
 </div>
 
@@ -107,28 +101,41 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li>GPL (&gt;=2)</li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing schnellerGP</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Matt Wheeler <br><small class="roles"> Maintainer </small>  </li>
 </ul>
 </div>
+
+
 
   </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Matt Wheeler.</p>
+  <p></p>
+<p>Developed by Matt Wheeler.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -136,6 +143,8 @@
 
   
 
+
+  
 
   </body>
 </html>

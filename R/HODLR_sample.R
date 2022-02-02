@@ -1,6 +1,6 @@
 #' HODLR_TP_sample
 #'
-#' Assuming a tensor product f*g, this function samples f given g 
+#' Assuming a tensor product \eqn{f*g}, this function samples f given g 
 #' using a Gibbs sampler defined in Moran and Wheeler. 
 
 #'
@@ -9,8 +9,8 @@
 #' @param TP This parameter represents g. In practice, this value can represent
 #' multiple dimensions. 
 #' @param x  Values of the covariate associated with f. 
-#' @cur_tau  Current precision estimate of Y, i.e. Y = f\times g + \epsilon.
-#'           where \epsilon \sim N(0,\tau^-1).
+#' @cur_tau  Current precision estimate of \eqn{Y}, i.e. \eqn{Y = f\times g + \epsilon}.
+#'           where \eqn{\epsilon \sim N(0,\tau^-1)}.
 #' @param l_scale The length scale parameter 
 #' @param idx   This optional parameter is the index of the x sorted in increasing order. 
 #'              If it is not specified, the function will sort x for the Gibbs sampler. 
@@ -21,7 +21,6 @@
 #' @export
 #'
 #' @examples
-#' add_numbers(1, 2) ## returns 3
 #'
 HODLR_TP_sample <- function(Y,TP,x,cur_tau,l_scale,idx = NULL, kernel = "matern"){
        
@@ -56,7 +55,7 @@ HODLR_TP_sample <- function(Y,TP,x,cur_tau,l_scale,idx = NULL, kernel = "matern"
 
 #' HODLR_TP_sample_ls
 #'
-#' Assuming a tensor product f*g, this function samples the length-scale
+#' Assuming a tensor product \eqn{f*g}, this function samples the length-scale
 #' for f, given the marginal distribution of Y given g. It performs
 #' a simple Metropolis step where the proposal distribution is 
 #' a uniform(-0.5,0.5) and the prior distribution on the length-scale
@@ -68,8 +67,8 @@ HODLR_TP_sample <- function(Y,TP,x,cur_tau,l_scale,idx = NULL, kernel = "matern"
 #' @param TP This parameter represents g. In practice, this value can represent
 #' multiple dimensions. 
 #' @param x  Values of the covariate associated with f.
-#' @cur_tau  Current precision estimate of Y, i.e. Y = f\times g + \epsilon.
-#'           where \epsilon \sim N(0,\tau^-1).  
+#' @cur_tau  Current precision estimate of \eqn{Y}, i.e., \eqn{Y = f\times g + \epsilon}.
+#'           where \eqn{\epsilon \sim N(0,\tau^-1)}.
 #' @param idx   This optional parameter is the index of the x sorted in increasing order. 
 #'              If it is not specified, the function will sort x for the Gibbs sampler. 
 #'              However, since most samplers only require x to be sorted once, 
@@ -79,7 +78,6 @@ HODLR_TP_sample <- function(Y,TP,x,cur_tau,l_scale,idx = NULL, kernel = "matern"
 #' @export
 #'
 #' @examples
-#' add_numbers(1, 2) ## returns 3
 #'
 HODLR_TP_sample_ls <- function(ls,Y,TP,x,cur_tau,bounds,idx = NULL,kernel="matern"){
         
@@ -121,21 +119,20 @@ HODLR_TP_sample_ls <- function(ls,Y,TP,x,cur_tau,bounds,idx = NULL,kernel="mater
 
 #' HODLR_TP_sample_cale
 #'
-#' Assuming a tensor product of k 1-D functions, i.e. \gamma f_1 \cdot f_2\cdots f_k,
-#'  this function samples \gamma, which is the scale parameter. 
-#'  Here \gamma \sim N(\mu,\alpha^-1), and by default \mu = 0 and \alpha =1.
+#' Assuming a tensor product of k 1-D functions, i.e. \eqn{\gamma f_1 \cdot f_2\cdots f_k},
+#'  this function samples \eqn{\gamma}, which is the scale parameter. 
+#'  Here \eqn{\gamma \sim N(\mu,\alpha^-1)}, and by default \eqn{\mu = 0} and \eqn{\alpha =1}.
 #'
-#' @param Y The observed n \times 1 data vector or the residual given \
+#' @param Y The observed \eqn{n \times 1} data vector or the residual given \
 #' other components in the mean. 
-#' @param TP A matrix of dimension n \times k. Here, each row corresponds
+#' @param TP A matrix of dimension \eqn{n \times k}. Here, each row corresponds
 #' to an observation in Y and each column corresponds to one of the k dimensions 
 #' in the tensor Product. 
-#' @cur_tau  Current precision estimate of Y, i.e. Y = \gamma f_1 \cdot f_2\cdots f_k + \epsilon.
-#'           where \epsilon \sim N(0,\tau^-1).  
+#' @cur_tau  Current precision estimate of \eqn{Y}, i.e., \eqn{Y = \gamma f_1 \cdot f_2\cdots f_k + \epsilon}
+#'           where \eqn{\epsilon \sim N(0,\tau^-1)}.
 #' @export
 #'
 #' @examples
-#' add_numbers(1, 2) ## returns 3
 HODLR_TP_sample_scale <- function(Y,TP,cur_tau,mean=0,prec=1){
         if (length(Y)!=nrow(TP)){
                 stop("The data and the TP dimensions do not match.")

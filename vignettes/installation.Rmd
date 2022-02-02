@@ -3,7 +3,7 @@ title: "schnellerGP: Installation and Performance"
 author: Wesley S. Burr^1^
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{schnellerGP: Installation}
+  %\VignetteIndexEntry{schnellerGP: Installation and Performance}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

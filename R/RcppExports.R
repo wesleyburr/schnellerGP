@@ -252,13 +252,13 @@ solve_HODLR <- function(GPobj, b) {
 #'
 #' Returns the log-determinant of a  HODLR matrix
 #'
-#' Givne a HODLR matrix A returns \log | A |
+#' Givne a HODLR matrix A returns \eqn{\log | A |}
 #' 
 #'
 #' @param GPobj  The H matrix, assembled and factorized for use.
 #' 
 #' @export
-#' @return \log |A| where |A| is the determinant of the matrix.,   
+#' @return \eqn{\log |A|} where \eqn{|A|} is the determinant of the matrix.,   
 #' 
 #'
 log_det_HODLR <- function(GPobj) {

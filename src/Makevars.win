@@ -12,7 +12,7 @@ HODLR_FLAGS  = -DUSE_DOUBLE
 #Final Package Setup
 ##################################################
 
-PKG_CPPFLAGS +=  -I"./include" $(HODLR_FLAGS)
+PKG_CPPFLAGS =  -I"./include" $(HODLR_FLAGS)
 
 HODLR        = $(wildcard hodlrlib/*.cpp)
 MAIN         = $(wildcard *.cpp)
