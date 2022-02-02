@@ -2,18 +2,7 @@
 # Compilers, GCC is used to create dependencies
 #################################################
 
-#################################################
-#Options Necessary for HODLR
-#################################################
+PKG_CPPFLAGS =  -I"./include" -DUSE_DOUBLE
 
-HODLR_FLAGS  = -DUSE_DOUBLE 
-
-##################################################
-#Final Package Setup
-##################################################
-
-PKG_CPPFLAGS =  -I"./include" $(HODLR_FLAGS)
-
-HODLR        = $(wildcard hodlrlib/*.cpp)
 MAIN         = $(wildcard *.cpp)
-OBJECTS      = $(MAIN:.cpp=.o) $(WRAPPERS:.cpp=.o) $(HODLR:.cpp=.o)
+OBJECTS      = $(MAIN:.cpp=.o)
