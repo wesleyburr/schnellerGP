@@ -1,5 +1,5 @@
 ---
-title: "schnellerGP: Installation"
+title: "schnellerGP: Installation and Performance"
 author: Wesley S. Burr^1^
 output: rmarkdown::html_vignette
 vignette: >
@@ -19,27 +19,33 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-The schnellerGP package contains interfaces to two source libraries (in C
-and C++): H2Lib and HODLR. In addition, the package assumes access to 
-BLAS, LAPACK, and other standard code libraries. As such, the installation
-can be a bit tricky, especially if you haven't previously set up an optimized
-BLAS library for your personal system. This vignette will go through
+The schnellerGP package contains interfaces to a source library (in
+ C++): HODLRlib, which "is a library consisting of fast matrix 
+ operations for matrices based on the Hierarchical Off-Diagonal Low-Rank (HODLR) structure."
+As such, the package works best when given access to OpenMP and a good BLAS (i.e., not
+the default shipping) library. As such, the installation for best performance
+can be quite a bit trickier than a standard R package, as while the 
+install.packages() step **will** install the package, it will not perform to 
+expectations without more work.
+
+This vignette goes through
 the process of configuring your environment for the installation of the
 package, for five different operating system frameworks: Windows 7, Windows 10,
-Ubuntu 20.04, Fedora 35, and Mac OSX. Please note that the installation has
-**not** been tested on the new M1 Mac chipset, and will not be until one of the
-authors gains access to such a machine.
+Ubuntu 20.04, Fedora 35, and Mac OSX, with that last discussed for both Intel
+and M1 (Mac) chipsets.
 
+# Windows 10
 
-# Windows 7
+**Note**: Using Windows with a) compiled code; b) high performance requirements;
+c) linear algebra is basically a pain. 
 
 For Windows, because packages are not as easily installed as, say, a Linux operating
-system, the instructions are somewhat more complex. As with the others, if you would
-like to optimize a BLAS installation, please refer to the Optimization Vignette.
+system, the instructions are somewhat more complex.
 Note that these instructions are only for installing the **latest** version of
 schnellerGP from **source** - compiled Windows binaries can gloss over most of these
 issues. Unfortunately, this takes work, and we won't always have the latest versions
-available. 
+available. Note that no significant differences have been observed for installing
+this package on either Windows 7 or 10; Windows 11 has not been tested at this time.
 
 Start by ensuring you have the latest version of **R tools** installed for your version
 of R. Testing has been done against R 4.1 and later, but not on R 3.5 or 3.6.
@@ -51,7 +57,6 @@ Start Menu under Rtools 4.0 for **Rtools MinGW 64-bit**. If you click this, you 
 a terminal in the environment that R uses for compiling packages from source. 
 
 There is a note in the Rtools installation guidelines on CRAN, which states that
-
 
     After installation is complete, you need to perform one more step to be able to compile R 
     packages: you need to put the location of the Rtools make utilities (bash, make, etc) on the 
@@ -75,45 +80,124 @@ required packages:
 install.packages(c("Rcpp", "RcppEigen", "RcppArmadillo", "knitr", "rmarkdown"))
 ```
 
-Now, we do the tricky bits, starting with setting up the build environment.
-    
-## Setting up the pacman / mingw world
+## Optimized BLAS
 
-If you run Rtools MinGW 64-bit from your start menu, you can then use the **pacman** package manager
-to organize system libraries that can be used to compile against. Start with updating the
-indexes (package databases):
+The precompiled R distribution that you likely downloaded and installed on your Windows
+machine is called the **reference BLAS**, and is designed to be very, very stable and cross-platform
+compatible, but not particularly optimized for performance. Significant improvements in almost
+all linear algebra operations can be observed by installing more optimized libraries. Given the
+use of HODLRlib, which is optimized for Intel Math Kernel Library (MKL), if you are planning on 
+running any serious code with this package on Windows, you really need to update your BLAS. However,
+doing this on Windows is **really** hard. The Intel MKL compilers do not match with those needed
+to compile R from source, so there is no easy way to link in the MKL without some shenanigans.
 
-```bash
-pacman -Sy
+Before you begin, you can use the **sessionInfo** in R to check which version you are running:
+```{r, eval = FALSE}
+sessionInfo()
 ```
+You will see something like
 
-Then, we need the same dependencies that we would compile against for Linux: netCDF, BLAS,
-and Cairo. Pandoc we will get by installing rmarkdown, which brings it along on Windows.
-We will install cairo, BLAS and netcdf, and for both the 32-bit and 64-bit architectures
-(because Windows is weird, and sometimes will just randomly decide to install the i386 version
-of a package). The glib2 is required for Cairo to work automatically in the configure.win
-call.
+    Matrix products: default
 
-```bash
-pacman -S mingw-w64-x86_64-netcdf mingw-w64-i686-netcdf
-pacman -S mingw-w64-i686-cairo mingw-w64-x86_64-cairo
-pacman -S mingw-w64-i686-openblas mingw-w64-x86_64-openblas
-pacman -S mingw-w64-i686-glib2 mingw-w64-x86_64-glib2
+if you are running the default BLAS library, and do not have a custom LAPACK installed. This indicates
+that you will benefit from the change suggested here. It is probably worth grabbing a benchmark
+script before you start, to verify that the changes have actually given some speedup. One
+[https://mac.r-project.org/benchmarks/](set of good examples) is from Simon Urbanek's old
+site, even if they are a bit dated. Using Option 2 or 3 below results in a minimum of a 5x speedup
+on many operations; the increases can be even more for certain classes of matrix operations.
+
+### Option 1: Install MKL, Manually Move Libraries
+
+The Intel MKL library is included as part of the [https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html](Intel oneAPI Base Toolkit),
+which is freely available for download. This framework included BLAS and LAPACK operations,
+sparse linear algebra functions, Fast Fourier Transforms, and other functions which to some extent
+may be used by R to do statistical modeling. If you go to the provided link, and choose the Offline
+Installer, it is 3.5GB in size compressed (and 26GB fully installed), but can be downloaded once and installed, and then (likely) never
+touched again. The **Online** version is only 13.4MB, but then will download what you need dynamically
+after installation. This is still multiple gigabytes of space (6.8GB if you only select the
+MKL and nothing else).
+
+Download the oneAPI Base Toolkit, and install at least the MKL on your computer. Then, navigate
+to your R program directory, typically in 
+
+    C:\Program Files\R\R-4.1.2\bin\x64
+
+and copy all of the contents of the mkl folder, typically in
+
+    C:\Program Files (x86)\Intel\oneAPI\mkl\latest\redist\intel64\
+
+to your R bin\x64 directory. Within the latter, find the files named **Rblas.dll** and **Rlapack.dll** and rename
+them to **Rblas.bak** and **Rlapack.bak**. Note that you will need file extensions visible in your Windows Explorer
+to be able to do this properly (click **View** then check the box for File name extensions). Now, take the file 
+**mkl_rt.dll** which should have copied over along with the rest of the Intel files, and copy it twice, still
+within the bin\x64 directory. Rename the first to **Rblas.dll**, and the second to **Rlapack.dll**.
+Restart R or RStudio if you have it open, and when you run **sessionInfo()**, your information
+should have updated. 
+
+**NOTE**: this doesn't currently work well. The oneAPI is a bit different to the original MKL installer,
+for which this was a good drop-in solution.
+
+### Option 2: Microsoft R Open (Now Deprecated)
+
+The **easiest** way to get improved performance in R on Windows was to simply install 
+[https://mran.microsoft.com/rro](Microsoft R Open). This was an open source fork of R 
+(currently 4.0.2 as of January, 2022) which has been optimized to use the Intel MKL and other, related
+performance libraries. It also, less fortunately, comes with a customized, snapshotted CRAN, which
+while fast, is not updated in between releases of Microsoft R Open. In addition, this program has
+been deprecated as of June 2021, and will no longer be updated moving forward, making it a poor
+overall choice. However, for now, R 4.0.2 isn't **that** old, so this is a nice easy fix if you just
+need some speed for now.
+
+All you need to do is run [https://www.rstudio.com/products/rstudio/download/](RStudio),
+install Microsoft R Open, and then switch which R you are using within RStudio when you want to work
+on linear algebra applications. In RStudio, under **Global Options, General** you can specify which R version you
+wish to use - if you restart RStudio after installing Microsoft R Open, it will appear as one of your
+options. You may find it suitable for everyday use, in which case you won't be able to easily
+update your CRAN packages to the latest and greatest, but you will have extremely fast linear algebra
+libraries on the back end. Note that if you run
+```{r, eval = FALSE}
+sessionInfo()
 ```
+you will not see any particular information about your BLAS library, but if you are referencing
+the R version provided by Microsoft R Open (4.0.2, currently), it will be using the correct,
+higher performance libraries.
 
-That should set things up (ignoring the customized BLAS - for that, see the Optimization Vignette)
-so you can compile. Return to R, and on the prompt run:
+### Option 3: Microsoft R Open, Just the Libraries
+
+Repeat option 2, install Microsoft R Open, even if deprecated, then take three files:
+
+    C:\Program Files\Microsoft\R Open\R-4.0.2\bin\x64\libiomp5md.dll
+    C:\Program Files\Microsoft\R Open\R-4.0.2\bin\x64\Rblas.dll
+    C:\Program Files\Microsoft\R Open\R-4.0.2\bin\x64\Rlapack.dll
+
+and copy them to your 
+
+    C:\Program Files\R\R-4.1.2\bin\x64\
+
+directory. This does violate the Microsoft R Services MKL license, as it separates the MKL
+out of Microsoft R Open, but it's a solution which gets you the speed if you also need to
+continue using Microsoft R Open past its deprecation. 
+
+## Install schnellerGP from Source
+
+Now that you have an updated BLAS library installed, proceed to install **schnellerGP**
+by installing from the source tar.gz file - either type out the following
+(assuming your download is in the current working directory), or use the Install Packages
+interface in RStudio to point to the correct file. 
 
 ```{r, eval = FALSE}
-install.packages("schnellerGP_0.1.0.tar.gz", type = "source")
+install.packages("schnellerGP_0.1.0.tar.gz", type = "source", repo = NULL)
 ```
 
-(assuming you have placed the .tar.gz file in the current working directory). Alternatively,
-use the menu system and run Packages -> Install package(s) from local files ..., then
-point the interface at the .tar.gz file and allow it to proceed. If the package compiles
+If the package compiles
 successfully, you can then load it in the usual way, and proceed with your modeling!
 
-# Windows 10
+# Windows 7
+
+The instructions for Windows 7 are the same as Windows 10, except you cannot install Microsoft R
+Open, as it does not support Windows 7 any more. Thus, while you can install Rtools, and install
+**schnellerGP**, it will not perform well. We strongly encourage the upgrade to a more recent
+operating system (Windows 10 is 7 years old as of 2022; Windows 7 is 13 years old!).
 
 # Ubuntu Desktop 20.04
 
@@ -122,31 +206,49 @@ successfully, you can then load it in the usual way, and proceed with your model
 Assuming you have a working installation of Fedora (tested on 34 and 35), you should have installed
 a few background applications:
 
+## Optimized BLAS
+
 ```bash
-sudo dnf install R netcdf netcdf-devel blas blas-devel cairo-devel pandoc
+sudo dnf install R blas blas-devel R-flexiblas pandoc
+dnf config-manager --add-repo https://yum.repos.intel.com/mkl/setup/intel-mkl.repo
+rpm --import https://yum.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS-2019.PUB
+dnf install intel-mkl
 ```
 
-In addition, the package depends on several R dependencies, which will be automatically taken
-care of if you install via, e.g., RStudio's system. If you prefer to do things manually, 
-you will need the following (knitr and rmarkdown are to allow the vignettes to be installed):
+Once this is done, if you launch an R session, you should be able to dynamically change your
+BLAS library at will. For example,
+
+```{r, eval = FALSE}
+library(flexiblas)
+flexiblas_load_backend("/opt/intel/mkl/lib/intel64/libmkl_rt.so")
+flexiblas_list_loaded()
+```
+[1] "OPENBLAS-OPENMP"                        
+[2] "/opt/intel/mkl/lib/intel64/libmkl\_rt.so"
+
+Note that OpenBLAS is still a great package, and for many operations, is actually faster than
+Intel's MKL (e.g., matrix products). However, as HODLRlib works best with MKL, this is why
+we recommend it be present.
+
+In addition, the **schnellerGP** package depends on several R dependencies.
+You will need the following (knitr and rmarkdown are to allow the vignettes to be installed):
 
 ```{r, eval = FALSE}
 install.packages(c("Rcpp", "RcppEigen", "RcppArmadillo", "knitr", "rmarkdown"))
 ```
 
-Note that setting up alternative BLAS options for Linux is fairly straightforward:
-see the Optimization Vignette for more on how to do this for Fedora.
-
 Once you have ensured the dependencies are available, the installation is straightforward. 
 From within R, you can run:
 
 ```{r, eval = FALSE}
-install.packages("schnellerGP_0.1.0.tar.gz", type = "source")
+install.packages("schnellerGP_0.1.1.tar.gz", type = "source", repo = NULL)
 ```
 or from the command line,
 ```bash
-
+R CMD INSTALL schnellerGP_0.1.1.tar.gz
 ```
+
+
 # Mac OSX 10.??
 
 
