@@ -158,6 +158,7 @@ Rcpp::XPtr<HODLR_Tree> setup_compressedMatrixGP_Matern_tP(Mat X,
 //' the Squared Exponential kernel.
 //'
 //' @param X  Matrix of locations.
+//' @param tP   Specified kernel.
 //' @param sigma  Function standard deviation.
 //' @param rho  Length-Scale.
 //' @param tol  Tolerance for accuracy of calculations.

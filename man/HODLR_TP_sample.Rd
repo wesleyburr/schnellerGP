@@ -14,6 +14,9 @@ multiple dimensions.}
 
 \item{x}{Values of the covariate associated with f.}
 
+\item{cur_tau}{Current precision estimate of \eqn{Y}, i.e., \eqn{Y = f\times g + \epsilon}.
+where \eqn{\epsilon \sim N(0,\tau^-1)}.}
+
 \item{l_scale}{The length scale parameter}
 
 \item{idx}{This optional parameter is the index of the x sorted in increasing order. 

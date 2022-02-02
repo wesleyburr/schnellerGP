@@ -86,6 +86,11 @@ the mean.</p></dd>
 multiple dimensions.</p></dd>
 <dt>x</dt>
 <dd><p>Values of the covariate associated with f.</p></dd>
+<dt>cur_tau</dt>
+<dd><p>Current precision estimate of \(Y\), i.e., \(Y = f\times g + \epsilon\).
+where \(\epsilon \sim N(0,\tau^-1)\).</p></dd>
+<dt>bounds</dt>
+<dd><p>Uniform distribution [a,b] specified for prior distribution on length scale.</p></dd>
 <dt>idx</dt>
 <dd><p>This optional parameter is the index of the x sorted in increasing order. 
 If it is not specified, the function will sort x for the Gibbs sampler. 

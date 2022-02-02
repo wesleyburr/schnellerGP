@@ -13,6 +13,13 @@ other components in the mean.}
 \item{TP}{A matrix of dimension \eqn{n \times k}. Here, each row corresponds
 to an observation in Y and each column corresponds to one of the k dimensions 
 in the tensor Product.}
+
+\item{cur_tau}{Current precision estimate of \eqn{Y}, i.e., \eqn{Y = \gamma f_1 \cdot f_2\cdots f_k + \epsilon}
+where \eqn{\epsilon \sim N(0,\tau^-1)}.}
+
+\item{mean}{Mean for scale, default 0.}
+
+\item{prec}{Precision argument, default 1.}
 }
 \description{
 Assuming a tensor product of k 1-D functions, i.e. \eqn{\gamma f_1 \cdot f_2\cdots f_k},

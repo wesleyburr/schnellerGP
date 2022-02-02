@@ -9,7 +9,7 @@
 #' @param TP This parameter represents g. In practice, this value can represent
 #' multiple dimensions. 
 #' @param x  Values of the covariate associated with f. 
-#' @cur_tau  Current precision estimate of \eqn{Y}, i.e. \eqn{Y = f\times g + \epsilon}.
+#' @param  cur_tau  Current precision estimate of \eqn{Y}, i.e., \eqn{Y = f\times g + \epsilon}.
 #'           where \eqn{\epsilon \sim N(0,\tau^-1)}.
 #' @param l_scale The length scale parameter 
 #' @param idx   This optional parameter is the index of the x sorted in increasing order. 
@@ -67,8 +67,9 @@ HODLR_TP_sample <- function(Y,TP,x,cur_tau,l_scale,idx = NULL, kernel = "matern"
 #' @param TP This parameter represents g. In practice, this value can represent
 #' multiple dimensions. 
 #' @param x  Values of the covariate associated with f.
-#' @cur_tau  Current precision estimate of \eqn{Y}, i.e., \eqn{Y = f\times g + \epsilon}.
+#' @param cur_tau  Current precision estimate of \eqn{Y}, i.e., \eqn{Y = f\times g + \epsilon}.
 #'           where \eqn{\epsilon \sim N(0,\tau^-1)}.
+#' @param bounds  Uniform distribution [a,b] specified for prior distribution on length scale.
 #' @param idx   This optional parameter is the index of the x sorted in increasing order. 
 #'              If it is not specified, the function will sort x for the Gibbs sampler. 
 #'              However, since most samplers only require x to be sorted once, 
@@ -128,8 +129,10 @@ HODLR_TP_sample_ls <- function(ls,Y,TP,x,cur_tau,bounds,idx = NULL,kernel="mater
 #' @param TP A matrix of dimension \eqn{n \times k}. Here, each row corresponds
 #' to an observation in Y and each column corresponds to one of the k dimensions 
 #' in the tensor Product. 
-#' @cur_tau  Current precision estimate of \eqn{Y}, i.e., \eqn{Y = \gamma f_1 \cdot f_2\cdots f_k + \epsilon}
+#' @param  cur_tau  Current precision estimate of \eqn{Y}, i.e., \eqn{Y = \gamma f_1 \cdot f_2\cdots f_k + \epsilon}
 #'           where \eqn{\epsilon \sim N(0,\tau^-1)}.
+#' @param mean  Mean for scale, default 0.
+#' @param prec  Precision argument, default 1.
 #' @export
 #'
 #' @examples

@@ -1,6 +1,7 @@
 useDynLib(schnellerGP, .registration=TRUE)
 exportPattern("^[[:alpha:]]+")
-importFrom(Rcpp, evalCpp)
+importFrom("Rcpp", "evalCpp")
+importFrom("stats", "rnorm", "runif")
 import(Matrix)
 
 export()

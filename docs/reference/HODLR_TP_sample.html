@@ -68,6 +68,9 @@ using a Gibbs sampler defined in Moran and Wheeler.</p>
 multiple dimensions.</p></dd>
 <dt>x</dt>
 <dd><p>Values of the covariate associated with f.</p></dd>
+<dt>cur_tau</dt>
+<dd><p>Current precision estimate of \(Y\), i.e., \(Y = f\times g + \epsilon\).
+where \(\epsilon \sim N(0,\tau^-1)\).</p></dd>
 <dt>l_scale</dt>
 <dd><p>The length scale parameter</p></dd>
 <dt>idx</dt>

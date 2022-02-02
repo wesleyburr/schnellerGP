@@ -9,6 +9,8 @@ setup_compressedMatrixGP_sqrExp_tP(X, tP, sigma, rho, tol, M)
 \arguments{
 \item{X}{Matrix of locations.}
 
+\item{tP}{Specified kernel.}
+
 \item{sigma}{Function standard deviation.}
 
 \item{rho}{Length-Scale.}

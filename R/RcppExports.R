@@ -100,6 +100,7 @@ setup_compressedMatrixGP_Matern_tP <- function(X, tP, sigma, rho, tol, M) {
 #' the Squared Exponential kernel.
 #'
 #' @param X  Matrix of locations.
+#' @param tP   Specified kernel.
 #' @param sigma  Function standard deviation.
 #' @param rho  Length-Scale.
 #' @param tol  Tolerance for accuracy of calculations.

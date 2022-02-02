@@ -70,6 +70,13 @@ other components in the mean.</p></dd>
 <dd><p>A matrix of dimension \(n \times k\). Here, each row corresponds
 to an observation in Y and each column corresponds to one of the k dimensions 
 in the tensor Product.</p></dd>
+<dt>cur_tau</dt>
+<dd><p>Current precision estimate of \(Y\), i.e., \(Y = \gamma f_1 \cdot f_2\cdots f_k + \epsilon\)
+where \(\epsilon \sim N(0,\tau^-1)\).</p></dd>
+<dt>mean</dt>
+<dd><p>Mean for scale, default 0.</p></dd>
+<dt>prec</dt>
+<dd><p>Precision argument, default 1.</p></dd>
 </dl></div>
 
   </div>
