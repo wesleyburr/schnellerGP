@@ -139,9 +139,9 @@ for which this was a good drop-in solution.
 
 ### Option 2: Microsoft R Open (Now Deprecated)
 
-The **easiest** way to get improved performance in R on Windows was to simply install 
+The **easiest** way to get improved performance in R on Windows **was** to simply install 
 [https://mran.microsoft.com/rro](Microsoft R Open). This was an open source fork of R 
-(currently 4.0.2 as of January, 2022) which has been optimized to use the Intel MKL and other, related
+(currently 4.0.2 as of January, 2022) which had been optimized to use the Intel MKL and other, related
 performance libraries. It also, less fortunately, comes with a customized, snapshotted CRAN, which
 while fast, is not updated in between releases of Microsoft R Open. In addition, this program has
 been deprecated as of June 2021, and will no longer be updated moving forward, making it a poor
@@ -176,7 +176,8 @@ and copy them to your
 
 directory. This does violate the Microsoft R Services MKL license, as it separates the MKL
 out of Microsoft R Open, but it's a solution which gets you the speed if you also need to
-continue using Microsoft R Open past its deprecation. 
+continue using Microsoft R Open past its deprecation, and can't (or won't) install the 
+MKL directly.
 
 ## Install schnellerGP from Source
 
@@ -248,8 +249,49 @@ or from the command line,
 R CMD INSTALL schnellerGP_0.1.1.tar.gz
 ```
 
+# Mac OSX 12.0 - Intel Chipset
 
-# Mac OSX 10.??
+# Mac OSX 12.0 - Apple (ARM) Chipset (M1)
+
+New Mac systems, as of 2020, come with the new Apple M1 chip variants, which are custom
+Apple silicon based on the ARM architecture. This, of course, complicates our lives. 
+
+To start, you should ensure you have:
+
+* installed XCode 13.2
+* installed XQuartz 2.8.1 (required for R)
+* installed R 4.1 or later, as the appropriate arm64 installer (Note: if you install the x86 binary,
+  it will work, but will run under Rosetta emulation, and you will lose speed)
+* installed RStudio (version 2021.09 or later)
+* installed a conda environment (we assume Anaconda3 below)
+
+If you then launch RStudio, it may ask you to install the "command line developer tools",
+as an extension of XCode. Do this, and you should then be largely set up to compile packages
+from source. 
+
+**Note**: I also install the gfortran compiler (GNU Fortran 11 arm64 fork, as described
+on the cran.r-project.org page).
+
+## Optimized BLAS
+
+Intel's MKL obviously isn't going to work on a non-x64 architecture, so our options are
+limited to OpenBLAS to get better linear algebra performance. Thankfully, it's not that
+hard to set up. Assuming you've done the above, you should be able to
+download OpenBLAS (version 0.3-17 as of latest) using **conda**, which maintains packages
+for the new M1 chips. In the following, I use the full Anaconda3 environment to install
+openblas, and then symlink 
+
+```{bash, eval = FALSE}
+conda install openblas
+cd /Library/Frameworks/R.framework/Resources/lib
+ln -sf /opt/openblas/lib/libopenblas.dylib libRblas.dylib
+```
+
+**Note**: the -sf tag on ln makes the link symbolic, and removes the existing destination file.
+R keeps a copy of the blas library as libRblas.0.dylib, so we can just overwrite the base
+file and the original is still available if we ever want to revert.
+
+Once you've done this, you are ready to install **schnellerGP** from source if you wish.
 
 
 
