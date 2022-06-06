@@ -97,6 +97,7 @@ void HODLR_Tree::assembleTree(bool is_sym, bool is_pd)
         }
     }
 
+
     // Assembly of leaf nodes:
     #pragma omp parallel for
     for (int k = 0; k < nodes_in_level[n_levels]; k++) 

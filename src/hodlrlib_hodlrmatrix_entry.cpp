@@ -7,6 +7,8 @@
 #include <squaredMat_ptau.hpp>
 #include <maternMat_ptau.hpp>
 #include <maternMat_pX.hpp>
+#include <iostream>
+using namespace std; 
 
 using namespace Rcpp;
 

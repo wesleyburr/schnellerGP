@@ -31,11 +31,11 @@ HODLR_TP_sample <- function(Y,TP,x,cur_tau,l_scale,idx = NULL, kernel = "matern"
         tY       <- as.matrix(Y[idx])
         W        <- matrix(TP[idx]^2*cur_tau)
         if (kernel == "matern"){
-                Q        <- setup_compressedMatrixGP_Matern(as.matrix(x[idx]),1,l_scale,1e-14,50)
-                QP1      <- setup_compressedMatrixGP_Matern_tP(as.matrix(x[idx]),W,1,l_scale,1e-14,50)
+                Q        <- setup_compressedMatrixGP_Matern(as.matrix(x[idx]),1,l_scale,1e-14,min(50,dim(x)[1]))
+                QP1      <- setup_compressedMatrixGP_Matern_tP(as.matrix(x[idx]),W,1,l_scale,1e-14,min(50,dim(x)[1]))
         }else if (kernel == "sqr-exp"){
-                Q        <- setup_compressedMatrixGP_sqrExp(as.matrix(x[idx]),1,l_scale,1e-14,50)
-                QP1      <- setup_compressedMatrixGP_sqrExp_tP(as.matrix(x[idx]),W,1,l_scale,1e-14,50)
+                Q        <- setup_compressedMatrixGP_sqrExp(as.matrix(x[idx]),1,l_scale,1e-14,min(50,dim(x)[1]))
+                QP1      <- setup_compressedMatrixGP_sqrExp_tP(as.matrix(x[idx]),W,1,l_scale,1e-14,min(50,dim(x)[1]))
         }else{
                 stop("Undefined kernel specified.")            
         }
@@ -93,12 +93,12 @@ HODLR_TP_sample_ls <- function(ls,Y,TP,x,cur_tau,bounds,idx = NULL,kernel="mater
         ny    <- as.matrix(t(Y/(TP)))[idx]
         W     <- as.matrix(1/(TP)^2*(1/cur_tau))[idx]
         if (kernel == "matern"){
-                QP1   <- setup_compressedMatrixGP_Matern_tP(as.matrix(x[idx]),as.matrix(1/W),1,ls,1e-14,50)
-                QP2   <- setup_compressedMatrixGP_Matern_tP(as.matrix(x[idx]),as.matrix(1/W),1,nls,1e-14,50)
+                QP1   <- setup_compressedMatrixGP_Matern_tP(as.matrix(x[idx]),as.matrix(1/W),1,ls,1e-14,min(50,dim(x)[1]))
+                QP2   <- setup_compressedMatrixGP_Matern_tP(as.matrix(x[idx]),as.matrix(1/W),1,nls,1e-14,min(50,dim(x)[1]))
         }else if (kernel == "sqr-exp"){
                 function(X, sigma, rho, tol, M)
-                QP1   <- setup_compressedMatrixGP_sqrExp_tP(as.matrix(x[idx]),as.matrix(1/W),1,ls,1e-14,50)
-                QP2   <- setup_compressedMatrixGP_sqrExp_tP(as.matrix(x[idx]),as.matrix(1/W),1,nls,1e-14,50)
+                QP1   <- setup_compressedMatrixGP_sqrExp_tP(as.matrix(x[idx]),as.matrix(1/W),1,ls,1e-14,min(50,dim(x)[1]))
+                QP2   <- setup_compressedMatrixGP_sqrExp_tP(as.matrix(x[idx]),as.matrix(1/W),1,nls,1e-14,min(50,dim(x)[1]))
                 
         }else{
                 stop("Undefined kernel specified.") 
