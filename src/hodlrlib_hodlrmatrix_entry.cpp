@@ -61,9 +61,10 @@ Rcpp::XPtr<HODLR_Tree> setup_compressedMatrixGP_Matern(Mat X, double sigma, doub
   Matern_Kernel* K = new Matern_Kernel(X, N, sigma, rho);
   int n_levels = get_n_levels(N, M);
   HODLR_Tree* T = new HODLR_Tree(n_levels, tol, K);
-  Rcpp::XPtr<HODLR_Tree> ptr(T);
+  Rcpp::XPtr<HODLR_Tree> ptr(T,true);
   T->assembleTree(is_sym, is_pd);
   T->factorize();
+  delete K; 
   return ptr;
 
 }
@@ -101,7 +102,7 @@ Rcpp::XPtr<HODLR_Tree> setup_compressedMatrixGP_MaternP1(Mat X,
   Matern_p1_Kernel* K  = new Matern_p1_Kernel(X, N, sigma, rho);
   int n_levels = get_n_levels(N, M);
   HODLR_Tree* T = new HODLR_Tree(n_levels, tol, K);
-  Rcpp::XPtr<HODLR_Tree> ptr(T);
+  Rcpp::XPtr<HODLR_Tree> ptr(T,true);
   T -> assembleTree(is_sym, is_pd);
   T -> factorize();
   return ptr;
@@ -144,7 +145,7 @@ Rcpp::XPtr<HODLR_Tree> setup_compressedMatrixGP_Matern_tP(Mat X,
   Matern_pX_Kernel* K = new Matern_pX_Kernel(X, N, sigma, rho, tP);
   int n_levels = get_n_levels(N, M);
   HODLR_Tree* T = new HODLR_Tree(n_levels, tol, K);
-  Rcpp::XPtr<HODLR_Tree> ptr(T);
+  Rcpp::XPtr<HODLR_Tree> ptr(T,true);
   T->assembleTree(is_sym, is_pd);
   T->factorize();
   return ptr;
@@ -186,9 +187,10 @@ Rcpp::XPtr<HODLR_Tree> setup_compressedMatrixGP_sqrExp_tP(Mat X,
   SQRExponential_pX_Kernel* K  = new SQRExponential_pX_Kernel(X, N, sigma, rho, tP);
   int n_levels = get_n_levels(N, M);
   HODLR_Tree* T = new HODLR_Tree(n_levels, tol, K);
-  Rcpp::XPtr<HODLR_Tree> ptr(T);
+  Rcpp::XPtr<HODLR_Tree> ptr(T,true);
   T->assembleTree(is_sym, is_pd);
   T->factorize();
+  delete K; 
   return ptr;
   
 }
@@ -228,7 +230,8 @@ Rcpp::XPtr<HODLR_Tree> setup_compressedMatrixGP_sqrExp(Mat X,
   SQRExponential_Kernel* K = new SQRExponential_Kernel(X, N, sigma, rho);
   int n_levels = get_n_levels(N, M);
   HODLR_Tree* T = new HODLR_Tree(n_levels, tol, K);
-  Rcpp::XPtr<HODLR_Tree> ptr(T);
+  Rcpp::XPtr<HODLR_Tree> ptr(T,true);
+  delete K; 
   T->assembleTree(is_sym, is_pd);
   T->factorize();
   return ptr;
@@ -265,7 +268,8 @@ Rcpp::XPtr<HODLR_Tree> setup_compressedMatrixGP_sqrExpP1(Mat X, double sigma, do
   SQRExponential_p1_Kernel* K  = new SQRExponential_p1_Kernel(X, N, sigma, rho);
   int n_levels = get_n_levels(N, M);
   HODLR_Tree* T = new HODLR_Tree(n_levels, tol, K);
-  Rcpp::XPtr<HODLR_Tree> ptr(T);
+  Rcpp::XPtr<HODLR_Tree> ptr(T,true);
+  delete K; 
   T->assembleTree(is_sym, is_pd);
   T->factorize();
   return ptr;
