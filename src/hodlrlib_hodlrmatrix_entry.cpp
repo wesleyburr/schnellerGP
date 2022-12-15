@@ -146,6 +146,7 @@ Rcpp::XPtr<HODLR_Tree> setup_compressedMatrixGP_Matern_tP(Mat X,
   int n_levels = get_n_levels(N, M);
   HODLR_Tree* T = new HODLR_Tree(n_levels, tol, K);
   Rcpp::XPtr<HODLR_Tree> ptr(T,true);
+  delete K; 
   T->assembleTree(is_sym, is_pd);
   T->factorize();
   return ptr;
